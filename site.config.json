@@ -1,0 +1,20 @@
+{
+  "_comment": "Every brand detail lives here. Leave a value empty (\"\") to hide it everywhere. Then run: python build.py  (output goes to public/)",
+  "brand": "Crewwise",
+  "domain": "https://crewwisehq.com",
+  "us_phone": "",
+  "us_phone_tel": "",
+  "demo_phone": "",
+  "demo_phone_tel": "",
+  "email": "hello@crewwisehq.com",
+  "calendly": "[CALENDLY LINK]",
+  "form_endpoint": "[FORM ENDPOINT]",
+  "app_login": "",
+  "company": "Hallmark Data Systems Pvt Ltd",
+  "company_address": "3rd Floor, Sunivas Building, St Inez, Panaji, Goa 403001, India",
+  "governing_law": "the laws of India, and the courts of Goa, India have exclusive jurisdiction",
+  "og_image": "https://crewwisehq.com/og.jpg",
+  "analytics_token": "",
+  "price": "$499",
+  "example_business": "Oak Ridge Roofing"
+}

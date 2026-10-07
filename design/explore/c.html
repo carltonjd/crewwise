@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobstead · C · The roof</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --canvas: #F7F3EC; --navy: #13233A; --ember: #C4471B; --timber: #B98A5E; --green: #2E8B57; --ink-2: #4B5566;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Inter", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--canvas); color: var(--navy); font: 400 1.0625rem/1.55 var(--body); overflow-x: hidden; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
+  @media (min-width: 768px) { .wrap { padding-inline: 40px; } }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font: 500 1.4rem var(--display); font-stretch: 112%; letter-spacing: -.03em; text-decoration: none; }
+  .logo svg { width: 30px; height: 30px; }
+  nav { display: none; gap: 26px; font-size: .95rem; color: var(--ink-2); }
+  nav a { text-decoration: none; }
+  @media (min-width: 1000px) { nav { display: flex; } }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 12px 24px; border-radius: 999px; background: var(--ember); color: #fff; font: 600 1rem/1 var(--body); text-decoration: none; white-space: nowrap; }
+  .btn.sm { min-height: 42px; padding: 8px 16px; font-size: .92rem; }
+
+  .hero { display: grid; gap: 24px; align-items: center; padding-block: 24px 72px; }
+  @media (min-width: 1000px) { .hero { grid-template-columns: 1fr 1fr; gap: 40px; padding-block: 40px 96px; } }
+  .eyebrow { font-size: .95rem; color: #7A5634; font-weight: 500; }
+  h1 { margin: 16px 0 0; font: 500 clamp(2.4rem, 5vw, 4.4rem)/1 var(--display); font-stretch: 125%; letter-spacing: -.05em; max-width: 13ch; text-wrap: balance; }
+  .sub { margin-top: 22px; color: var(--ink-2); max-width: 32rem; font-size: 1.08rem; }
+  .cta { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .cta .alt { color: var(--ink-2); font-size: .95rem; }
+  .cta .alt a { color: var(--navy); font-weight: 600; }
+
+  /* 3D roof */
+  .stage { position: relative; height: clamp(360px, 42vw, 540px); perspective: 1400px; display: grid; place-items: center; order: -1; }
+  @media (min-width: 1000px) { .stage { order: 0; } }
+  .shadow { position: absolute; left: 50%; top: 70%; width: 70%; height: 60px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(19,35,58,.25), transparent); }
+  .scene { --s: 1; position: relative; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(40px) scale(var(--s)) rotateX(var(--rx, -22deg)) rotateY(var(--ry, -34deg)); }
+  @media (max-width: 600px) { .scene { --s: .72; } }
+  .f { position: absolute; backface-visibility: visible; }
+  /* W=300 D=380 H=150 rise=110 slope=186 (34.4deg) */
+  .front { left: -150px; top: 0; width: 300px; height: 150px; background: #EFE6D7; transform: translateZ(190px); }
+  .back { left: -150px; top: 0; width: 300px; height: 150px; background: #E3D7C3; transform: translateZ(-190px) rotateY(180deg); }
+  .side-l { left: -190px; top: 0; width: 380px; height: 150px; background: #DCCDB4; transform: translateX(-150px) rotateY(-90deg); }
+  .side-r { left: -190px; top: 0; width: 380px; height: 150px; background: #E8DDCB; transform: translateX(150px) rotateY(90deg); }
+  .gable-f, .gable-b { left: -150px; top: -110px; width: 300px; height: 110px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .gable-f { background: #EFE6D7; transform: translateZ(190px); }
+  .gable-b { background: #E3D7C3; transform: translateZ(-190px); }
+  .door { position: absolute; left: 118px; bottom: 0; width: 46px; height: 82px; background: var(--navy); }
+  .win { position: absolute; top: 34px; width: 54px; height: 40px; background: #9FB2C6; border: 5px solid #F7F3EC; }
+  .roof { top: -110px; width: 200px; height: 420px; margin-top: -210px; transform-style: preserve-3d; display: flex; }
+  .roof-l { left: -200px; transform-origin: 100% 50%; transform: rotateZ(-34.4deg) rotateX(90deg); flex-direction: row; }
+  .roof-r { left: 0; transform-origin: 0% 50%; transform: rotateZ(34.4deg) rotateX(90deg); flex-direction: row-reverse; }
+  .course { flex: 1; transform-style: preserve-3d;
+    background: #1C3252;
+    background-image: repeating-linear-gradient(0deg, rgba(247,243,236,.16) 0 2px, transparent 2px 34px), linear-gradient(90deg, rgba(0,0,0,.28), transparent 30%);
+    border-left: 2px solid #0B1627;
+  }
+  .course:nth-child(even) { background-position: 0 17px, 0 0; }
+  .ridge { position: absolute; left: -8px; top: -120px; width: 16px; height: 16px; margin-top: -210px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .course { animation: lay .55s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 140ms + 300ms); }
+    @keyframes lay { from { transform: translateZ(70px); opacity: 0; } to { transform: none; opacity: 1; } }
+  }
+  .badge { position: absolute; right: 6%; top: 10%; display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid rgba(19,35,58,.12); border-radius: 12px; padding: 10px 14px; font-size: .92rem; box-shadow: 0 16px 30px -18px rgba(19,35,58,.4); }
+  .badge i { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+  .badge b { font-weight: 600; }
+  .ex { position: absolute; right: 0; bottom: 0; font-size: .78rem; color: #7A5634; }
+
+  .next { border-top: 1px solid rgba(19,35,58,.14); padding-block: 72px; }
+  .next h2 { margin: 0; font: 500 clamp(2rem, 4.4vw, 3.4rem)/1 var(--display); font-stretch: 120%; letter-spacing: -.04em; }
+  .next p { margin-top: 14px; color: var(--ink-2); max-width: 34rem; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#13233A"/><polyline points="10,21 22,11 34,21" fill="none" stroke="#F06A35" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,26 20,31 30,21" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Jobstead</a>
+  <nav><a href="#">What it does</a><a href="#">Storm Mode</a><a href="#">Pricing</a><a href="#">Questions</a></nav>
+  <a class="btn sm" href="#">Book a demo</a>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">AI front desk for roofing companies</div>
+      <h1>You paid for the lead. We make sure you don't lose it.</h1>
+      <p class="sub">Jobstead answers every call 24/7, qualifies the homeowner, books the inspection into your calendar, and follows up on every estimate, so the leads you already pay for turn into jobs.</p>
+      <div class="cta"><a class="btn" href="#">Book a 15-min demo</a><span class="alt">Or call or text <a href="#">[US PHONE]</a></span></div>
+    </div>
+    <div class="stage" id="stage" role="img" aria-label="A small house whose roof lays itself shingle course by shingle course, with a note: leak call booked for Monday 9 AM.">
+      <div class="shadow"></div>
+      <div class="scene" id="scene">
+        <div class="f back"></div><div class="f side-l"></div><div class="f side-r"></div>
+        <div class="f gable-b"></div>
+        <div class="f roof roof-l"><i class="course" style="--i:0"></i><i class="course" style="--i:1"></i><i class="course" style="--i:2"></i><i class="course" style="--i:3"></i><i class="course" style="--i:4"></i><i class="course" style="--i:5"></i></div>
+        <div class="f roof roof-r"><i class="course" style="--i:0"></i><i class="course" style="--i:1"></i><i class="course" style="--i:2"></i><i class="course" style="--i:3"></i><i class="course" style="--i:4"></i><i class="course" style="--i:5"></i></div>
+        <div class="f front"><span class="win" style="left:28px"></span><span class="door"></span><span class="win" style="right:28px"></span></div>
+        <div class="f gable-f"></div>
+      </div>
+      <div class="badge"><i aria-hidden="true"></i><span>Leak call, 7:42 PM. <b>Booked Mon 9:00 AM</b></span></div>
+      <span class="ex">Example</span>
+    </div>
+  </section>
+  <section class="next">
+    <h2>Where roofing leads leak</h2>
+    <p>You already pay for the leads. These are the five places they slip away.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const stage = document.getElementById('stage'), scene = document.getElementById('scene');
+  let tx = -34, ty = -22, cx = -34, cy = -22, t0 = performance.now(), active = false;
+  stage.addEventListener('pointermove', e => {
+    const r = stage.getBoundingClientRect(); active = true;
+    tx = -34 + ((e.clientX - r.left) / r.width - .5) * 22; ty = -22 - ((e.clientY - r.top) / r.height - .5) * 12;
+  });
+  stage.addEventListener('pointerleave', () => { active = false; });
+  function frame(now) {
+    if (!active) { tx = -34 + Math.sin((now - t0) / 3200) * 9; ty = -22; }
+    cx += (tx - cx) * .08; cy += (ty - cy) * .08;
+    scene.style.setProperty('--ry', cx + 'deg'); scene.style.setProperty('--rx', cy + 'deg');
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

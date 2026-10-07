@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobstead · A · Storm radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --deep: #0B1627; --navy: #13233A; --navy-2: #1C3252;
+    --ember: #C4471B; --bright: #F06A35; --canvas: #F7F3EC; --mist: #B4C0CF; --green: #3FA36C;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Inter", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--deep); color: var(--canvas); font: 400 1.0625rem/1.55 var(--body); }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
+  @media (min-width: 768px) { .wrap { padding-inline: 40px; } }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font: 600 1.35rem var(--display); letter-spacing: -.02em; text-decoration: none; }
+  .logo svg { width: 30px; height: 30px; }
+  nav { display: none; gap: 28px; font-size: .95rem; color: var(--mist); }
+  nav a { text-decoration: none; }
+  @media (min-width: 1000px) { nav { display: flex; } }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 12px 22px; border-radius: 10px; background: var(--ember); color: #fff; font: 600 1rem/1 var(--body); text-decoration: none; white-space: nowrap; border: 1px solid transparent; }
+  .btn.sm { min-height: 42px; padding: 8px 16px; font-size: .92rem; }
+
+  .hero { display: grid; gap: 8px; align-items: center; padding-block: 24px 64px; }
+  @media (min-width: 1000px) { .hero { grid-template-columns: .95fr 1.05fr; gap: 40px; padding-block: 40px 88px; } }
+  .eyebrow { font-size: .95rem; color: var(--bright); font-weight: 500; }
+  h1 { margin: 16px 0 0; font: 700 clamp(2.6rem, 5.2vw, 4.75rem)/1 var(--display); font-stretch: 100%; letter-spacing: -.035em; text-wrap: balance; max-width: 14ch; }
+  .sub { margin-top: 22px; color: var(--mist); max-width: 34rem; font-size: 1.1rem; }
+  .cta { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .cta .alt { color: var(--mist); font-size: .95rem; }
+  .cta .alt a { color: var(--canvas); font-weight: 600; }
+
+  .radar { position: relative; width: 100%; max-width: 640px; justify-self: center; aspect-ratio: 1; order: -1; }
+  @media (min-width: 1000px) { .radar { order: 0; } }
+  .radar canvas { width: 100%; height: 100%; display: block; }
+  .log { position: absolute; left: 0; bottom: 0; width: min(100%, 300px); font-size: .82rem; color: var(--mist); }
+  .log b { color: var(--canvas); font-weight: 600; }
+  .log p { margin: 0; }
+  .ex { position: absolute; right: 4px; bottom: 0; font-size: .78rem; color: var(--mist); }
+
+  .next { border-top: 1px solid rgba(247,243,236,.12); padding-block: 72px; }
+  .next h2 { margin: 0; font: 700 clamp(2rem, 4vw, 3.2rem)/1.05 var(--display); letter-spacing: -.03em; }
+  .next p { margin-top: 14px; color: var(--mist); max-width: 34rem; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#F7F3EC"/><polyline points="10,21 22,11 34,21" fill="none" stroke="#C4471B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,26 20,31 30,21" fill="none" stroke="#13233A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Jobstead</a>
+  <nav><a href="#">What it does</a><a href="#">Storm Mode</a><a href="#">Pricing</a><a href="#">Questions</a></nav>
+  <a class="btn sm" href="#">Book a demo</a>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">AI front desk for roofing companies</div>
+      <h1>You paid for the lead. We make sure you don't lose it.</h1>
+      <p class="sub">Jobstead answers every call 24/7, qualifies the homeowner, books the inspection into your calendar, and follows up on every estimate, so the leads you already pay for turn into jobs.</p>
+      <div class="cta"><a class="btn" href="#">Book a 15-min demo</a><span class="alt">Or call or text <a href="#">[US PHONE]</a></span></div>
+    </div>
+    <div class="radar" role="img" aria-label="Example: a radar over a roofer's service area. The sweep finds incoming calls and each one turns into a booked inspection.">
+      <canvas id="r"></canvas>
+      <div class="log" aria-hidden="true"><p id="logline"><b>7:42 PM</b> Leak, kitchen ceiling, Round Rock. Booked Mon 9:00 AM.</p></div>
+      <span class="ex">Example</span>
+    </div>
+  </section>
+  <section class="next">
+    <h2>Where roofing leads leak</h2>
+    <p>You already pay for the leads. These are the five places they slip away.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  const cv = document.getElementById('r'), ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, dpr = Math.min(devicePixelRatio || 1, 2), dots = [];
+  const towns = [
+    { a: -0.9, r: .55, name: 'Round Rock', job: 'Leak, kitchen ceiling', slot: 'Mon 9:00 AM', t: '7:42 PM' },
+    { a: 0.6, r: .72, name: 'Georgetown', job: 'Hail damage', slot: 'Mon 11:30 AM', t: '7:58 PM' },
+    { a: 2.2, r: .38, name: 'Pflugerville', job: 'Missing shingles', slot: 'Tue 8:00 AM', t: '8:13 PM' },
+    { a: 3.6, r: .64, name: 'Hutto', job: 'Insurance inspection', slot: 'Tue 10:30 AM', t: '8:31 PM' },
+    { a: 4.9, r: .5, name: 'Cedar Park', job: 'Active leak, attic', slot: 'Sent to you now', t: '8:47 PM', urgent: true },
+  ];
+  // roads: a few curved lines through the area, built once
+  const roads = [];
+  function seed(n) { let s = n; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+  const rnd = seed(42);
+  for (let i = 0; i < 7; i++) {
+    let x = rnd() * 2 - 1, y = -1.1, ang = Math.PI / 2 + (rnd() - .5) * .8; const pts = [];
+    for (let k = 0; k < 60; k++) { pts.push([x, y]); x += Math.cos(ang) * .04; y += Math.sin(ang) * .04; ang += (rnd() - .5) * .25; }
+    roads.push(pts);
+  }
+  for (let i = 0; i < 4; i++) {
+    let x = -1.1, y = rnd() * 2 - 1, ang = (rnd() - .5) * .6; const pts = [];
+    for (let k = 0; k < 60; k++) { pts.push([x, y]); x += Math.cos(ang) * .04; y += Math.sin(ang) * .04; ang += (rnd() - .5) * .25; }
+    roads.push(pts);
+  }
+  function size() {
+    const r = cv.getBoundingClientRect(); W = r.width;
+    cv.width = W * dpr; cv.height = W * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dots = []; const step = Math.max(7, W / 70), R = W / 2 - 4;
+    for (let y = step / 2; y < W; y += step) for (let x = step / 2; x < W; x += step) {
+      const nx = (x - W / 2) / R, ny = (y - W / 2) / R, d = Math.hypot(nx, ny);
+      if (d > 1) continue;
+      let base = .07;
+      for (const ring of [.25, .5, .75, 1]) if (Math.abs(d - ring) < step / R * .6) base = .2;
+      for (const rd of roads) for (const p of rd) if (Math.abs(p[0] - nx) < .022 && Math.abs(p[1] - ny) < .022) { base = Math.max(base, .17); break; }
+      dots.push({ x, y, th: Math.atan2(ny, nx), base, s: step });
+    }
+  }
+  const PERIOD = 7000;
+  function draw(t) {
+    ctx.clearRect(0, 0, W, W);
+    const sweep = ((t % PERIOD) / PERIOD) * Math.PI * 2 - Math.PI;
+    for (const d of dots) {
+      let diff = sweep - d.th; while (diff < 0) diff += Math.PI * 2; while (diff > Math.PI * 2) diff -= Math.PI * 2;
+      const trail = reduce ? 0 : Math.max(0, 1 - diff / 1.3);
+      const a = Math.min(1, d.base + trail * .55);
+      const r = d.s * (.16 + .2 * a);
+      ctx.fillStyle = trail > .75 ? `rgba(240,106,53,${a})` : `rgba(247,243,236,${a})`;
+      ctx.beginPath(); ctx.arc(d.x, d.y, r, 0, 7); ctx.fill();
+    }
+    const R = W / 2 - 4, cx = W / 2;
+    const loop = Math.floor(t / PERIOD);
+    let last = null;
+    towns.forEach((tw, i) => {
+      const x = cx + Math.cos(tw.a - Math.PI) * tw.r * R, y = cx + Math.sin(tw.a - Math.PI) * tw.r * R;
+      let since = sweep - (tw.a - Math.PI); while (since < 0) since += Math.PI * 2;
+      const found = reduce || loop > 0 || since < sweep + Math.PI;
+      if (!found) return;
+      const age = reduce ? 9 : since / (Math.PI * 2) * PERIOD / 1000 + (loop > 0 ? 7 : 0);
+      const booked = reduce || age > 2.2;
+      const col = tw.urgent ? '#F06A35' : (booked ? '#3FA36C' : '#F06A35');
+      if (!booked || tw.urgent) {
+        const pulse = (t / 900) % 1;
+        ctx.strokeStyle = `rgba(240,106,53,${1 - pulse})`; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x, y, 8 + pulse * 22, 0, 7); ctx.stroke();
+      }
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 7, 0, 7); ctx.fill();
+      ctx.fillStyle = '#F7F3EC'; ctx.font = `600 ${Math.max(11, W / 52)}px Inter, system-ui, sans-serif`;
+      const lbl = tw.urgent ? 'Urgent, sent to you' : (booked ? tw.slot : tw.name);
+      ctx.fillText(lbl, x + 14, y + 4);
+      if (since < 2.4 && !reduce) last = tw;
+    });
+    if (last) document.getElementById('logline').innerHTML = `<b>${last.t}</b> ${last.job}, ${last.name}. ${last.urgent ? 'Sent to you now.' : 'Booked ' + last.slot + '.'}`;
+    // sweep line
+    if (!reduce) {
+      ctx.strokeStyle = 'rgba(240,106,53,.9)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(cx, cx); ctx.lineTo(cx + Math.cos(sweep) * R, cx + Math.sin(sweep) * R); ctx.stroke();
+    }
+  }
+  size(); addEventListener('resize', size);
+  let vis = true;
+  new IntersectionObserver(e => vis = e[0].isIntersecting).observe(cv);
+  const t0 = performance.now();
+  function frame(now) { if (vis && !document.hidden) draw(now - t0); if (!reduce) requestAnimationFrame(frame); }
+  if (reduce) draw(0); else requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

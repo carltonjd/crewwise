@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobstead · Type-led hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ground: #FFFFFF; --ink: #13233A; --ink-2: #4E5B6C; --ink-3: #6B7686; --rule: #E3E8EE; --rule-2: #C9D1DB;
+    --accent: #C4471B; --accent-ink: #B5401A; --ok: #237A4B;
+    --cta: #13233A; --cta-hover: #1D3354; --cta-ink: #FFFFFF;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Inter", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+    --ease: cubic-bezier(.2,.8,.2,1);
+  }
+  :root[data-theme="navy"] {
+    color-scheme: dark;
+    --ground: #0D1A2D; --ink: #EEF2F7; --ink-2: #A9B6C6; --ink-3: #8696AA; --rule: #22344E; --rule-2: #3A4E6B;
+    --accent: #F06A35; --accent-ink: #F58A5E; --ok: #5CC28E;
+    --cta: #C4471B; --cta-hover: #D0521F; --cta-ink: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 1.0625rem/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+  @media (min-width: 768px) { .wrap { padding-inline: 40px; } }
+
+  .top { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font: 600 1.25rem var(--display); letter-spacing: -.02em; text-decoration: none; }
+  .logo svg { width: 28px; height: 28px; }
+  .nav { display: none; gap: 32px; font-size: .92rem; color: var(--ink-2); }
+  .nav a { text-decoration: none; transition: color .15s; }
+  .nav a:hover { color: var(--ink); }
+  @media (min-width: 980px) { .nav { display: flex; } }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border-radius: 8px; border: 1px solid transparent; background: var(--cta); color: var(--cta-ink); font: 600 .95rem/1 var(--body); text-decoration: none; white-space: nowrap; transition: background-color .15s; }
+  .btn:hover { background: var(--cta-hover); }
+  .btn.sm { min-height: 38px; padding: 8px 14px; font-size: .88rem; }
+
+  .hero { padding-top: clamp(40px, 6vw, 84px); }
+  h1 { margin: 0; font: 600 clamp(2.9rem, 6vw, 5.6rem)/.98 var(--display); letter-spacing: -.045em; max-width: 15ch; text-wrap: balance; }
+  .row { margin-top: clamp(32px, 4vw, 48px); display: grid; gap: 24px; align-items: end; }
+  @media (min-width: 900px) { .row { grid-template-columns: minmax(0, 34rem) auto; justify-content: space-between; } }
+  .sub { margin: 0; font-size: 1.15rem; line-height: 1.55; color: var(--ink-2); }
+  .act { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+  .act .call { font-size: .95rem; color: var(--ink-2); text-decoration: none; }
+  .act .call b { color: var(--ink); font-weight: 600; }
+
+  /* The signature: one call on a time ruler */
+  .line { position: relative; margin-top: clamp(48px, 5vw, 72px); padding-bottom: 28px; }
+  .ruler { position: relative; height: 40px; }
+  .ruler::before { content: ""; position: absolute; left: 0; right: 0; top: 19px; height: 1px; background: var(--rule-2); }
+  .tick { position: absolute; top: 15px; width: 1px; height: 9px; background: var(--rule-2); }
+  .tick.h { top: 11px; height: 17px; }
+  .tick span { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--ink-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .trail { position: absolute; left: 0; top: 18px; height: 3px; border-radius: 2px; background: var(--accent); width: var(--p, 100%); }
+  .dot { position: absolute; top: 13px; left: var(--p, 100%); width: 13px; height: 13px; margin-left: -6.5px; border-radius: 50%; background: var(--ground); border: 3px solid var(--accent); }
+  .dot.done { border-color: var(--ok); background: var(--ok); }
+  .ring { position: absolute; top: 19.5px; left: var(--p0); width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; border: 1.5px solid var(--accent); opacity: 0; }
+  .events { position: relative; height: 92px; margin-top: 14px; }
+  .ev { position: absolute; top: 0; transform: translateX(-12px); width: 250px; font-size: .9rem; line-height: 1.4; transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .ev::before { content: ""; position: absolute; left: 11px; top: -40px; width: 1px; height: 34px; background: var(--rule-2); }
+  .ev time { display: block; font-size: 12.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .ev b { font-weight: 600; }
+  .ev.last { transform: translateX(-238px); text-align: right; }
+  .ev.last::before { left: auto; right: 11px; }
+  .ev.last b { color: var(--ok); }
+  .ev.wait { opacity: 0; transform: translateX(-12px) translateY(6px); }
+  .ev.last.wait { transform: translateX(-238px) translateY(6px); }
+  .cap { display: flex; justify-content: space-between; gap: 16px; font-size: .82rem; color: var(--ink-3); }
+
+  /* Phone: the ruler turns vertical */
+  @media (max-width: 999px) {
+    .ruler, .events { display: none; }
+    .vlist { display: grid !important; }
+  }
+  .vlist { display: none; list-style: none; margin: 0 0 18px; padding: 0 0 0 26px; position: relative; gap: 18px; }
+  .vlist::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 1px; background: var(--rule-2); }
+  .vlist li { position: relative; font-size: .95rem; }
+  .vlist li::before { content: ""; position: absolute; left: -26px; top: 5px; width: 13px; height: 13px; border-radius: 50%; background: var(--ground); border: 3px solid var(--accent); box-sizing: border-box; }
+  .vlist li:last-child::before { background: var(--ok); border-color: var(--ok); }
+  .vlist time { display: block; font-size: 12.5px; color: var(--ink-3); }
+  .vlist li:last-child b { color: var(--ok); }
+
+  .next { border-top: 1px solid var(--rule); margin-top: 72px; padding-block: 88px 120px; }
+  .next h2 { margin: 0; font: 600 clamp(2rem, 3.6vw, 3rem)/1.05 var(--display); letter-spacing: -.035em; }
+  .next p { margin-top: 12px; color: var(--ink-2); max-width: 36rem; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+<script>if (new URLSearchParams(location.search).get('theme') === 'navy') document.documentElement.dataset.theme = 'navy';</script>
+<style>:root{color-scheme:light;--display:"Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;--body:"Schibsted Grotesk", system-ui, "Segoe UI", Roboto, Arial, sans-serif;--ground:#F2F3F4;--ink:#14181C;--ink-2:#47505A;--ink-3:#5F6973;--rule:#DCE0E4;--rule-2:#BFC6CD;--accent:#B0522A;--accent-ink:#9C4722;--ok:#23794A;--cta:#14181C;--cta-hover:#2A3036;--cta-ink:#FFFFFF;} h1{font-weight:700;letter-spacing:-.045em;} .next h2{font-weight:700;} .logo{font-weight:700;}</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="logo" href="#"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#14181C"/><polyline points="10,21 22,11 34,21" fill="none" stroke="#C0632F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,26 20,31 30,21" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Jobstead</a>
+  <nav class="nav" aria-label="Page sections"><a href="#">What it does</a><a href="#">Storm Mode</a><a href="#">Pricing</a><a href="#">Questions</a></nav>
+  <a class="btn sm" href="#">Book a demo</a>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>You paid for the lead. We make sure you don't lose it.</h1>
+    <div class="row">
+      <p class="sub">Jobstead is an AI front desk for roofing companies. It answers every call 24/7, qualifies the homeowner, books the inspection into your calendar, and follows up on every estimate.</p>
+      <div class="act"><a class="btn" href="#">Book a 15-min demo</a><a class="call" href="#">or call <b>[US PHONE]</b></a></div>
+    </div>
+
+    <div class="line" id="line" aria-label="Example: one Saturday evening call. 7:42 PM, a homeowner calls about a leak. Answered on the first ring. Qualified: kitchen ceiling leak, roof about 15 years old, insurance claim filed. At 7:44 PM, the inspection is booked for Monday at 9 AM.">
+      <div class="ruler" aria-hidden="true">
+        <div class="trail"></div>
+        <span class="ring"></span>
+        <div class="dot done"></div>
+      </div>
+      <div class="events" aria-hidden="true">
+        <div class="ev" data-at="0"><time>7:42 PM</time><b>Homeowner calls.</b> You're up on a roof.</div>
+        <div class="ev" data-at="1"><time>7:42 PM</time><b>Answered</b> on the first ring, in your company's name.</div>
+        <div class="ev" data-at="2"><time>7:43 PM</time><b>Qualified:</b> ceiling leak, roof about 15 years old, claim filed.</div>
+        <div class="ev last" data-at="3"><time>7:44 PM</time><b>Booked Mon 9:00 AM</b><br>Added to your calendar.</div>
+      </div>
+      <ol class="vlist">
+        <li><time>7:42 PM</time><b>Homeowner calls.</b> You're up on a roof.</li>
+        <li><time>7:42 PM</time><b>Answered</b> on the first ring, in your company's name.</li>
+        <li><time>7:43 PM</time><b>Qualified:</b> ceiling leak, 15-year roof, claim filed.</li>
+        <li><time>7:44 PM</time><b>Booked Mon 9:00 AM.</b> Added to your calendar.</li>
+      </ol>
+      <div class="cap"><span>One Saturday evening call. Example.</span><span>Recorded and transcribed for you.</span></div>
+    </div>
+  </section>
+
+  <section class="next">
+    <h2>Where roofing leads leak</h2>
+    <p>You already pay for the leads. These are the five places they slip away.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  const line = document.getElementById('line'), ruler = line.querySelector('.ruler');
+  // Ruler: 6 PM to 10 PM, a tick every 15 minutes, hours labelled
+  const START = 18 * 60, END = 22 * 60;
+  const pos = m => (m - START) / (END - START);
+  for (let m = START; m <= END; m += 15) {
+    const t = document.createElement('i'); t.className = 'tick' + (m % 60 ? '' : ' h'); t.style.left = (pos(m) * 100) + '%';
+    ruler.appendChild(t);
+  }
+  // Events sit at real minutes; the call spans 7:42 to 7:44, so spread the labels for legibility but keep the dot honest
+  const at = [7 * 60 + 42, 7 * 60 + 42, 7 * 60 + 43, 7 * 60 + 44].map(m => m + 12 * 60);
+  const evs = [...line.querySelectorAll('.ev')];
+  const slots = [.02, .3, .58, .98];
+  evs.forEach((e, i) => e.style.left = (slots[i] * 100) + '%');
+  const p0 = pos(at[0]);
+  line.style.setProperty('--p0', (p0 * 100) + '%');
+  // The dot travels the labelled slots (a story of four moments), finishing on Booked
+  const dot = ruler.querySelector('.dot'), trail = ruler.querySelector('.trail'), ring = ruler.querySelector('.ring');
+  function setP(p) { ruler.style.setProperty('--p', (p * 100) + '%'); }
+  ruler.style.setProperty('--p0', (slots[0] * 100) + '%');
+  trail.style.left = (slots[0] * 100) + '%';
+  trail.style.width = 'calc(var(--p) - ' + (slots[0] * 100) + '%)';
+  setP(slots[3]);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let raf, t0;
+  function play() {
+    cancelAnimationFrame(raf);
+    evs.forEach(e => e.classList.add('wait')); dot.classList.remove('done');
+    setP(slots[0]);
+    ring.animate([{ opacity: .9, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(3.2)' }], { duration: 1100, iterations: 2, easing: 'ease-out' });
+    evs[0].classList.remove('wait');
+    t0 = performance.now() + 1600;
+    const legs = [[0, 1, 1300], [1, 2, 1700], [2, 3, 1700]];
+    let leg = 0;
+    function frame(now) {
+      if (now < t0) { raf = requestAnimationFrame(frame); return; }
+      const [a, b, d] = legs[leg]; const k = Math.min(1, (now - t0) / d);
+      const e = 1 - Math.pow(1 - k, 3);
+      setP(slots[a] + (slots[b] - slots[a]) * e);
+      if (k === 1) {
+        evs[b].classList.remove('wait');
+        leg++; t0 = now + 500;
+        if (leg === legs.length) { dot.classList.add('done'); setTimeout(play, 9000); return; }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  let started = false;
+  new IntersectionObserver(e => { if (e[0].isIntersecting && !started) { started = true; setTimeout(play, 400); } }, { threshold: .5 }).observe(line);
+})();
+</script>
+</body>
+</html>

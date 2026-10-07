@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobstead · B · Yard sign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ember: #C4471B; --ember-deep: #A93C16; --navy: #13233A; --canvas: #F7F3EC; --timber: #B98A5E;
+    --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+    --body: "Inter", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+    --ease: cubic-bezier(.2,.8,.2,1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ember); color: var(--canvas); font: 400 1.0625rem/1.55 var(--body); overflow-x: hidden; }
+  a { color: inherit; }
+  .wrap { max-width: 1320px; margin-inline: auto; padding-inline: 20px; }
+  @media (min-width: 768px) { .wrap { padding-inline: 40px; } }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font: 700 1.4rem var(--display); letter-spacing: -.02em; text-decoration: none; }
+  .logo svg { width: 30px; height: 30px; }
+  nav { display: none; gap: 26px; font-weight: 500; font-size: .95rem; }
+  nav a { text-decoration: none; }
+  @media (min-width: 1000px) { nav { display: flex; } }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 12px 24px; border-radius: 4px; background: var(--navy); color: var(--canvas); font: 600 1.02rem/1 var(--body); text-decoration: none; white-space: nowrap; box-shadow: 0 4px 0 #08111D; }
+  .btn.sm { min-height: 42px; padding: 8px 16px; font-size: .92rem; box-shadow: 0 3px 0 #08111D; }
+
+  .hero { position: relative; display: grid; gap: 40px; align-items: end; padding-block: 28px 0; }
+  @media (min-width: 1000px) { .hero { grid-template-columns: 1.1fr .9fr; gap: 24px; padding-top: 48px; } }
+  .eyebrow { font-weight: 600; font-size: .95rem; }
+  h1 { margin: 14px 0 0; font: 850 clamp(3rem, 8.4vw, 7.6rem)/.9 var(--display); font-stretch: 62%; letter-spacing: -.01em; text-transform: uppercase; max-width: 11ch; }
+  .sub { margin-top: 24px; max-width: 32rem; font-size: 1.1rem; }
+  .cta { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding-bottom: 56px; }
+  .cta .alt a { font-weight: 600; }
+
+  /* The yard sign */
+  .sign-stage { position: relative; height: clamp(420px, 46vw, 600px); display: flex; justify-content: center; align-items: flex-start; }
+  .sign { position: relative; z-index: 2; width: min(92%, 470px); transform: rotate(-2.5deg); transform-origin: 50% 100%; }
+  @media (prefers-reduced-motion: no-preference) { .sign { animation: sway 7s ease-in-out infinite; } }
+  @keyframes sway { 0%,100% { transform: rotate(-2.5deg); } 50% { transform: rotate(-1deg); } }
+  .board {
+    position: relative; background: var(--canvas); color: var(--navy); border-radius: 6px; overflow: hidden;
+    background-image: repeating-linear-gradient(90deg, rgba(19,35,58,.05) 0 2px, transparent 2px 9px);
+    box-shadow: 0 30px 50px -24px rgba(60,16,4,.55);
+  }
+  .band { background: var(--navy); color: var(--canvas); display: flex; align-items: center; gap: 10px; padding: 14px 20px; font: 700 1.25rem var(--display); letter-spacing: -.01em; }
+  .band svg { width: 26px; height: 26px; }
+  .board-body { padding: 22px 22px 24px; }
+  .kicker { font: 600 .9rem var(--body); color: #6B4A2C; }
+  .word { display: block; height: 1em; overflow: hidden; margin-top: 6px; font: 900 clamp(4rem, 8vw, 6.4rem)/1 var(--display); font-stretch: 62%; text-transform: uppercase; letter-spacing: -.01em; color: var(--ember-deep); }
+  .word span { display: inline-block; }
+  .meta { margin-top: 14px; padding-top: 14px; border-top: 2px solid var(--navy); display: flex; justify-content: space-between; gap: 12px; font-weight: 600; font-size: .95rem; font-variant-numeric: tabular-nums; }
+  .stakes { position: absolute; z-index: 1; left: 50%; top: 92%; width: 46%; height: 260px; transform: translateX(-50%); display: flex; justify-content: space-between; }
+  .stakes i { width: 6px; background: linear-gradient(90deg, #7d8792, #c9d0d6, #7d8792); }
+  .lawn { position: absolute; left: -100vw; right: -100vw; bottom: 0; height: 64px; background: var(--navy); z-index: 3; }
+  .ex { position: absolute; z-index: 4; right: 0; bottom: 18px; font-size: .8rem; color: var(--canvas); }
+
+  .next { background: var(--canvas); color: var(--navy); }
+  .next .wrap { padding-block: 72px; }
+  .next h2 { margin: 0; font: 850 clamp(2.4rem, 5vw, 4.2rem)/.95 var(--display); font-stretch: 62%; text-transform: uppercase; }
+  .next p { margin-top: 14px; max-width: 34rem; color: #4B5566; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#13233A"/><polyline points="10,21 22,11 34,21" fill="none" stroke="#F06A35" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,26 20,31 30,21" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Jobstead</a>
+  <nav><a href="#">What it does</a><a href="#">Storm Mode</a><a href="#">Pricing</a><a href="#">Questions</a></nav>
+  <a class="btn sm" href="#">Book a demo</a>
+</div></header>
+
+<main>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">AI front desk for roofing companies</div>
+        <h1>You paid for the lead. We make sure you don't lose it.</h1>
+        <p class="sub">Jobstead answers every call 24/7, qualifies the homeowner, books the inspection into your calendar, and follows up on every estimate, so the leads you already pay for turn into jobs.</p>
+        <div class="cta"><a class="btn" href="#">Book a 15-min demo</a><span class="alt">Or call or text <a href="#">[US PHONE]</a></span></div>
+      </div>
+      <div class="sign-stage" role="img" aria-label="Example: a contractor yard sign reading: Saturday 7:42 PM, leak in the kitchen ceiling, booked for Monday 9 AM.">
+        <div class="sign">
+          <div class="board">
+            <div class="band"><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#F7F3EC"/><polyline points="10,21 22,11 34,21" fill="none" stroke="#C4471B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,26 20,31 30,21" fill="none" stroke="#13233A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>This call was</div>
+            <div class="board-body">
+              <div class="kicker">Saturday, 7:42 PM. Leak in the kitchen ceiling.</div>
+              <span class="word" id="word">Booked.</span>
+              <div class="meta"><span>Inspection</span><span>Mon 9:00 AM</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stakes" aria-hidden="true"><i></i><i></i></div>
+        <div class="lawn" aria-hidden="true"></div>
+        <span class="ex">Example</span>
+      </div>
+    </section>
+  </div>
+  <section class="next"><div class="wrap">
+    <h2>Where roofing leads leak</h2>
+    <p>You already pay for the leads. These are the five places they slip away.</p>
+  </div></section>
+</main>
+
+<script>
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el = document.getElementById('word');
+  const words = ['Answered.', 'Qualified.', 'Booked.'];
+  let i = 2;
+  function set(w) {
+    el.innerHTML = '';
+    [...w].forEach((ch, k) => {
+      const s = document.createElement('span'); s.textContent = ch; el.appendChild(s);
+      s.animate([{ transform: 'translateY(105%)' }, { transform: 'none' }], { duration: 520, delay: k * 34, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+    });
+    el.setAttribute('aria-label', w);
+  }
+  setInterval(() => { i = (i + 1) % words.length; set(words[i]); }, 2200);
+})();
+</script>
+</body>
+</html>
