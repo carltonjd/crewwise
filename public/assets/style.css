@@ -495,3 +495,12 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 340px) { .logo .logo-text { display: none; } }
 .word { font-family: var(--font); font-weight: 650; letter-spacing: -0.019em; justify-content: flex-start; font-size: clamp(4rem, 19.4vw, 17.6rem); white-space: nowrap; }
 .word span { letter-spacing: inherit; }
+
+/* Trade links in the hero: homepage points to live trades, trade pages point back */
+.trade-row { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; font-size: var(--t-small); }
+.trade-row a { font-weight: 600; color: var(--line); text-decoration: none; border-bottom: 1.5px solid color-mix(in srgb, var(--line) 35%, transparent); padding-bottom: 1px; }
+.trade-row a:hover { border-bottom-color: var(--line); }
+.trade-row span { color: var(--ink-3); }
+.hero .back { display: inline-block; margin-bottom: 18px; font-size: var(--t-small); font-weight: 600; color: var(--ink-2); text-decoration: none; }
+.hero .back:hover { color: var(--line); }
+.legalline.brandline { margin-top: 6px; }

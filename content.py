@@ -1,0 +1,155 @@
+# Page content, one block per page. The layout lives in build.py (trade_page).
+# To add a trade later (e.g. plumbing), copy ROOFING, change the text and example screens,
+# set slug/path/og_image, add it to PAGES, then run npm run og (see README.md).
+
+import json, os
+PRICE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.config.json'), encoding='utf-8'))['price']
+
+# Example screens shared by both pages for now (a roofing company; every screen is labelled Example).
+ROOF_EXAMPLE = dict(
+    business='Oak Ridge Roofing',
+    flow_aria='Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.',
+    flow_card1="<b>Homeowner calling.</b> You're up on a roof.",
+    flow_card3='<b>Ceiling leak</b><div class="tags"><span>15-year roof</span><span>Claim filed</span><span>In your area</span></div>',
+    call=[("Thanks for calling Oak Ridge Roofing. How can I help?", 'ai'),
+          ("Water's coming through my kitchen ceiling after the storm.", 'caller'),
+          ("Let's get someone out. What's the address, and is there an insurance claim?", 'ai'),
+          ("1418 Maple Court, Round Rock. We filed a claim this morning.", 'caller')],
+    chips=['Leak, kitchen ceiling', 'Residential', 'Repair', 'Claim filed', 'In service area'],
+    cal_busy='Estimate, Cedar Park', cal_event='Inspection booked', cal_where='1418 Maple Ct, Round Rock',
+    sms='You\'re booked with Oak Ridge Roofing for Monday at 9:00 AM. Reply C to confirm.',
+    followups=[('Estimate follow-up, day 7', 'Hi Mike, just checking in on the roof estimate we sent last week. Any questions I can answer?', ''),
+               ('Reply', 'Yes, can someone call me about the shingle options?', 'reply'),
+               ('Review request, after the job', 'Thanks for choosing Oak Ridge Roofing. Would you leave us a quick Google review?', '')],
+    queue=[('urgent', 'Urgent', 'Active leak, kitchen ceiling', '1418 Maple Ct, Round Rock. No claim yet.', 'Sent to you now', ''),
+           ('', 'High', 'Hail damage, shingles missing', '88 Cedar Ridge Dr, Georgetown. Claim filed.', 'Mon 9:00 AM', 'ok'),
+           ('', 'Normal', 'Dented gutters and vents', '2205 Oak Bend, Pflugerville. Claim filed.', 'Mon 11:30 AM', 'ok'),
+           ('', 'Normal', 'Inspection before adjuster visit', '710 Pecan St, Hutto. Adjuster Thursday.', 'Tue 8:00 AM', 'ok')],
+)
+
+COMMON_FAQ_TAIL = [
+    ('Do I keep my number?', 'Yes. Your number stays the same. You forward missed and after-hours calls to a number we set up.'),
+    ('What if a caller wants a real person?', 'It transfers the call to you or takes a message, based on your rules.'),
+    ('Can I hear the calls?', 'Yes. Every call is recorded and transcribed, so you can listen to it or read it.'),
+]
+FAQ_END = [
+    ('Do I need to change my CRM?', "No. It works alongside the tools you already use. There's no new CRM to learn."),
+    ('How long does setup take?', 'Usually 1 to 2 weeks. Most of that is waiting on US text-message registration, which carriers require before we can text your customers.'),
+    ('Can I switch it off?', 'Anytime. Turn off call forwarding and your calls come straight back to you. Plans are month to month.'),
+]
+
+HOME = dict(
+    slug='home', path='/', p='',
+    title='AI Receptionist for Home Service Businesses | Crewwise',
+    desc='Crewwise answers your calls 24/7, qualifies the customer, books the job and follows up on every quote. Built for home-service businesses, starting with roofing companies.',
+    og_title='Crewwise | AI front desk for home-service businesses',
+    og_desc="You paid for the lead. We make sure you don't lose it. Crewwise answers 24/7, qualifies the customer and books the job into your calendar.",
+    tw_desc="You paid for the lead. We make sure you don't lose it. Crewwise answers 24/7, qualifies the customer and books the job.",
+    og_image='og.jpg?v=4',
+    og_alt="Crewwise logo with the headline: Answers your phone while you're on the job.",
+    og_headline="Answers your phone while you're on the job.", og_sub='AI front desk for home-service businesses',
+    service_name='Crewwise', service_type='AI receptionist and answering service for home-service businesses',
+    eyebrow='AI front desk for home-service businesses',
+    h1="Crewwise answers your phone while you're on the job.",
+    sub='It picks up day or night, gets the job details and books the visit into your calendar. Then it follows up on your quotes, so the leads you pay for turn into jobs.',
+    trade_row='<a href="roofing/">Built for roofing companies &rarr;</a><span>More trades coming soon.</span>',
+    back_link='',
+    flow_cap="Example call. Names are made up. Crewwise is live for roofing companies today, with more trades coming soon. It never calls customers who haven't contacted you, and there's no call center behind it.",
+    leaks_title='Where your leads leak',
+    leaks_intro="A customer who can't reach you calls the next company on the list. Here's where paid leads usually go that way.",
+    leaks=[('Missed calls', 'On a job, on the road, after hours.', 'Answered 24/7'),
+           ('Slow response', 'Web and ad leads waiting hours for a callback.', 'Replied to within a minute'),
+           ('Wrong-fit calls', 'Out-of-area or wrong-job calls eating your time.', 'Screened before they reach you'),
+           ('Silent quotes', 'Quotes or estimates sent, never followed up.', 'Followed up automatically'),
+           ('Old leads', 'Past inquiries never contacted again.', 'Contacted again')],
+    leakmap_start='Customer calls',
+    what_title="Your front desk while you're on the job",
+    moments=[('0:00', 'On the call', [
+                ('Answers every call, 24/7', "In your company's name, nights, weekends and holidays included."),
+                ('Qualifies every customer', "Asks the questions you'd ask: address, what's wrong, how urgent, and anything specific to your trade."),
+                ('Checks your service area', 'Only books jobs inside the radius and towns you choose.'),
+                ('Hands off to you', 'Urgent jobs, upset callers and complex questions go straight to you.')]),
+             ('+1 min', 'Right after', [
+                ('Books visits and inspections into your calendar', 'With a text confirmation and reminders for the customer.'),
+                ('Texts back missed calls and web leads', 'Anyone who hangs up, and every web lead, gets a reply within a minute.')]),
+             ('+2 weeks', 'Weeks later', [
+                ('Follows up on unsold quotes', "Automatic check-ins on the quotes or estimates you've sent."),
+                ('Reactivates old leads', 'Gets back in touch with old inquiries that never turned into a job.'),
+                ('Asks for Google reviews', 'After the job, happy customers get a short review request with your link.')])],
+    busy_id='busy-days', busy_nav='Busy days', busy_mode='Busy-day mode',
+    busy_title="When it's busiest, every call gets answered.",
+    busy_copy="On your busiest days the phone doesn't stop, and the job goes to whoever picks up first. For a roofer, that's the day after a storm. Busy-day mode handles many calls at once, flags urgent jobs, captures the details and books visits in priority order. You see the full list and decide where to go first.",
+    busy_note='Example: a roofing company the day after a storm. Addresses are made up.',
+    report=[('Calls answered', '180'), ('Missed calls recovered', '40'), ('Visits or inspections booked', '24'),
+            ('Quotes followed up', '30'), ('Old leads reactivated', '12')],
+    report_foot='Example report with illustrative numbers, not real results. Estimated opportunity value is based on booked visits and your average job value. It is not revenue.',
+    strip_booked='Visit booked that day',
+    plan_name='Crewwise', founding='Founding customers',
+    faq_title='Questions we get asked',
+    faq=[('How much does it cost?', f"{PRICE} a month. The setup fee is waived for founding customers, and there's no contract.")] + COMMON_FAQ_TAIL + [
+         ('What happens on my busiest days?', 'Busy-day mode takes many calls at once, flags urgent jobs, captures the details and books visits in priority order. You see the full list and decide where to go first.'),
+         ('Will it book jobs outside my area?', 'No. It checks your service radius and towns first, and only books jobs inside the area you choose.'),
+         ('Does it handle complex questions?', 'It captures the details and passes complex insurance, pricing or technical questions to you.')] + FAQ_END,
+    closing="Next time you're on a job, let Crewwise pick up.",
+    tagline='AI front desk for home-service businesses.',
+    example=ROOF_EXAMPLE,
+)
+
+ROOFING = dict(
+    slug='roofing', path='/roofing/', p='../',
+    title='AI Receptionist for Roofers | Roofing Answering Service | Crewwise',
+    desc='Crewwise answers your roofing calls 24/7, qualifies homeowners, books inspections and follows up on every estimate. Built for roofing companies.',
+    og_title='Crewwise | AI front desk for roofing companies',
+    og_desc="You paid for the lead. We make sure you don't lose it. Crewwise answers 24/7, qualifies the homeowner and books the inspection.",
+    tw_desc="You paid for the lead. We make sure you don't lose it. Crewwise answers 24/7, qualifies the homeowner and books the inspection.",
+    og_image='og-roofing.jpg?v=1',
+    og_alt="Crewwise logo with the headline: Answers your phone while you're on the roof.",
+    og_headline="Answers your phone while you're on the roof.", og_sub='AI front desk for roofing companies',
+    service_name='Crewwise for Roofers', service_type='AI receptionist and answering service for roofing companies',
+    eyebrow='AI front desk for roofing companies',
+    h1="Crewwise answers your phone while you're on the roof.",
+    sub='It picks up day or night, gets the address, the damage and the insurance details, and books the inspection into your calendar. Then it follows up on your estimates, so the leads you pay for turn into jobs.',
+    trade_row='',
+    back_link='<a class="back" href="../">&larr; All trades</a>',
+    flow_cap="Example call. Oak Ridge Roofing is a made-up company. Crewwise doesn't sell leads, never calls customers who haven't contacted you, and there's no call center behind it. It answers the calls your business already gets.",
+    leaks_title='Where roofing leads leak',
+    leaks_intro="A homeowner who can't reach you calls the next roofer. Here's where paid leads usually go that way.",
+    leaks=[('Missed calls', 'On a roof, on the road, after hours.', 'Answered 24/7'),
+           ('Slow response', 'Web and ad leads waiting hours for a callback.', 'Replied to within a minute'),
+           ('Wrong-fit calls', 'Out-of-area or wrong-job calls eating your time.', 'Screened before they reach you'),
+           ('Silent estimates', 'Quotes sent, never followed up.', 'Followed up automatically'),
+           ('Old leads', 'Past inquiries never contacted again.', 'Contacted again')],
+    leakmap_start='Homeowner calls',
+    what_title="Your front desk while you're on the roof",
+    moments=[('0:00', 'On the call', [
+                ('Answers every call, 24/7', "In your company's name, nights, weekends and holidays included."),
+                ('Qualifies every homeowner', 'Address, leak or damage, roof age, insurance claim, repair or replacement, residential or commercial.'),
+                ('Checks your service area', 'Only books jobs inside the radius and towns you choose.'),
+                ('Hands off to you', 'Active leaks, upset callers and complex insurance questions go straight to you.')]),
+             ('+1 min', 'Right after', [
+                ('Books inspections into your calendar', 'With a text confirmation and reminders for the homeowner.'),
+                ('Texts back missed calls and web leads', 'Anyone who hangs up, and every web lead, gets a reply within a minute.')]),
+             ('+2 weeks', 'Weeks later', [
+                ('Follows up on unsold estimates', "Automatic check-ins on the quotes you've sent."),
+                ('Reactivates old leads', 'Gets back in touch with old inquiries that never turned into a job.'),
+                ('Asks for Google reviews', 'After the job, happy customers get a short review request with your link.')])],
+    busy_id='storm-mode', busy_nav='Storm Mode', busy_mode='Storm Mode',
+    busy_title='When the storm hits, every call gets answered.',
+    busy_copy='After a storm, your phone explodes and the job goes to whoever picks up first. Storm Mode handles many calls at once, flags active leaks as urgent, captures the address, damage and insurance details, and books inspections in priority order. You see the full list and decide who to visit first.',
+    busy_note='Example. Addresses are made up.',
+    report=[('Calls answered', '180'), ('Missed calls recovered', '40'), ('Inspections booked', '24'),
+            ('Estimates followed up', '30'), ('Old leads reactivated', '12')],
+    report_foot='Example report with illustrative numbers, not real results. Estimated opportunity value is based on booked inspections and your average job value. It is not revenue.',
+    strip_booked='Inspection booked that day',
+    plan_name='Crewwise for Roofers', founding='Founding roofers',
+    faq_title='Questions roofers ask us',
+    faq=[('How much does it cost?', f"{PRICE} a month. The setup fee is waived for founding roofers, and there's no contract.")] + COMMON_FAQ_TAIL + [
+         ('What happens in storm season?', 'Storm Mode takes many calls at once, flags active leaks as urgent, captures the address, damage and insurance details, and books inspections in priority order. You see the full list and decide who to visit first.'),
+         ('Will it book jobs outside my area?', 'No. It checks your service radius and towns first, and only books jobs inside the area you choose.'),
+         ('Does it handle insurance questions?', 'It captures the claim details, like whether a claim is filed and when the adjuster is coming, and passes complex insurance questions to you.')] + FAQ_END,
+    closing="Next time you're on a roof, let Crewwise pick up.",
+    tagline='AI front desk for roofing companies.',
+    example=ROOF_EXAMPLE,
+)
+
+PAGES = [HOME, ROOFING]
