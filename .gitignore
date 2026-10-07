@@ -12,3 +12,6 @@ Thumbs.db
 
 # Local deploy bundles
 *.zip
+
+# Node
+node_modules/

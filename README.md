@@ -15,3 +15,6 @@ Build command: `python build.py` · Output directory: `public`. `_redirects` sen
 - `design/`: direction, critique log, screenshots, social card source (`design/collateral/og.html`), archive of earlier versions
 
 Legal pages are drafts to be reviewed by a lawyer.
+
+## Social share image
+Edit `og/og-template.html`, then run `npm install` (once) and `npm run og` to regenerate `public/og.jpg`. Bump `?v=` on `og_image` in `site.config.json` each time so WhatsApp fetches the new image.

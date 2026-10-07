@@ -1,0 +1,12 @@
+{
+  "name": "crewwise-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "python build.py",
+    "og": "node scripts/build-og.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.48.0"
+  }
+}

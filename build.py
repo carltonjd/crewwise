@@ -27,9 +27,10 @@ FAVICON_SVG = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rec
                '<polyline points="10,21 22,11 34,21" fill="none" stroke="#F26A1B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
                '<polyline points="15,26 20,31 30,21" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
-def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None, schema=''):
+def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None, schema='', tw_desc=None):
     url = C['domain'] + path
     ot, od = og_title or title, og_desc or desc
+    td = tw_desc or od
     img = C['og_image']
     return f"""<!doctype html>
 <html lang="en">
@@ -41,22 +42,21 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 {extra}<link rel="canonical" href="{url}">
 <meta name="theme-color" content="#0E1A33">
 <meta property="og:type" content="website">
+<meta property="og:url" content="{url}">
 <meta property="og:site_name" content="{B}">
 <meta property="og:locale" content="en_US">
-<meta property="og:url" content="{url}">
 <meta property="og:title" content="{E(ot)}">
 <meta property="og:description" content="{E(od)}">
 <meta property="og:image" content="{img}">
-<meta property="og:image:secure_url" content="{img}">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{B}: AI front desk for roofing companies. Every call answered, every job booked.">
+<meta property="og:image:alt" content="{B} logo with the headline: {B} answers your phone while you're on the roof.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{E(ot)}">
-<meta name="twitter:description" content="{E(od)}">
+<meta name="twitter:description" content="{E(td)}">
 <meta name="twitter:image" content="{img}">
-<meta name="twitter:image:alt" content="{B}: AI front desk for roofing companies.">
+<meta name="twitter:image:alt" content="{B} logo with the headline: {B} answers your phone while you're on the roof.">
 <link rel="icon" href="{p}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="{p}favicon.ico" sizes="any">
 <link rel="icon" href="{p}favicon-32.png" type="image/png" sizes="32x32">
@@ -256,8 +256,9 @@ def home():
     return head(f'AI Receptionist for Roofers | Roofing Answering Service | {B}',
                 f'{B} answers your roofing calls 24/7, qualifies homeowners, books inspections and follows up on every estimate. Built for roofing companies.',
                 '/', p,
-                og_title=f"{B} answers your phone while you're on the roof",
-                og_desc="AI front desk for roofing companies. It picks up when you can't, gets the job details and books the inspection into your calendar. $499 a month.",
+                og_title=f"{B} | AI front desk for roofing companies",
+                og_desc=f"You paid for the lead. We make sure you don't lose it. {B} answers 24/7, qualifies the homeowner and books the inspection into your calendar.",
+                tw_desc=f"You paid for the lead. We make sure you don't lose it. {B} answers 24/7, qualifies the homeowner and books the inspection.",
                 schema=SCHEMA) + header(p) + f"""
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-inner">
