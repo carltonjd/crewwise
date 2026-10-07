@@ -137,7 +137,7 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   .flow svg.path, .flow .node { display: none; }
   .fcard { position: relative; width: auto; left: auto !important; top: auto !important; }
   .fcard::before { content: ""; position: absolute; z-index: 1; left: -29px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px var(--ground); transition: background-color .3s, transform .4s var(--spring); }
-  .js .flow.run .fcard:not(.hit)::before { background: var(--rule-2); transform: scale(.7); }
+  .js .flow.mrun .fcard:not(.hit)::before, .js .flow.run .fcard:not(.hit)::before { background: var(--rule-2); transform: scale(.7); }
   .fcard.booked::before { background: var(--ok-dot); }
   .flow-cap { order: 4; }
   .hero-copy { margin-top: 20px; }
@@ -384,6 +384,7 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
 .leakmap .ck { fill: none; stroke: var(--accent-on-dark); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
 .signal { position: absolute; left: 0; top: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 6px color-mix(in srgb, var(--line) 22%, transparent), 0 0 18px 4px color-mix(in srgb, var(--line) 45%, transparent); opacity: 0; pointer-events: none; z-index: 2; transition: opacity .3s; }
 .typing { display: none; gap: 3px; align-items: center; }
+.mtip { display: none; }
 .typing i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 @media (max-width: 999px) { .signal { display: none; } }
 
@@ -395,7 +396,7 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   .js .flow.run .signal { opacity: 1; }
   .js .flow.run.s2 .typing { display: inline-flex; }
   .js .flow.run.s3 .typing { display: none; }
-  .js .flow.run .typing i { animation: blink 1s ease-in-out infinite; }
+  .js .flow.run .typing i, .js .flow.mrun .typing i { animation: blink 1s ease-in-out infinite; }
   .js .flow.run .typing i:nth-child(2) { animation-delay: .15s; }
   .js .flow.run .typing i:nth-child(3) { animation-delay: .3s; }
   .js .flow.run.s4 .fcard.booked::after { animation: halo 2.4s ease-in-out .8s infinite; }
@@ -404,9 +405,28 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   @keyframes blink { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
   @keyframes halo { 0%, 100% { opacity: 0; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
   @media (max-width: 999px) {
-    /* Cards wait faded (still readable) until the fill reaches their dot */
-    .js .flow.run .fcard { opacity: .35; transform: translateY(6px); animation: none; transition: opacity .4s var(--ease), transform .5s var(--spring); }
-    .js .flow.run .fcard.hit { opacity: 1; transform: none; animation: none; }
+    /* Phones: scroll drives the line (main.js). Cards wait faded, still readable, until the line reaches their dot */
+    .js .flow.mrun .fcard { transform: translateY(8px); transition: transform .6s var(--spring), box-shadow .4s var(--ease); box-shadow: none; }
+    .js .flow.mrun .fcard > * { opacity: .3; transition: opacity .45s var(--ease); }
+    .js .flow.mrun .fcard.hit { transform: none; box-shadow: 0 1px 2px rgba(21,21,21,.05), 0 18px 36px -24px rgba(21,21,21,.35); }
+    .js .flow.mrun .fcard.hit > * { opacity: 1; }
+    .js .flow.mrun .fcard.booked.hit { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok-dot) 12%, transparent), 0 18px 36px -24px rgba(21,21,21,.35); }
+    .js .flow.mrun .fcard.hit::before { animation: dotpop .6s var(--spring); }
+    /* Glowing tip rides the end of the line while it is moving */
+    .mtip { display: block; position: absolute; left: 9px; top: calc(var(--t0, 25px) + var(--fill, 0px)); width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 5px color-mix(in srgb, var(--line) 22%, transparent), 0 0 16px 4px color-mix(in srgb, var(--line) 45%, transparent); opacity: 0; z-index: 2; pointer-events: none; transition: opacity .3s; }
+    .js .flow.mrun:not(.mdone) .mtip { opacity: 1; }
+    /* The AI card shows typing dots for a moment after it wakes; the greeting is always visible */
+    .js .flow.mrun .fcard.dk.hit:not(.said) .typing { display: inline-flex; }
+    /* Qualified card: tags land one by one */
+    .js .flow.mrun .fcard .tags span { opacity: 0; transform: scale(.8); transition: opacity .3s, transform .45s var(--spring); }
+    .js .flow.mrun .fcard:not(.hit) .tags span { opacity: 1; transform: none; transition: none; }
+    .js .flow.mrun .fcard.hit .tags span { opacity: 1; transform: none; }
+    .js .flow.mrun .fcard.hit .tags span:nth-child(1) { transition-delay: .35s; }
+    .js .flow.mrun .fcard.hit .tags span:nth-child(2) { transition-delay: .5s; }
+    .js .flow.mrun .fcard.hit .tags span:nth-child(3) { transition-delay: .65s; }
+    /* Booked: the green pulse once the line arrives */
+    .js .flow.mrun .fcard.booked.hit::after { animation: halo 2.4s ease-in-out .5s infinite; }
+    @keyframes dotpop { 0% { transform: scale(.7); } 50% { transform: scale(1.45); } 100% { transform: scale(1); } }
   }
 
   /* Generic choreography: a .play container gets .in when it scrolls into view */

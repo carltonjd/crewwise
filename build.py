@@ -233,14 +233,15 @@ def trade_page(T):
           <path class="live" d="M0 46 H330 Q360 46 360 76 V140 Q360 170 390 170 H870"/>
         </svg>
         <span class="signal" aria-hidden="true"></span>
+        <span class="mtip" aria-hidden="true"></span>
         <span class="node pill" data-step="1" style="left:9%;top:46px"><i></i>Incoming call</span>
         <span class="node pill" data-step="2" style="left:45%;top:170px"><i></i>Answered</span>
         <span class="node pill" data-step="3" style="left:66%;top:170px"><i></i>Qualified</span>
         <span class="node pill ok" data-step="4" style="left:87%;top:170px"><i></i>Booked</span>
-        <div class="fcard" data-step="1" style="left:1%;top:84px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}</div>
-        <div class="fcard dk" data-step="2" style="left:29%;top:200px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div>"{X['call'][0][0]}"</div>
-        <div class="fcard" data-step="3" style="left:53%;top:200px;width:19%"><div class="h"><span>1:05</span></div>{X['flow_card3']}</div>
-        <div class="fcard booked" data-step="4" style="left:74.5%;top:200px;width:23%"><div class="h"><span>1:48</span></div><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div>
+        <div class="fcard" data-step="1" style="left:1%;top:84px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><div class="fb">{X['flow_card1']}</div></div>
+        <div class="fcard dk" data-step="2" style="left:29%;top:200px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div><span class="say">"{X['call'][0][0]}"</span></div>
+        <div class="fcard" data-step="3" style="left:53%;top:200px;width:19%"><div class="h"><span>1:05</span></div><div class="fb">{X['flow_card3']}</div></div>
+        <div class="fcard booked" data-step="4" style="left:74.5%;top:200px;width:23%"><div class="h"><span>1:48</span></div><div class="fb"><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
       </figure>
       <div class="hero-copy">
         <div>

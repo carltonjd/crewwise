@@ -129,37 +129,50 @@
       };
       if (wide.matches) layout();
       new ResizeObserver(() => { if (wide.matches) { layout(); if (!flow.classList.contains('run')) live.style.strokeDashoffset = 0; } }).observe(flow);
-      /* Phones: the same one-clock logic on a vertical line */
+      /* Phones: the line is driven by scroll, not a clock, so the reader always sees it happen.
+         It fills toward a point 62% down the screen, never retracts, and each card wakes when the line reaches its dot. */
       const cards = steps.map(g => g.find(el => el.classList.contains('fcard')));
-      let mDots = [], mRaf = 0, mTimer = 0;
+      let mDots = [], track = 0, fill = 0, target = 0, mRaf = 0;
       const mLayout = () => {
-        mDots = cards.map(c => c.offsetTop + 25);
+        mDots = cards.map(c => c.offsetTop + 25); track = mDots[3] - mDots[0];
         flow.style.setProperty('--t0', mDots[0] + 'px');
-        flow.style.setProperty('--track', (mDots[3] - mDots[0]) + 'px');
+        flow.style.setProperty('--track', track + 'px');
       };
-      const mStop = () => { cancelAnimationFrame(mRaf); clearTimeout(mTimer); flow.classList.remove('run'); flow.style.removeProperty('--fill'); cards.forEach(c => c.classList.add('hit')); };
-      const mPlay = () => {
-        cancelAnimationFrame(mRaf); clearTimeout(mTimer); mLayout();
-        cards.forEach(c => c.classList.remove('hit')); flow.classList.add('run');
-        const span = mDots[3] - mDots[0], T = 3600, start = performance.now() + 200; let n = 0;
-        const f = now => {
-          const k = Math.min(1, Math.max(0, (now - start) / T)), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2, h = e * span;
-          flow.style.setProperty('--fill', h + 'px');
-          while (n < 4 && mDots[0] + h >= mDots[n] - 1) cards[n++].classList.add('hit');
-          if (k < 1 && visible) mRaf = requestAnimationFrame(f);
-          else if (k >= 1) mTimer = setTimeout(() => visible && !document.hidden && mPlay(), HOLD);
-        };
-        mRaf = requestAnimationFrame(f);
+      const wake = (c, i) => {
+        c.classList.add('hit');
+        if (i === 1) setTimeout(() => c.classList.add('said'), 800);
+        if (i === 3) flow.classList.add('mdone');
       };
-      if (!wide.matches) mLayout();
-      new ResizeObserver(() => { if (!wide.matches) mLayout(); }).observe(flow);
+      const mTick = () => {
+        mRaf = 0;
+        const gap = target - fill;
+        fill += Math.sign(gap) * Math.min(Math.abs(gap), Math.max(1.5, Math.min(9, Math.abs(gap) * .12)));
+        flow.style.setProperty('--fill', fill + 'px');
+        cards.forEach((c, i) => { if (!c.classList.contains('hit') && fill >= mDots[i] - mDots[0] - 1) wake(c, i); });
+        if (fill !== target) mRaf = requestAnimationFrame(mTick);
+      };
+      const mScroll = () => {
+        if (wide.matches || flow.classList.contains('mdone')) return;
+        const at = innerHeight * .62 - (flow.getBoundingClientRect().top + mDots[0]);
+        if (at < 0 || at <= target) return;
+        target = Math.min(track, at);
+        if (!mRaf) mRaf = requestAnimationFrame(mTick);
+      };
+      const mStart = () => {
+        mLayout(); fill = target = 0; flow.classList.remove('mdone', 'run');
+        cards.forEach(c => c.classList.remove('hit', 'said'));
+        flow.style.setProperty('--fill', '0px'); flow.classList.add('mrun'); mScroll();
+      };
+      const mOff = () => { cancelAnimationFrame(mRaf); mRaf = 0; flow.classList.remove('mrun'); flow.style.removeProperty('--fill'); };
+      if (!wide.matches) mStart();
+      addEventListener('scroll', mScroll, { passive: true });
+      new ResizeObserver(() => { if (!wide.matches) { mLayout(); if (fill > track) { fill = target = track; flow.style.setProperty('--fill', fill + 'px'); } mScroll(); } }).observe(flow);
 
       new IntersectionObserver(e => {
         const was = visible; visible = e[0].isIntersecting;
         if (wide.matches) { if (visible && !was) play(); else if (!visible) stop(); }
-        else { if (visible && !was) mPlay(); else if (!visible) mStop(); }
       }, { threshold: .25 }).observe(flow);
-      wide.addEventListener('change', () => { stop(); mStop(); if (wide.matches) { layout(); visible && play(); } else { mLayout(); visible && mPlay(); } });
+      wide.addEventListener('change', () => { stop(); if (wide.matches) { mOff(); layout(); visible && play(); } else { mStart(); } });
     }
   }
 
