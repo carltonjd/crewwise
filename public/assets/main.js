@@ -4,17 +4,22 @@
   if (year) year.textContent = new Date().getFullYear();
 
   /* Smooth scroll like the reference site; off for reduced motion and touch (native scroll is better there) */
-  let lenis = null;
+  let lenis = null, wakeLenis = () => {};
   if (!reduce && window.Lenis && matchMedia('(pointer: fine)').matches) {
     lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
-    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
+    /* Run Lenis's frame loop only while it is moving the page, so an idle page does no work */
+    let looping = false, still = 0;
+    const raf = t => { lenis.raf(t); still = lenis.isScrolling ? 0 : still + 1; if (still < 20) requestAnimationFrame(raf); else looping = false; };
+    const wake = () => { still = 0; if (!looping) { looping = true; requestAnimationFrame(raf); } };
+    wakeLenis = wake;
+    ['wheel', 'keydown', 'pointerdown', 'scroll'].forEach(e => addEventListener(e, wake, { passive: true }));
+    wake();
     document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
       const id = a.getAttribute('href');
       const el = id.length > 1 && document.querySelector(id);
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el, { offset: -88 });
+      wake(); lenis.scrollTo(el, { offset: -88 });
       history.replaceState(null, '', id);
     }));
   }
@@ -67,240 +72,45 @@
     }), { threshold: .12, rootMargin: '0px 0px 8% 0px' });
     document.querySelectorAll('.play').forEach(el => io.observe(el));
 
-    /* Hero: one clock drives the line, the signal and every checkpoint, so they can never drift apart.
-       The path is rebuilt in real pixels (no stretched SVG), so its length and the fill are exact. */
-    const flow = document.querySelector('.flow');
-    const wide = matchMedia('(min-width: 1000px)');
-    if (flow) {
-      const svg = flow.querySelector('svg.path'), base = svg.querySelector('path:not(.live)'), live = svg.querySelector('path.live');
-      const sig = flow.querySelector('.signal');
-      const steps = [1, 2, 3, 4].map(n => [...flow.querySelectorAll(`[data-step="${n}"]`)]);
-      const nodeX = [.09, .45, .66, .87];
-      const TRAVEL = 4200, HOLD = 6500;
-      let W = 0, LEN = 0, stops = [], t0 = 0, raf = 0, timer = 0, visible = false, hit = 0;
-
-      const layout = () => {
-        W = flow.clientWidth; const H = flow.clientHeight; if (!W) return;
-        const VW = document.documentElement.clientWidth, OFF = flow.getBoundingClientRect().left;
-        svg.style.left = -OFF + 'px'; svg.style.width = VW + 'px'; svg.style.right = 'auto';
-        svg.setAttribute('viewBox', `${-OFF} 0 ${VW} ${H}`); svg.setAttribute('preserveAspectRatio', 'none');
-        const bx = .36 * W, r = 30, y1 = 46, y2 = 150;
-        const d = end => `M${-OFF} ${y1} H${bx - r} Q${bx} ${y1} ${bx} ${y1 + r} V${y2 - r} Q${bx} ${y2} ${bx + r} ${y2} H${end}`;
-        base.setAttribute('d', d(VW - OFF)); live.setAttribute('d', d(nodeX[3] * W));
-        base.removeAttribute('pathLength'); live.removeAttribute('pathLength');
-        LEN = live.getTotalLength();
-        // length along the path at which each node sits
-        stops = nodeX.map((nx, i) => {
-          const tx = nx * W, ty = i === 0 ? y1 : y2;
-          let best = 0, bd = 1e9;
-          for (let l = 0; l <= LEN; l += 2) { const p = live.getPointAtLength(l); const dd = Math.hypot(p.x - tx, p.y - ty); if (dd < bd) { bd = dd; best = l; } }
-          return best;
-        });
-        stops[3] = LEN;
-        live.style.strokeDasharray = `${LEN} ${LEN}`;
-      };
-
-      const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      const reach = n => {
-        hit = n; steps[n - 1].forEach(el => el.classList.add('hit'));
-        flow.classList.remove('s1', 's2', 's3', 's4'); flow.classList.add('s' + n);
-      };
-      const frame = now => {
-        const k = Math.min(1, Math.max(0, (now - t0) / TRAVEL)), l = ease(k) * LEN;
-        live.style.strokeDashoffset = LEN - l;
-        const p = live.getPointAtLength(l);
-        sig.style.transform = `translate(${p.x}px, ${p.y}px)`;
-        sig.style.opacity = k >= 1 ? '0' : '';
-        while (hit < 4 && l >= stops[hit] - 1) reach(hit + 1);
-        if (k < 1 && visible) raf = requestAnimationFrame(frame);
-        else if (k >= 1) timer = setTimeout(() => visible && !document.hidden && play(), HOLD);
-      };
-      const play = () => {
-        cancelAnimationFrame(raf); clearTimeout(timer);
-        steps.flat().forEach(el => el.classList.remove('hit')); hit = 0;
-        flow.classList.remove('run', 's1', 's2', 's3', 's4'); void flow.offsetWidth; flow.classList.add('run');
-        live.style.strokeDashoffset = LEN;
-        t0 = performance.now() + 250; raf = requestAnimationFrame(frame);
-      };
-      const stop = () => {
-        cancelAnimationFrame(raf); clearTimeout(timer);
-        flow.classList.remove('run'); steps.flat().forEach(el => el.classList.add('hit'));
-        live.style.strokeDashoffset = 0;
-      };
-      if (wide.matches) layout();
-      new ResizeObserver(() => { if (wide.matches) { layout(); if (!flow.classList.contains('run')) live.style.strokeDashoffset = 0; } }).observe(flow);
-      /* Phones: the line is driven by scroll, not a clock, so the reader always sees it happen.
-         It fills toward a point 62% down the screen, never retracts, and each card wakes when the line reaches its dot. */
-      const cards = steps.map(g => g.find(el => el.classList.contains('fcard')));
-      let mDots = [], track = 0, fill = 0, target = 0, mRaf = 0;
-      const mLayout = () => {
-        mDots = cards.map(c => c.offsetTop + 25); track = mDots[3] - mDots[0];
-        flow.style.setProperty('--t0', mDots[0] + 'px');
-        flow.style.setProperty('--track', track + 'px');
-      };
-      const wake = (c, i) => {
-        c.classList.add('hit');
-        if (i === 1) setTimeout(() => c.classList.add('said'), 800);
-        if (i === 3) flow.classList.add('mdone');
-      };
-      const mTick = () => {
-        mRaf = 0;
-        const gap = target - fill;
-        fill += Math.sign(gap) * Math.min(Math.abs(gap), Math.max(1.5, Math.min(9, Math.abs(gap) * .12)));
-        flow.style.setProperty('--fill', fill + 'px');
-        cards.forEach((c, i) => { if (!c.classList.contains('hit') && fill >= mDots[i] - mDots[0] - 1) wake(c, i); });
-        if (fill !== target) mRaf = requestAnimationFrame(mTick);
-      };
-      const mScroll = () => {
-        if (wide.matches || flow.classList.contains('mdone')) return;
-        const at = innerHeight * .62 - (flow.getBoundingClientRect().top + mDots[0]);
-        if (at < 0 || at <= target) return;
-        target = Math.min(track, at);
-        if (!mRaf) mRaf = requestAnimationFrame(mTick);
-      };
-      const mStart = () => {
-        mLayout(); fill = target = 0; flow.classList.remove('mdone', 'run');
-        cards.forEach(c => c.classList.remove('hit', 'said'));
-        flow.style.setProperty('--fill', '0px'); flow.classList.add('mrun'); mScroll();
-      };
-      const mOff = () => { cancelAnimationFrame(mRaf); mRaf = 0; flow.classList.remove('mrun'); flow.style.removeProperty('--fill'); };
-      if (!wide.matches) mStart();
-      addEventListener('scroll', mScroll, { passive: true });
-      new ResizeObserver(() => { if (!wide.matches) { mLayout(); if (fill > track) { fill = target = track; flow.style.setProperty('--fill', fill + 'px'); } mScroll(); } }).observe(flow);
-
-      new IntersectionObserver(e => {
-        const was = visible; visible = e[0].isIntersecting;
-        if (wide.matches) { if (visible && !was) play(); else if (!visible) stop(); }
-      }, { threshold: .25 }).observe(flow);
-      wide.addEventListener('change', () => { stop(); if (wide.matches) { mOff(); layout(); visible && play(); } else { mStart(); } });
-    }
   }
 
-  /* Overdrive: the hero call as a pinned scene. Scroll decides which beat you are on; a clock plays each beat
-     at a readable pace, one beat at a time. Without motion or sticky support the regular hero flow stays. */
-  const scene = document.querySelector('.scene');
-  if (scene && !reduce && window.CSS && CSS.supports('position', 'sticky')) {
-    document.documentElement.classList.add('od');
-    /* One hero note in the page: move it into the scene rather than showing a second copy */
-    const note = document.querySelector('.hero-inner .flow-cap');
-    if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
-    const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
-    const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li:not(.rail-fill)')], stage = scene.querySelector('.stage');
-    const B = [0, .10, .50, .76];              /* scroll progress where beats 1 to 4 begin; the dialogue gets the most */
-    const CPS = 34;                            /* greeting typing speed, characters per second */
-    const clamp = v => Math.min(1, Math.max(0, v));
-    const set = (c, on) => scene.classList.toggle(c, on);
-    const span = () => Math.max(1, scene.offsetHeight - innerHeight);
-    const scrollP = () => clamp(-scene.getBoundingClientRect().top / span());
-    const beatAt = p => p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
-
-    let shown = 1, busy = false, timers = [], typer = 0;
-    let floor = 1;          /* autoplay raises this to 4: the call plays to the end */
-    let anchor = null;      /* after autoplay is interrupted, scrolling continues from the beat it reached */
-    let collapsed = false, idle = 0;
-    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
-    const clearBeat = () => { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(typer); };
-
-    /* The finished look of beats up to n, applied at once (jumping back, or skimming past) */
-    const finalState = n => {
-      if (type) type.textContent = n >= 2 ? full : '';
-      set('typing', false); set('caller', n >= 2); set('tags', n >= 3); set('drop', n >= 4); set('green', n >= 4); set('sms', n >= 4);
-    };
-    const showBeat = n => {
-      for (let i = 1; i <= 4; i++) set('s' + i, i === n);
-      nodes.forEach((li, i) => li.classList.toggle('hit', i < n));
-      if (fill) fill.style.transform = `scaleX(${(n - 1) / 3})`;
-      set('moved', n > 1);
-    };
-
-    /* Each beat's script. done() fires once it has been on screen long enough to read. fast = skimming. */
-    const play = (n, fast, done) => {
-      clearBeat(); showBeat(n); shown = n;
-      const k = fast ? .6 : 1;
-      if (n === 2) {
-        finalState(1);
-        if (fast) { type.textContent = full; later(() => set('caller', true), 150); later(done, 700); return; }
-        set('typing', true);
-        const t0 = performance.now() + 250;   /* begin once the beat has risen in */
-        const tick = now => {
-          const c = Math.max(0, Math.floor((now - t0) / 1000 * CPS));
-          type.textContent = full.slice(0, c);
-          if (c < full.length) typer = requestAnimationFrame(tick);
-          else { set('typing', false); later(() => set('caller', true), 300); later(done, 300 + 2000); }
-        };
-        typer = requestAnimationFrame(tick);
-      } else if (n === 3) {
-        finalState(2); later(() => set('tags', true), 200 * k); later(done, 1800 * k);
-      } else if (n === 4) {
-        finalState(3);
-        later(() => set('drop', true), 150 * k); later(() => set('green', true), 850 * k); later(() => set('sms', true), 1550 * k);
-        later(done, 1900 * k);
-      } else { finalState(1); later(done, 300); }
-    };
-
-    const effP = sp => {
-      if (!anchor) return sp;
-      const a = B[anchor.s - 1];
-      return sp >= anchor.sp ? a + (sp - anchor.sp) / Math.max(.001, 1 - anchor.sp) * (1 - a) : (sp / Math.max(.001, anchor.sp)) * a;
-    };
-    const target = () => Math.max(beatAt(effP(scrollP())), floor);
-    /* Scroll leads; the clock only sets the pace and never lags behind it:
-       - one beat ahead: the playing beat wraps up within ~0.6s, then the next plays
-       - two or more ahead (a flick): jump to the beat before, play only the one you're on
-       - scene leaving the screen: show the finished call at once */
-    let hurry = 0;
-    const finishNow = () => { clearTimeout(hurry); hurry = 0; clearBeat(); finalState(shown); busy = false; };
-    const step = () => {
-      const t = target(), auto = floor === 4;
-      if (!auto && scene.getBoundingClientRect().bottom < innerHeight * .5 && shown < 4) {
-        finishNow(); showBeat(4); finalState(4); shown = 4; return;
+  /* Hero: the example call plays itself along the route once it's on screen (about 9s), pauses while hovered,
+     touched, off screen or in a background tab, and rests on Booked with Replay. No scroll coupling, and every card
+     keeps its final size from the start, so nothing on the page moves. Without motion the finished call shows. */
+  const route = document.querySelector('.route');
+  if (route && !reduce && 'IntersectionObserver' in window) {
+    const typeEl = route.querySelector('.r-type'), ghost = route.querySelector('.r-ghost'), full = ghost ? ghost.textContent : '';
+    const replay = route.querySelector('.route-replay');
+    const STEPS = [[0, 'at1'], [1400, 'at2'], [1600, 'at-typing'], [3300, 'at-caller'], [5100, 'at3'], [5300, 'at-tags'], [7300, 'at4'], [8000, 'at-sms'], [8700, 'at-done']];
+    const CPS = 45, ALL = STEPS.map(s => s[1]);
+    let t = 0, idx = 0, timer = 0, onScreen = false, held = false, last = 0;
+    const set = (c, on) => route.classList.toggle(c, on);
+    const tick = () => {
+      const now = performance.now();
+      if (onScreen && !held && !document.hidden) t += now - last;
+      last = now;
+      while (idx < STEPS.length && t >= STEPS[idx][0]) set(STEPS[idx++][1], true);
+      if (route.classList.contains('at-typing')) {
+        const c = Math.min(full.length, Math.max(0, Math.floor((t - 1600) / 1000 * CPS)));
+        typeEl.textContent = full.slice(0, c);
+        if (c >= full.length) set('at-typing', false);
       }
-      if (busy) {
-        if (!auto && t > shown && !hurry) hurry = setTimeout(() => { finishNow(); step(); }, 600);
-        if (t < shown) { finishNow(); } else return;
-      }
-      if (t < shown) { clearBeat(); showBeat(t); finalState(t); shown = t; return; }
-      if (t === shown) { if (auto && shown === 4) giveBackScroll(); return; }
-      if (!auto && t - shown >= 2) { showBeat(t - 1); finalState(t - 1); shown = t - 1; }
-      busy = true;
-      play(shown + 1, false, () => { clearTimeout(hurry); hurry = 0; busy = false; step(); });
+      if (idx >= STEPS.length) { clearInterval(timer); timer = 0; replay.hidden = false; }
     };
-
-    /* When the call has played to the end by itself, give back the scene's unused scroll */
-    const giveBackScroll = () => {
-      if (collapsed) return;
-      const top = scene.getBoundingClientRect().top + scrollY;
-      scene.style.height = Math.max(innerHeight + 2, scrollY - top + innerHeight + 2) + 'px';
-      collapsed = true;
+    const start = () => {
+      ALL.forEach(c => set(c, false)); typeEl.textContent = ''; replay.hidden = true;
+      t = 0; idx = 0; last = performance.now(); clearInterval(timer); timer = setInterval(tick, 50); tick();
     };
-    const armIdle = () => {
-      clearTimeout(idle);
-      idle = setTimeout(() => {
-        const r = stage.getBoundingClientRect();
-        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || shown >= 4 || collapsed) return;
-        floor = 4; anchor = null; step();
-      }, 1500);
-    };
-
-    let raf = 0;
-    addEventListener('scroll', () => {
-      if (floor === 4 && !collapsed) { anchor = { sp: scrollP(), s: shown }; floor = 1; }   /* scrolling takes over autoplay */
-      if (scene.getBoundingClientRect().top > innerHeight * .5 && (collapsed || anchor || floor > 1)) {   /* well above: start fresh */
-        if (collapsed) { scene.style.height = ''; collapsed = false; }
-        anchor = null; floor = 1;
-      }
-      armIdle();
-      if (!raf) raf = requestAnimationFrame(() => { raf = 0; step(); });
-    }, { passive: true });
-    addEventListener('resize', () => step());
-    /* Rail steps are buttons: go to that beat */
-    scene.querySelectorAll('.rail button').forEach(btn => btn.addEventListener('click', () => {
-      if (collapsed) { scene.style.height = ''; collapsed = false; }
-      anchor = null; floor = 1;
-      const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + .04);
-      if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' });
-    }));
-    showBeat(1); finalState(1); armIdle();
+    route.classList.add('rplay');
+    let started = false;
+    new IntersectionObserver(es => {
+      onScreen = es[0].isIntersecting;
+      if (onScreen && !started) { started = true; start(); }
+    }, { threshold: .4 }).observe(route);
+    route.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') held = true; });
+    route.addEventListener('pointerleave', () => { held = false; });
+    route.addEventListener('touchstart', e => { if (!e.target.closest('button')) held = !held; }, { passive: true });
+    replay.addEventListener('click', () => { held = false; start(); });
   }
 
   /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
@@ -319,18 +129,6 @@
     new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting)); sync(); }).observe(heroAct);
     const eo = new IntersectionObserver(e => { e.forEach(x => x.isIntersecting ? endSeen.add(x.target) : endSeen.delete(x.target)); seen.set('end', endSeen.size > 0); sync(); });
     ends.forEach(el => eo.observe(el));
-  }
-
-  /* Phone hero line always ends on the Booked dot, with or without motion */
-  const pf = document.querySelector('.flow');
-  if (pf) {
-    const pc = [1, 2, 3, 4].map(n => pf.querySelector(`.fcard[data-step="${n}"]`));
-    const size = () => {
-      if (innerWidth >= 1000 || !pc[0]) return;
-      const a = pc[0].offsetTop + 25, z = pc[3].offsetTop + 25;
-      pf.style.setProperty('--t0', a + 'px'); pf.style.setProperty('--track', (z - a) + 'px');
-    };
-    size(); addEventListener('resize', size); addEventListener('load', size);
   }
 
   if (!reduce && 'IntersectionObserver' in window) {

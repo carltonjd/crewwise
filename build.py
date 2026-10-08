@@ -238,22 +238,6 @@ def trade_page(T):
                 schema=schema(T), T=T) + header(p, T=T) + f"""
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-inner">
-      <figure class="flow play" aria-label="{X['flow_aria']}">
-        <svg class="path" viewBox="0 0 1000 290" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H1000"/>
-          <path class="live" d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H870"/>
-        </svg>
-        <span class="signal" aria-hidden="true"></span>
-        <span class="mtip" aria-hidden="true"></span>
-        <span class="node pill" data-step="1" style="left:9%;top:46px"><i></i>Incoming call</span>
-        <span class="node pill" data-step="2" style="left:45%;top:150px"><i></i>Answered</span>
-        <span class="node pill" data-step="3" style="left:66%;top:150px"><i></i>Qualified</span>
-        <span class="node pill ok" data-step="4" style="left:87%;top:150px"><i></i>Booked</span>
-        <div class="fcard" data-step="1" style="left:1%;top:80px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><div class="fb">{X['flow_card1']}</div></div>
-        <div class="fcard dk" data-step="2" style="left:29%;top:178px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div><span class="say">"{X['call'][0][0]}"</span></div>
-        <div class="fcard" data-step="3" style="left:53%;top:178px;width:19%"><div class="h"><span>1:05</span></div><div class="fb">{X['flow_card3']}</div></div>
-        <div class="fcard booked" data-step="4" style="left:74.5%;top:178px;width:23%"><div class="h"><span>1:48</span></div><div class="fb"><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
-      </figure>
       <div class="hero-copy">
         <div>
           {T['back_link']}<p class="eyebrow">{T['eyebrow']}</p>
@@ -262,23 +246,21 @@ def trade_page(T):
         <div>
           <p class="sub">{T['sub']}</p>
           <div class="act"><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
-          <p class="cta-note">15-minute demo, you'll hear it answer a call. {C['price']} a month, no contract.</p>
           {trade_row}
         </div>
       </div>
-      <div class="scene">
-        <div class="scene-pin">
-          <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
-          <div class="stage" role="img" aria-label="{X['flow_aria']}">
-            <div class="beat b1"><div class="ring"><span></span><span></span></div>
-              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
-            <div class="beat b2"><p class="said ai"><small>{B}</small><span class="type" data-text="{E(X['call'][0][0])}"></span></p><p class="said caller"><small>Caller</small><span>{X['call'][1][0]}</span></p></div>
-            <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts']))}</div></div></div>
-            <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>{X['cal_where']}</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
-              <div class="bubble me sms-pop">{X['sms']}</div></div>
-          </div>
-          <a class="skip-call" href="#leaks">Skip the call</a>
-        </div>
+      <div class="route" role="group" aria-label="{X['flow_aria']}">
+        <ol class="route-steps">
+          <li class="rs rs1"><span class="pill"><i></i>Incoming call<time>0:00</time></span>
+            <div class="rcard"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><p>{X['flow_card1']}</p></div></li>
+          <li class="rs rs2"><span class="pill"><i></i>Answered<time>0:03</time></span>
+            <div class="rcard dk"><p class="r-said"><span class="r-ghost">"{X['call'][0][0]}"</span><span class="r-type" aria-hidden="true"></span></p><p class="r-caller">"{X['call'][1][0]}"</p></div></li>
+          <li class="rs rs3"><span class="pill"><i></i>Qualified<time>1:05</time></span>
+            <div class="rcard"><b class="r-issue">{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts'][:3]))}</div></div></li>
+          <li class="rs rs4"><span class="pill ok"><i></i>Booked<time>1:48</time></span>
+            <div class="rcard booked"><b>Booked Mon 9:00 AM</b><span class="r-where">{X['cal_where']}</span><span class="r-sms">Text confirmation sent</span></div></li>
+        </ol>
+        <button class="route-replay" type="button" hidden>Replay the call</button>
       </div>
       <p class="flow-cap">{T['flow_cap']}</p>
     </div>
