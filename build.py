@@ -117,8 +117,9 @@ def footer(p, home=False, T=HOME):
 <footer class="closing">
   <div class="wrap inner">
     <div class="close-top">
-      <h2>{T['closing']}</h2>
-      <div class="act"><a class="btn light" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>{phone_link('or call ')}</div>
+      <div><h2>{T['closing']}</h2>
+      <div class="act"><a class="btn light" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>{phone_link('or call ')}</div></div>
+      <div class="close-card play" aria-hidden="true"><div class="fcard booked" data-a="s" style="--d:300"><div class="h"><span>1:48</span><span>Example</span></div><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
     </div>
     <a class="foot-logo" href="{p or './'}" aria-label="{B} home">{LOGO_DARK}</a>
     <div class="foot">
@@ -212,7 +213,7 @@ def trade_page(T):
     eb = X['business']
     leaks = ''.join(f'<li data-a style="--d:{i * 90}"><h3>{a}</h3><p>{b}</p><p class="fix">{c}</p></li>' for i, (a, b, c) in enumerate(T['leaks']))
     queue = ''.join(f'<div class="q {c}" data-a style="--d:{400 + i * 220}"><span class="lvl">{l}</span><span><b>{h}</b><small>{d}</small></span><span class="when {k}">{s}</span></div>' for i, (c, l, h, d, s, k) in enumerate(X['queue']))
-    tiles = ''.join(f'<div class="tile" data-a style="--d:{i * 80}"><dt>{k}</dt><dd data-count="{v}">{v}</dd></div>' for i, (k, v) in enumerate(T['report']))
+    ledger = ''.join(f'<div data-a style="--d:{200 + i * 110}"><dt>{k}</dt><dd data-count="{v}">{v}</dd></div>' for i, (k, v) in enumerate(T['report']))
     det = [f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in T['faq']]
     half = (len(det) + 1) // 2
     faq = f'<div class="faq-col">{"".join(det[:half])}</div><div class="faq-col">{"".join(det[half:])}</div>'
@@ -225,6 +226,7 @@ def trade_page(T):
     def feats(items):
         return '<ul class="feats">' + ''.join(f'<li><h4>{h}</h4><p>{d}</p></li>' for h, d in items) + '</ul>'
     m0, m1, m2 = T['moments']
+    rules = ''.join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in X['rules'])
     trade_row = f'<p class="trade-row">{T["trade_row"]}</p>' if T['trade_row'] else ''
     return head(T['title'], T['desc'], T['path'], p, og_title=T['og_title'], og_desc=T['og_desc'], tw_desc=T['tw_desc'],
                 schema=schema(T), T=T) + header(p, T=T) + f"""
@@ -323,31 +325,38 @@ def trade_page(T):
 """ + connector('Every month', '72%', 'from-dark') + f"""
   <section class="wrap" id="report" aria-labelledby="report-title" style="padding-top:56px;padding-bottom:104px">
     <div class="split"><h2 id="report-title">Your monthly Lead Recovery Report</h2><p>Once a month you get a plain count of what happened to every lead.</p></div>
-    <p class="ex-label"><span class="ex">Example report</span>Illustrative numbers, not real results.</p>
-    <dl class="tiles play">{tiles}<div class="tile total" data-a style="--d:420"><dt>Estimated opportunity value</dt><dd data-count="72000" data-prefix="$">$72,000</dd></div></dl>
-    <p class="report-foot">{T['report_foot']}</p>
-    {month_strip(T['strip_booked'])}
+    <article class="sheet play" aria-label="Example Lead Recovery Report">
+      <header class="sheet-h"><div><b>Lead Recovery Report</b><span>{eb}, September</span></div><span class="ex">Example report</span></header>
+      {month_strip(T['strip_booked'])}
+      <dl class="ledger">{ledger}<div class="total" data-a style="--d:{len(T['report']) * 110 + 200}"><dt>Estimated opportunity value</dt><dd data-count="72000" data-prefix="$">$72,000</dd></div></dl>
+      <p class="report-foot">{T['report_foot']}</p>
+    </article>
   </section>
 
   <section class="wrap" id="how-it-works" aria-labelledby="how-title" style="padding-bottom:120px">
     <div class="split"><h2 id="how-title">How it works</h2><p>It works with the tools you already use, so there's no new CRM to learn.</p></div>
-    <ol class="steps play">
-      <li data-a style="--d:200"><span class="pill"><i></i>Step 1</span><h3>30-minute setup call</h3><p>Your services, service area, hours, the questions to ask and your booking rules.</p></li>
-      <li data-a style="--d:600"><span class="pill"><i></i>Step 2</span><h3>Forward your calls</h3><p>Missed and after-hours calls go to a number we set up. <strong>You keep your existing number.</strong></p></li>
-      <li data-a style="--d:1000"><span class="pill"><i></i>Step 3</span><h3>Go live</h3><p>Crewwise starts answering. You can listen to any call, and the Lead Recovery Report arrives each month.</p></li>
+    <ol class="journey play">
+      <li data-a style="--d:200"><span class="pill"><i></i>Step 1</span><h3>30-minute setup call</h3><p>Your services, service area, hours, the questions to ask and your booking rules.</p>
+        <div class="fcard jc"><div class="h"><span>Your rules</span><span>Example</span></div><dl class="rules">{rules}</dl></div></li>
+      <li data-a style="--d:700"><span class="pill"><i></i>Step 2</span><h3>Forward your calls</h3><p>Missed and after-hours calls go to a number we set up. <strong>You keep your existing number.</strong></p>
+        <div class="fcard dk jc"><div class="h"><span>Call forwarding</span><span class="fwd"><span class="switch" aria-hidden="true"></span>On</span></div><b>Missed and after-hours calls</b> now ring through to {B}. Your number stays the same.</div></li>
+      <li data-a style="--d:1200"><span class="pill ok"><i></i>Step 3</span><h3>Go live</h3><p>{B} starts answering. You can listen to any call, and the Lead Recovery Report arrives each month.</p>
+        <div class="fcard booked jc"><div class="h"><span>Live</span><span>Usually 1 to 2 weeks</span></div><b>Answering your calls</b><br>Every call recorded, every booking in your calendar.</div></li>
     </ol>
   </section>
 
   <section class="wrap" id="pricing" aria-labelledby="pricing-title" style="padding-bottom:120px">
     <div class="split"><h2 id="pricing-title">One plan, one price</h2><p>{C['price']} a month covers everything on this page.</p></div>
-    <div class="plan">
-      <div>
+    <div class="price">
+      <div class="price-main">
         <p class="plan-name">{T['plan_name']}</p>
-        <p class="amount">{C['price']}<span>/month</span></p>
-        <p class="founding"><b>{T['founding']}:</b> setup fee waived, month-to-month, cancel anytime.</p>
+        <p class="amount">{C['price']}<span>a month</span></p>
+        <ul class="terms"><li>No contract</li><li>Keep your number</li><li>Cancel anytime</li></ul>
+        <p class="founding"><b>{T['founding']}:</b> setup fee waived.</p>
         <a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>
       </div>
-      <div>
+      <div class="price-side">
+        <p class="side-h">Everything included</p>
         <ul class="includes"><li>Calls answered, qualified and booked, 24/7</li><li>Follow-ups, old leads and review requests</li><li>{T['busy_mode']}</li><li>Monthly Lead Recovery Report</li><li>Setup and tuning done for you</li><li>A real person for support</li></ul>
         <p class="fine">Includes a generous monthly allowance of AI call minutes. We'll tell you upfront if you ever get close. Billed monthly in US dollars. See the <a href="{p}refunds/">refund and cancellation policy</a>.</p>
       </div>

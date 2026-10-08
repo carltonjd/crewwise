@@ -568,3 +568,98 @@ html.lenis, html.lenis body { height: auto; }
 .cb-card p { margin-top: 4px; font-size: var(--t-small); color: var(--ink-2); }
 .cb-card p b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .cb-edit { font: inherit; color: var(--line); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 24px; }
+
+/* ===== Bolder: How it works, as the hero's line with a card per step ===== */
+.journey { position: relative; list-style: none; margin: 64px 0 0; padding: 0; display: grid; gap: 56px; }
+.journey li { position: relative; min-width: 0; }
+.journey .pill { position: relative; z-index: 1; }
+.journey h3 { margin-top: 20px; }
+.journey p { margin-top: 8px; color: var(--ink-2); max-width: 34ch; }
+.journey p strong { color: var(--ink); font-weight: 600; }
+.fcard.jc { position: relative; left: auto; top: auto; width: auto; max-width: 360px; margin-top: 24px; }
+.fcard.jc::before { display: none; }
+.rules { margin: 6px 0 0; display: grid; gap: 6px; }
+.rules div { display: flex; gap: 12px; align-items: baseline; }
+.rules dt { flex: none; width: 4.75rem; font-size: var(--t-meta); color: var(--ink-3); }
+.rules dd { margin: 0; }
+.fwd { display: inline-flex; align-items: center; gap: 8px; color: var(--dark-ink); font-weight: 600; }
+.fwd .switch { width: 30px; height: 17px; }
+.fwd .switch::after { width: 13px; height: 13px; }
+@media (min-width: 900px) {
+  .journey { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .journey::before, .journey::after { content: ""; position: absolute; left: 0; right: 0; top: 15px; height: 2px; border-radius: 2px; background: var(--rule-2); }
+  .journey::after { background: var(--line); transform-origin: left; }
+}
+
+/* ===== Bolder: the report as the document an owner receives ===== */
+.sheet { margin-top: 56px; background: var(--surface); border: 1px solid var(--rule); border-radius: 22px; padding: 26px 20px 22px; box-shadow: 0 1px 2px rgba(17,21,34,.04), 0 30px 60px -40px rgba(17,21,34,.35); }
+@media (min-width: 900px) { .sheet { padding: 44px 48px 36px; } }
+.sheet-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
+.sheet-h b { display: block; font-size: var(--t-h3); font-weight: 600; letter-spacing: -.015em; line-height: 1.2; }
+.sheet-h div span { display: block; margin-top: 4px; color: var(--ink-2); font-size: var(--t-small); }
+.sheet .month { margin: 28px 0 0; padding: 0; border: 0; border-radius: 0; background: none; }
+.ledger { margin: 32px 0 0; }
+.ledger > div { display: flex; align-items: baseline; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+.ledger dt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; color: var(--ink-2); }
+.ledger dt::after { content: ""; flex: 1; min-width: 16px; border-bottom: 1.5px dotted var(--rule-2); }
+.ledger dd { margin: 0; font-size: 1.5rem; font-weight: 500; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.ledger .total { flex-wrap: wrap; margin-top: 10px; padding-top: 22px; border-top: 3px double var(--ink); border-bottom: 0; }
+.ledger .total dt { color: var(--ink); font-weight: 600; font-size: var(--t-lead); }
+.ledger .total dd { font-size: var(--t-h2); letter-spacing: -.04em; }
+.sheet .report-foot { margin-top: 16px; }
+@media (max-width: 559px) { .ledger .total dt::after { display: none; } .ledger .total dd { width: 100%; } }
+
+/* ===== Bolder: pricing as a plain statement, not a card ===== */
+.price { margin-top: 56px; padding-top: 40px; border-top: 2px solid var(--ink); display: grid; gap: 48px; }
+@media (min-width: 900px) { .price { grid-template-columns: 1.1fr .9fr; gap: 80px; } }
+.price .amount { font-size: clamp(4.5rem, 2.6rem + 5vw, 6rem); }
+.price .amount span { font-size: 1.375rem; }
+.terms { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 8px; }
+.terms li { display: flex; align-items: center; gap: 16px; font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-weight: 500; letter-spacing: -.025em; line-height: 1.2; }
+.terms li::before { content: ""; flex: none; width: 15px; height: 8px; margin-top: -6px; border-left: 3px solid var(--line); border-bottom: 3px solid var(--line); transform: rotate(-45deg); }
+.price .founding { margin-top: 26px; font-size: var(--t-body); color: var(--ink-2); }
+.price .founding b { color: var(--ink); }
+.price .btn { margin-top: 26px; }
+.side-h { margin-bottom: 14px; font-size: var(--t-small); font-weight: 600; color: var(--ink-2); }
+
+/* ===== Bolder: the page closes on the booking ===== */
+@media (min-width: 900px) { .close-top { grid-template-columns: 1fr auto; align-items: center; gap: 64px; } }
+.close-card .fcard { position: relative; left: auto; top: auto; width: min(340px, 100%); color: var(--ink); }
+.close-card .fcard::before { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 900px) {
+    .js .journey.play::after { transform: scaleX(0); transition: transform 1.6s var(--ease) .2s; }
+    .js .journey.play.in::after { transform: none; }
+  }
+  .js .journey.play .switch { background: var(--dark-3); transition: background-color .3s 1.4s; }
+  .js .journey.play .switch::after { transform: translateX(-13px); transition: transform .4s var(--spring) 1.4s; }
+  .js .journey.play.in .switch { background: var(--line); }
+  .js .journey.play.in .switch::after { transform: none; }
+  .js .close-card.in .fcard.booked::after { animation: halo 2.4s ease-in-out .9s 3; }
+}
+@media (forced-colors: active) { .sheet { border: 1px solid CanvasText; } }
+
+/* Closing: space between the headline and its button */
+.close-top > div > .act { margin-top: 28px; }
+
+/* ===== Bolder hero ===== */
+@media (min-width: 1000px) {
+  /* Headline first and at full size; the call flow runs underneath as the hero's band */
+  .hero-inner .hero-copy { order: 1; grid-template-columns: 1fr; gap: 28px; margin-top: 8px; }
+  .hero h1 { max-width: 19ch; font-size: clamp(4rem, .5rem + 6vw, 6rem); line-height: .96; }
+  .hero-copy > div:last-child { display: grid; grid-template-columns: minmax(0, 38rem) auto; column-gap: 64px; row-gap: 14px; align-items: center; justify-content: space-between; }
+  .hero-copy > div:last-child .sub { grid-row: span 2; }
+  .hero-copy > div:last-child .act { margin-top: 0; }
+  .hero-copy > div:last-child .trade-row { margin-top: 0; }
+  .hero-inner .flow { order: 2; margin-top: 44px; }
+  .hero-inner .flow-cap { order: 3; }
+}
+@media (max-width: 999px) {
+  /* Phones: claim, then the call happening, then the explanation and the buttons */
+  .hero-inner .hero-copy { display: contents; }
+  .hero-copy > div:first-child { order: 1; margin-top: 20px; }
+  .hero-inner .flow { order: 2; margin-top: 32px; }
+  .hero-copy > div:last-child { order: 3; margin-top: 36px; }
+  .hero-inner .flow-cap { order: 4; }
+}

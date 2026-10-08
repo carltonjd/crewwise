@@ -176,7 +176,7 @@
     }
   }
 
-  /* Phones: a booking button in thumb reach, shown once the hero buttons are off screen,
+  /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
      hidden again while the contact form or the closing band is on screen */
   const mcta = document.querySelector('.mcta'), heroAct = document.querySelector('.hero .act');
   if (mcta && heroAct && 'IntersectionObserver' in window) {
@@ -189,7 +189,7 @@
     };
     const ends = [document.getElementById('contact'), document.querySelector('.closing')].filter(Boolean);
     const endSeen = new Set();
-    new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting || x.boundingClientRect.top > 0)); sync(); }).observe(heroAct);
+    new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting)); sync(); }).observe(heroAct);
     const eo = new IntersectionObserver(e => { e.forEach(x => x.isIntersecting ? endSeen.add(x.target) : endSeen.delete(x.target)); seen.set('end', endSeen.size > 0); sync(); });
     ends.forEach(el => eo.observe(el));
   }
