@@ -74,8 +74,8 @@
 
   }
 
-  /* Hero: the example call plays itself along the route once it's on screen (about 9s), pauses while hovered,
-     touched, off screen or in a background tab, and rests on Booked with Replay. No scroll coupling, and every card
+  /* Hero: the example call plays itself along the route once it's on screen (about 9s), pauses while the mouse
+     rests on it (and says so), off screen or in a background tab, and rests on Booked with Replay. No scroll coupling, and every card
      keeps its final size from the start, so nothing on the page moves. Without motion the finished call shows. */
   if (!reduce && 'IntersectionObserver' in window) document.querySelectorAll('div.route').forEach(route => {
     const typeEl = route.querySelector('.r-type'), ghost = route.querySelector('.r-ghost'), full = ghost ? ghost.textContent : '';
@@ -106,10 +106,10 @@
       onScreen = es[0].isIntersecting;
       if (onScreen && !started) { started = true; start(); }
     }, { threshold: .4 }).observe(route);
-    route.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') held = true; });
-    route.addEventListener('pointerleave', () => { held = false; });
-    route.addEventListener('touchstart', e => { if (!e.target.closest('button')) held = !held; }, { passive: true });
-    replay.addEventListener('click', () => { held = false; start(); });
+    const hold = v => { held = v; set('r-held', v); };
+    route.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hold(true); });
+    route.addEventListener('pointerleave', () => hold(false));
+    replay.addEventListener('click', () => { hold(false); start(); });
   });
 
   /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
@@ -123,7 +123,7 @@
       mcta.classList.toggle('on', on);
       document.documentElement.classList.toggle('mcta-on', on);  /* header button steps aside while the bottom one shows */
     };
-    const ends = [document.getElementById('contact'), document.querySelector('.closing')].filter(Boolean);
+    const ends = [document.querySelector('#pricing .btn'), document.getElementById('contact'), document.querySelector('.closing')].filter(Boolean);
     const endSeen = new Set();
     new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting)); sync(); }).observe(heroAct);
     const eo = new IntersectionObserver(e => { e.forEach(x => x.isIntersecting ? endSeen.add(x.target) : endSeen.delete(x.target)); seen.set('end', endSeen.size > 0); sync(); });
@@ -219,13 +219,14 @@
         const d = digits(v);
         return d.length === 10 || (d.length === 11 && d[0] === '1') ? '' : 'Enter a 10-digit US phone number, like (512) 555-0134.';
       },
-      company: v => !v ? 'Enter your company name.' : v.length < 2 ? 'Enter your full company name.' : '',
+      company: v => v && v.length < 2 ? 'Enter your full company name, or leave it blank.' : '',
+      trade: v => !v ? 'Tell us your trade, like painting or landscaping.' : '',
     };
     const touched = new Set();
     let pressing = false;
     btn.addEventListener('pointerdown', () => { pressing = true; setTimeout(() => { pressing = false; }, 700); });
     const check = input => {
-      const msg = checks[input.name](input.value.trim()), slot = form.querySelector('#e-' + input.name);
+      const msg = checks[input.name](input.value.trim()), slot = form.querySelector('#' + input.getAttribute('aria-describedby'));
       input.setAttribute('aria-invalid', msg ? 'true' : 'false');
       if (slot) { slot.textContent = msg; slot.hidden = !msg; }
       return !msg;
@@ -259,9 +260,29 @@
           const n = thanks.querySelector('.thanks-name'); if (n) n.textContent = first ? ', ' + first : '';
           const cbP = thanks.querySelector('.cb-phone'), cbC = thanks.querySelector('.cb-company');
           if (cbP) cbP.textContent = form.elements.phone.value.trim();
-          if (cbC) cbC.textContent = form.elements.company.value.trim();
+          if (cbC) cbC.textContent = form.elements.company.value.trim() || form.elements.name.value.trim();
           form.hidden = true; thanks.hidden = false; thanks.classList.remove('in'); void thanks.offsetWidth; thanks.classList.add('in'); thanks.focus(); })
         .catch(() => { show(`Your details didn’t send. Check your connection and try again${phone ? ', or call us at ' + phone : email ? ', or email us at ' + email : ''}.`); btn.disabled = false; btn.textContent = label; });
     });
   });
+  /* Other trades: "Join the list" opens the waitlist dialog (without JavaScript the link goes to the contact form) */
+  const join = document.getElementById('join');
+  if (join && join.showModal) {
+    const close = () => join.close();
+    document.addEventListener('click', e => {
+      if (!e.target.closest('[data-join]')) return;
+      e.preventDefault(); e.stopPropagation();
+      join.showModal(); if (lenis) lenis.stop();
+    }, true);
+    join.querySelector('.dlg-x').addEventListener('click', close);
+    join.addEventListener('click', e => { if (e.target === join) close(); });
+    join.addEventListener('close', () => { if (lenis) { lenis.start(); wakeLenis(); } });
+  }
+
+  /* Report chart on phones: start the scroll at the storm, where the story is */
+  const ms = document.querySelector('.month-scroll'), stormTag = ms && ms.querySelector('.storm-tag text'), msSvg = ms && ms.querySelector('svg');
+  if (stormTag && msSvg) {
+    const centre = () => { if (ms.scrollWidth > ms.clientWidth + 4) ms.scrollLeft = +stormTag.getAttribute('x') * msSvg.clientWidth / msSvg.viewBox.baseVal.width - ms.clientWidth / 2; };
+    centre(); addEventListener('load', centre);
+  }
 })();

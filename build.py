@@ -209,6 +209,38 @@ def schema(T):
              "offers": {"@type": "Offer", "price": C['price'].lstrip('$'), "priceCurrency": "USD"}},
         ]}) + '</script>\n'
 
+def join_dialog(T):
+    # Other trades: a short waitlist form in a dialog, so the call-back form below stays a call-back form
+    if 'data-join' not in T['trade_row']:
+        return ''
+    return f"""  <dialog class="join-dialog" id="join" aria-labelledby="join-title">
+    <div class="form">
+      <button class="dlg-x" type="button" aria-label="Close"></button>
+      <form class="lead-form" action="{C['form_endpoint']}" method="POST" novalidate data-phone="{PHONE}" data-email="{C['email']}">
+        <h3 id="join-title">Join the list for your trade</h3>
+        <p class="form-sub">{B} works with roofing companies today. Tell us your trade and we'll call you when it's ready for it.</p>
+        <input type="hidden" name="page" value="{T['slug']}"><input type="hidden" name="interest" value="Other trade waitlist">
+        <div class="fields">
+          <div class="field"><label for="j-name">Name</label><input id="j-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="je-name"><p class="field-err" id="je-name" hidden></p></div>
+          <div class="field"><label for="j-phone">Phone</label><input id="j-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20" aria-describedby="je-phone"><p class="field-err" id="je-phone" hidden></p></div>
+          <div class="field full"><label for="j-trade">Your trade</label><input id="j-trade" name="trade" type="text" required maxlength="80" aria-describedby="je-trade"><p class="field-err" id="je-trade" hidden></p></div>
+          <div class="field full"><label for="j-company">Company <span class="opt">(optional)</span></label><input id="j-company" name="company" type="text" autocomplete="organization" maxlength="120" aria-describedby="je-company"><p class="field-err" id="je-company" hidden></p></div>
+          <div class="hp" aria-hidden="true"><label for="j-gotcha">Leave this field empty</label><input id="j-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+        </div>
+        <div class="form-foot">
+          <button class="btn" type="submit">Join the list</button>
+          <p>We'll only use your details to contact you about {B}.</p>
+          <div class="form-error" role="alert" hidden></div>
+        </div>
+      </form>
+      <div class="thanks" tabindex="-1" hidden role="status">
+        <h3>Thanks<span class="thanks-name"></span>. You're on the list.</h3>
+        <p>We'll call you when {B} is ready for your trade.</p>
+      </div>
+    </div>
+  </dialog>
+"""
+
 def trade_page(T):
     p, X = T['p'], T['example']
     eb = X['business']
@@ -260,7 +292,8 @@ def trade_page(T):
           <li class="rs rs4"><span class="pill ok"><i></i>Booked<time>1:48</time></span>
             <div class="rcard booked"><b>Booked Mon 9:00 AM</b><span class="r-where">{X['cal_where']}</span><span class="r-sms">Text confirmation sent</span></div></li>
         </ol>
-        <button class="route-replay" type="button" hidden>Replay the call</button>
+        <button class="route-replay" type="button" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9"/><path d="M12.4 1.4v3.3H9.1"/></svg>Replay the call</button>
+        <span class="route-held" aria-hidden="true">Paused while you read</span>
       </div>
       <p class="flow-cap">{T['flow_cap']}</p>
     </div>
@@ -272,6 +305,7 @@ def trade_page(T):
       {leakmap(T['leakmap_start'])}
       <ul class="leaks play">{leaks}</ul>
       <p class="plug">{B} covers all five for one monthly price.</p>
+      <div class="plug-act"><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><span>{C['price']} a month, no contract</span></div>
     </div>
   </section>
 """ + connector('What it does', '64%', 'from-dark') + f"""
@@ -361,7 +395,7 @@ def trade_page(T):
       <div class="price-side">
         <p class="side-h">Everything included</p>
         <ul class="includes"><li>Calls answered, qualified and booked, 24/7</li><li>Follow-ups, old leads and review requests</li><li>{T['busy_mode']}</li><li>Monthly Lead Recovery Report</li><li>Setup and tuning done for you</li><li>A real person for support</li></ul>
-        <p class="fine">Includes a generous monthly allowance of AI call minutes. We'll tell you upfront if you ever get close. Billed monthly in US dollars. See the <a href="{p}refunds/">refund and cancellation policy</a>.</p>
+        <p class="fine">Includes a generous monthly allowance of AI call minutes. We'll tell you upfront if you ever get close, and we never charge for extra minutes without your agreement. Billed monthly in US dollars. See the <a href="{p}refunds/">refund and cancellation policy</a>.</p>
       </div>
     </div>
   </section>
@@ -386,11 +420,11 @@ def trade_page(T):
         <form class="lead-form" action="{C['form_endpoint']}" method="POST" novalidate data-phone="{PHONE}" data-email="{C['email']}">
           <h3>We'll call you back</h3>
           <p class="form-sub">We'll call you to set up a 15-minute demo.</p>
-          <input type="hidden" name="page" value="{T['slug']}">
+          <input type="hidden" name="page" value="{T['slug']}"><input type="hidden" name="interest" value="Demo">
           <div class="fields">
             <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="e-name"><p class="field-err" id="e-name" hidden></p></div>
-            <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20" placeholder="(512) 555-0134" aria-describedby="e-phone"><p class="field-err" id="e-phone" hidden></p></div>
-            <div class="field full"><label for="f-company">Company</label><input id="f-company" name="company" type="text" autocomplete="organization" required minlength="2" maxlength="120" aria-describedby="e-company"><p class="field-err" id="e-company" hidden></p></div>
+            <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20" aria-describedby="e-phone"><p class="field-err" id="e-phone" hidden></p></div>
+            <div class="field full"><label for="f-company"><span class="lbl">Company</span> <span class="opt">(optional)</span></label><input id="f-company" name="company" type="text" autocomplete="organization" maxlength="120" aria-describedby="e-company"><p class="field-err" id="e-company" hidden></p></div>
             <div class="hp" aria-hidden="true"><label for="f-gotcha">Leave this field empty</label><input id="f-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
           </div>
           <div class="form-foot">
@@ -408,7 +442,7 @@ def trade_page(T):
       </div>
     </div>
   </section>
-  <div class="mcta" hidden><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a></div>
+{join_dialog(T)}  <div class="mcta" hidden><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><a class="mcta-cb" href="#contact">Call me back</a></div>
 """ + footer(p, home=True, T=T)
 
 # ---------------- Legal pages ----------------

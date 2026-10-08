@@ -6,6 +6,9 @@ colors:
   logo-blue-raised: "#2C68E4"
   logo-blue-rule: "#5A8BEE"
   deep-navy: "#0B1530"
+  navy-raised: "#17244B"
+  navy-rule: "#2B3B68"
+  navy-soft-text: "#C3CDE3"
   sun-yellow: "#FFC233"
   sun-yellow-pressed: "#FFB300"
   pale-sun: "#FFE08A"
@@ -136,7 +139,7 @@ Crewwise looks like a contractor's plan sheet that works: a crisp white page, a 
 
 The mood is bold, sharp and modern. Headlines are big and tight, the logo blue owns whole sections, and one sun-yellow action sits on every screen. The parts you touch are friendly and soft: generously rounded corners, light borders and short lifts, so the boldness reads as confident rather than hard. Density is generous on the page and compact inside the cards, the way a plan has open margins and dense annotations.
 
-Motion is narrative, never decorative. The page plays the product: the call happens as you scroll, the busy-day list sorts itself, the line draws to the next step. Everything is complete and readable without motion.
+Motion is narrative, never decorative. The page plays the product: the example call plays itself once it's on screen, the busy-day list sorts itself, the line draws to the next step. Everything is complete and readable without motion.
 
 **Key Characteristics:**
 - Crisp white sheet with a faint logo-blue plan grid fading from the top right of the first screen.
@@ -202,7 +205,7 @@ A two-colour brand on white: logo blue carries identity and structure, sun yello
 
 A centred sheet: content sits in a 1240px container with a 20px gutter on phones, and logo-blue or navy bands run full bleed behind it. Sections open with a split header (headline left, lead paragraph right) on desktop and stack on phones. Sections are separated by generous space (88 to 120px) and joined by a thin vertical connector line with a dot, the plan's route from one area to the next.
 
-Breakpoints follow the content: 560, 640, 760, 900, 980, 1000 and 1100px. Below 1000px the hero reorders to headline, explanation and buttons, then the call scene. Phones get a sun-yellow booking bar in thumb reach once the hero buttons scroll away; it hides near the form and the closing band, and the header button steps aside while it shows.
+Breakpoints follow the content: 560, 640, 760, 900, 980, 1000 and 1100px. Below 1000px the hero reorders to headline, explanation and buttons, then the call route as a vertical timeline. Phones get a sun-yellow booking bar in thumb reach once the hero buttons scroll away; it hides near the form and the closing band, and the header button steps aside while it shows.
 
 The plan grid (56px squares, logo blue at 9% opacity) exists only behind the top of the first screen, fading out from the top right. It never runs behind body content.
 
@@ -261,8 +264,8 @@ Friendly, solid and unmistakable.
 ### The Call Line (signature)
 The brand's route mark: a logo-blue line with checkpoint dots that carries a call from ring to booked. It appears as the hero's progress rail, the journey through How it works, the connectors between sections, and the phone hero track. Checkpoints fill blue as they are reached and turn green at Booked.
 
-### The Call Scene (signature)
-The hero's pinned scene plays one example call in four beats (ringing, answered, qualified, booked) as you scroll, with a scroll cue, autoplay after a pause, clickable rail steps and a skip link. Without motion it shows the four cards as a static diagram.
+### The Call Route (signature)
+The hero's example call plays itself in four steps (incoming call, answered, qualified, booked) along the call line once it's on screen, in about nine seconds, with no scroll coupling. The step that's playing widens and finished steps fade back; steps still to come show their content faded. It pauses off screen, in a background tab and while the mouse rests on it (with a visible "Paused" note), then rests on Booked with Replay. The row keeps its height throughout, so nothing below moves. Without motion it shows the finished call.
 
 ### The Report Sheet (signature)
 The monthly report drawn as the document itself: a header with the business and month, the storm chart, then a ledger of counts with dotted leaders. Counts only; no money figures.
