@@ -64,7 +64,7 @@
       e.target.classList.add('in');
       e.target.querySelectorAll('[data-count]').forEach(countUp);
       io.unobserve(e.target);
-    }), { threshold: .3, rootMargin: '0px 0px -8% 0px' });
+    }), { threshold: .12, rootMargin: '0px 0px 8% 0px' });
     document.querySelectorAll('.play').forEach(el => io.observe(el));
 
     /* Hero: one clock drives the line, the signal and every checkpoint, so they can never drift apart.
@@ -176,7 +176,112 @@
     }
   }
 
-  /* Phones: a booking button in thumb reach, shown once the hero buttons are off screen,
+  /* Overdrive: the hero call as a pinned, scroll-driven scene. Without motion or sticky support,
+     the regular hero flow stays in place, so nothing is lost. */
+  const scene = document.querySelector('.scene');
+  if (scene && !reduce && window.CSS && CSS.supports('position', 'sticky')) {
+    document.documentElement.classList.add('od');
+    /* One hero note in the page: move it into the scene rather than showing a second copy */
+    const note = document.querySelector('.hero-inner .flow-cap');
+    if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
+    const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
+    const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li:not(.rail-fill)')], stage = scene.querySelector('.stage');
+    const B = [0, .16, .40, .72];   /* beat starts; Qualified gets the widest window */
+    const clamp = v => Math.min(1, Math.max(0, v));
+    let raf = 0, lastP = -1, cur = 0, idle = 0, auto = 0, playing = false, autoP = 0, anchor = null, collapsed = false;
+    const set = (c, on) => scene.classList.toggle(c, on);
+    const span = () => Math.max(1, scene.offsetHeight - innerHeight);
+    const scrollP = () => clamp(-scene.getBoundingClientRect().top / span());
+    /* Scroll position to scene progress. After autoplay has run ahead, scrolling continues from where the call is
+       (an anchor), so there is no stretch of scroll where nothing happens. */
+    const progress = sp => {
+      if (playing) return Math.max(sp, autoP);
+      if (!anchor) return sp;
+      if (sp >= anchor.sp) return anchor.a + (sp - anchor.sp) * (1 - anchor.a) / Math.max(.001, 1 - anchor.sp);
+      return anchor.sp > 0 ? (sp / anchor.sp) * anchor.a : anchor.a;
+    };
+    const reset = () => {
+      anchor = null; autoP = 0;
+      if (collapsed) { scene.style.height = ''; collapsed = false; }
+    };
+    const update = () => {
+      raf = 0;
+      if (scene.getBoundingClientRect().top > innerHeight * .5 && (anchor || collapsed)) reset();   /* well above the scene again: start fresh */
+      const p = progress(scrollP());
+      cur = p;
+      set('moved', p > .06);
+      if (p === lastP) return;
+      lastP = p;
+      const beat = p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
+      for (let i = 1; i <= 4; i++) set('s' + i, beat === i);
+      nodes.forEach((n, i) => n.classList.toggle('hit', p >= B[i]));
+      if (fill) fill.style.transform = `scaleX(${clamp(p / B[3])})`;
+      const l2 = clamp((p - B[1]) / (B[2] - B[1]));
+      if (type) type.textContent = full.slice(0, Math.round(full.length * clamp(l2 * 1.7)));
+      set('typing', l2 > 0 && l2 < .59);
+      set('caller', l2 > .62 || beat > 2);
+      set('tags', clamp((p - B[2]) / (B[3] - B[2])) > .12 || beat > 3);
+      const l4 = clamp((p - B[3]) / (1 - B[3]));
+      set('drop', l4 > .12);
+      set('green', l4 > .38);
+      set('sms', l4 > .55);
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
+    /* Pause for 3s with the stage in view and the call plays itself to the end: greeting, reply,
+       details, booking, holding on each beat. Scrolling takes over at any time. */
+    let run = 0;
+    const settle = () => { if (playing) { playing = false; anchor = { sp: scrollP(), a: cur }; } };
+    const stopAuto = () => { run++; cancelAnimationFrame(auto); settle(); };
+    /* When the call has played to the end, give back the scene's unused scroll so the next scroll leaves it */
+    const collapse = () => {
+      const top = scene.getBoundingClientRect().top + scrollY;
+      scene.style.height = Math.max(innerHeight + 2, scrollY - top + innerHeight + 2) + 'px';
+      collapsed = true; anchor = { sp: scrollP(), a: 1 }; lastP = -1; update();
+    };
+    const tween = (to, ms, token) => new Promise(res => {
+      const from = cur, t0 = performance.now();
+      const step = now => {
+        if (token !== run) return res(false);
+        const k = clamp((now - t0) / ms); autoP = from + (to - from) * (1 - Math.pow(1 - k, 2)); lastP = -1; update();
+        if (k < 1) auto = requestAnimationFrame(step); else res(true);
+      };
+      auto = requestAnimationFrame(step);
+    });
+    const hold = (ms, token) => new Promise(res => setTimeout(() => res(token === run), ms));
+    const autoplay = async () => {
+      const token = ++run;
+      playing = true; autoP = cur; anchor = null;
+      const stops = [[B[2] - .02, 2600, 1400], [B[3] - .03, 1500, 1800], [1, 1400, 0]];   /* [target, move ms, hold ms] */
+      for (const [to, ms, wait] of stops) {
+        if (cur >= to) continue;
+        if (!(await tween(to, ms, token))) return;
+        if (wait && !(await hold(wait, token))) return;
+      }
+      playing = false;
+      collapse();
+    };
+    const armIdle = () => {
+      clearTimeout(idle);
+      idle = setTimeout(() => {
+        const r = stage.getBoundingClientRect();
+        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || cur >= .98 || collapsed) return;
+        autoplay();
+      }, 3000);
+    };
+    addEventListener('scroll', () => { stopAuto(); armIdle(); }, { passive: true });
+    addEventListener('scroll', kick, { passive: true });
+    armIdle();
+    /* Rail steps are buttons: jump to that beat */
+    scene.querySelectorAll('.rail button').forEach(btn => btn.addEventListener('click', () => {
+      stopAuto(); anchor = null; if (collapsed) { scene.style.height = ''; collapsed = false; }
+      const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + (i === 3 ? .2 : .1));
+      if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' });
+    }));
+    addEventListener('resize', () => { lastP = -1; kick(); });
+    update();
+  }
+
+  /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
      hidden again while the contact form or the closing band is on screen */
   const mcta = document.querySelector('.mcta'), heroAct = document.querySelector('.hero .act');
   if (mcta && heroAct && 'IntersectionObserver' in window) {
@@ -189,7 +294,7 @@
     };
     const ends = [document.getElementById('contact'), document.querySelector('.closing')].filter(Boolean);
     const endSeen = new Set();
-    new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting || x.boundingClientRect.top > 0)); sync(); }).observe(heroAct);
+    new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting)); sync(); }).observe(heroAct);
     const eo = new IntersectionObserver(e => { e.forEach(x => x.isIntersecting ? endSeen.add(x.target) : endSeen.delete(x.target)); seen.set('end', endSeen.size > 0); sync(); });
     ends.forEach(el => eo.observe(el));
   }
@@ -204,6 +309,69 @@
       pf.style.setProperty('--t0', a + 'px'); pf.style.setProperty('--track', (z - a) + 'px');
     };
     size(); addEventListener('resize', size); addEventListener('load', size);
+  }
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    const once = (el, fn, threshold = .35) => {
+      const o = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { o.disconnect(); fn(); } }, { threshold });
+      o.observe(el);
+    };
+
+    /* Busy-day list: calls show up in the order they came in, then sort themselves by urgency */
+    const queue = document.querySelector('.queue');
+    if (queue) {
+      const rows = [...queue.querySelectorAll('.q')], state = queue.querySelector('.q-state');
+      const arrival = [2, 0, 3, 1].filter(i => i < rows.length);
+      if (rows.length === 4) {
+        rows.forEach(r => { r.removeAttribute('data-a'); r.style.opacity = '0'; });
+        if (state) state.textContent = 'Incoming calls';
+        once(queue, () => {
+          const tops = rows.map(r => r.getBoundingClientRect().top), hs = rows.map(r => r.offsetHeight);
+          const gap = Math.max(0, tops[1] - tops[0] - hs[0]);
+          let y = tops[0]; const slot = [];
+          arrival.forEach(i => { slot[i] = y; y += hs[i] + gap; });
+          rows.forEach((r, i) => { r.style.transition = 'none'; r.style.transform = `translateY(${slot[i] - tops[i]}px)`; });
+          if (state) state.textContent = 'Incoming calls';
+          /* If the rows change size mid-sequence (fonts, translation, rotation), stop and show the sorted list */
+          const timers = []; let done = false;
+          const finish = () => { if (done) return; done = true; timers.forEach(clearTimeout); ro.disconnect();
+            rows.forEach(r => { r.style.transition = ''; r.style.transform = ''; r.style.opacity = ''; });
+            if (state) state.textContent = 'Sorted by urgency'; queue.classList.add('sorted'); };
+          const w0 = queue.offsetWidth, h0 = rows.map(r => r.offsetHeight).join();
+          const ro = new ResizeObserver(() => { if (queue.offsetWidth !== w0 || rows.map(r => r.offsetHeight).join() !== h0) finish(); });
+          ro.observe(queue); rows.forEach(r => ro.observe(r));
+          arrival.forEach((i, k) => timers.push(setTimeout(() => { rows[i].style.transition = 'opacity .4s ease'; rows[i].style.opacity = '1'; }, 350 + k * 380)));
+          timers.push(setTimeout(() => {
+            if (state) state.textContent = 'Sorted by urgency';
+            rows.forEach(r => { r.style.transition = 'transform .8s cubic-bezier(.22,1,.36,1), opacity .25s ease'; r.style.transform = ''; r.style.opacity = '.45'; });
+            timers.push(setTimeout(() => rows.forEach(r => { r.style.opacity = '1'; }), 650));
+            queue.classList.add('sorted');
+            timers.push(setTimeout(() => { done = true; ro.disconnect(); }, 900));
+          }, 350 + arrival.length * 380 + 700));
+        });
+      }
+    }
+
+    /* Live call: the recording timer runs while the transcript types in */
+    document.querySelectorAll('.tmr').forEach(t => {
+      const card = t.closest('.ui');
+      once(card, () => {
+        const end = 24, dur = 3600, t0 = performance.now();
+        const tick = now => {
+          const s = Math.min(end, Math.floor((now - t0) / dur * end));
+          t.textContent = ` 0:${String(s).padStart(2, '0')}`;
+          if (s < end) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    });
+  }
+
+  /* FAQ: the first six questions show; the rest open with "More questions". Without JS all of them show. */
+  const more = document.querySelector('.faq-more'), extra = document.getElementById('faq-extra');
+  if (more && extra) {
+    more.hidden = false; extra.hidden = true; more.setAttribute('aria-expanded', 'false');
+    more.addEventListener('click', () => { extra.hidden = false; more.setAttribute('aria-expanded', 'true'); more.hidden = true; const q = extra.querySelector('summary'); if (q) q.focus(); });
   }
 
   function countUp(el) {
@@ -235,6 +403,8 @@
       company: v => !v ? 'Enter your company name.' : v.length < 2 ? 'Enter your full company name.' : '',
     };
     const touched = new Set();
+    let pressing = false;
+    btn.addEventListener('pointerdown', () => { pressing = true; setTimeout(() => { pressing = false; }, 700); });
     const check = input => {
       const msg = checks[input.name](input.value.trim()), slot = form.querySelector('#e-' + input.name);
       input.setAttribute('aria-invalid', msg ? 'true' : 'false');
@@ -243,12 +413,19 @@
     };
     Object.keys(checks).forEach(n => {
       const input = form.elements[n]; if (!input) return;
-      input.addEventListener('blur', () => {
+      input.addEventListener('blur', e => {
         if (n === 'phone') { const d = digits(input.value), t = d.length === 11 && d[0] === '1' ? d.slice(1) : d; if (t.length === 10) input.value = `(${t.slice(0, 3)}) ${t.slice(3, 6)}-${t.slice(6)}`; }
+        /* Heading for the submit button: let submit validate, so an error message can't shift the button out from under the tap */
+        if (e.relatedTarget === btn || pressing) return;
         if (input.value.trim()) touched.add(n);
         if (touched.has(n)) check(input);
       });
       input.addEventListener('input', () => { if (touched.has(n)) check(input); if (!err.hidden && form.querySelectorAll('[aria-invalid="true"]').length === 0) err.hidden = true; });
+    });
+    const edit = box.querySelector('.cb-edit');
+    if (edit) edit.addEventListener('click', () => {
+      thanks.hidden = true; form.hidden = false; btn.disabled = false; btn.textContent = 'Send again';
+      form.elements.phone.focus(); form.elements.phone.select();
     });
     form.addEventListener('submit', e => {
       e.preventDefault(); err.hidden = true;
@@ -261,7 +438,10 @@
         .then(r => { if (!r.ok) throw 0;
           const first = (form.elements.name.value || '').trim().split(/\s+/)[0];
           const n = thanks.querySelector('.thanks-name'); if (n) n.textContent = first ? ', ' + first : '';
-          form.hidden = true; thanks.hidden = false; thanks.focus(); })
+          const cbP = thanks.querySelector('.cb-phone'), cbC = thanks.querySelector('.cb-company');
+          if (cbP) cbP.textContent = form.elements.phone.value.trim();
+          if (cbC) cbC.textContent = form.elements.company.value.trim();
+          form.hidden = true; thanks.hidden = false; thanks.classList.remove('in'); void thanks.offsetWidth; thanks.classList.add('in'); thanks.focus(); })
         .catch(() => { show(`Your details didn’t send. Check your connection and try again${phone ? ', or call us at ' + phone : email ? ', or email us at ' + email : ''}.`); btn.disabled = false; btn.textContent = label; });
     });
   });

@@ -66,7 +66,7 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 <link rel="manifest" href="{p}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{p}assets/style.css">
 <script>document.documentElement.classList.add('js')</script>
 {schema}</head>
@@ -75,13 +75,14 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 """
 
 def nav_items(T):
-    # Same order as the sections on the page, so each link moves further down
-    return [('#' + T['busy_id'], T['busy_nav']), ('#how-it-works', 'How it works'), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
+    # Same order as the sections on the page, so each link moves further down; Roofing first on the general pages
+    trades = [('roofing/', 'Roofing')] if T['slug'] == 'home' else []
+    return trades + [('#' + T['busy_id'], T['busy_nav']), ('#how-it-works', 'How it works'), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
 
 def header(p, nav=True, T=HOME):
     items = nav_items(T)
     href = lambda h: h if nav else f'{p}{h}'
-    links = ''.join(f'<a href="{href(h)}" data-spy="{h[1:]}">{t}</a>' for h, t in items)
+    links = ''.join(f'<a href="{href(h)}" data-spy="{h[1:]}">{t}</a>' if h.startswith('#') else f'<a href="{p}{h}">{t}</a>' for h, t in items)
     login = f'<a class="login" href="{LOGIN}">Client login</a>' if LOGIN else ''
     return f"""<header class="site-header">
   <div class="wrap">
@@ -117,8 +118,9 @@ def footer(p, home=False, T=HOME):
 <footer class="closing">
   <div class="wrap inner">
     <div class="close-top">
-      <h2>{T['closing']}</h2>
-      <div class="act"><a class="btn light" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>{phone_link('or call ')}</div>
+      <div><h2>{T['closing']}</h2>
+      <div class="act"><a class="btn light" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>{phone_link('or call ')}</div></div>
+      <div class="close-card play" aria-hidden="true"><div class="fcard booked" data-a="s" style="--d:300"><div class="h"><span>1:48</span><span>Example</span></div><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
     </div>
     <a class="foot-logo" href="{p or './'}" aria-label="{B} home">{LOGO_DARK}</a>
     <div class="foot">
@@ -171,6 +173,8 @@ def month_strip(booked_label):
             anc = 'start' if d == 0 else 'end' if d == 29 else 'middle'
             tx = d * step + 1 if d == 0 else W - 1 if d == 29 else x
             out.append(f'<text x="{tx:.1f}" y="{base + 26}" text-anchor="{anc}">Sep {d + 1}</text>')
+    peak = max(range(30), key=lambda d: calls[d]); px = peak * step + step / 2; py = base - 6 - calls[peak] * 5 - 22
+    out.append(f'<g class="storm-tag" style="--d:{30 * 45 + 300}"><text x="{px:.1f}" y="{py:.1f}" text-anchor="middle">Storm</text></g>')
     out.insert(0, f'<line x1="0" x2="{W}" y1="{base}" y2="{base}" stroke="var(--ink-2)"/>')
     return (f'<figure class="month play"><div class="month-scroll"><svg viewBox="0 0 {W} {H}" role="img" aria-label="Example: calls answered each day in September, 180 in total, with a spike mid-month after a storm, and the 24 days with a booking marked.">{"".join(out)}</svg></div>'
             '<p class="swipe">Scroll for the full month</p><figcaption><span><i class="k-call"></i>One call answered</span><span><i class="k-book"></i>' + booked_label + '</span></figcaption></figure>')
@@ -210,19 +214,25 @@ def trade_page(T):
     eb = X['business']
     leaks = ''.join(f'<li data-a style="--d:{i * 90}"><h3>{a}</h3><p>{b}</p><p class="fix">{c}</p></li>' for i, (a, b, c) in enumerate(T['leaks']))
     queue = ''.join(f'<div class="q {c}" data-a style="--d:{400 + i * 220}"><span class="lvl">{l}</span><span><b>{h}</b><small>{d}</small></span><span class="when {k}">{s}</span></div>' for i, (c, l, h, d, s, k) in enumerate(X['queue']))
-    tiles = ''.join(f'<div class="tile" data-a style="--d:{i * 80}"><dt>{k}</dt><dd data-count="{v}">{v}</dd></div>' for i, (k, v) in enumerate(T['report']))
-    det = [f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in T['faq']]
-    half = (len(det) + 1) // 2
-    faq = f'<div class="faq-col">{"".join(det[:half])}</div><div class="faq-col">{"".join(det[half:])}</div>'
+    ledger = ''.join(f'<div data-a style="--d:{200 + i * 110}"><dt>{k}</dt><dd data-count="{v}">{v}</dd></div>' for i, (k, v) in enumerate(T['report']))
+    first = ('How much', 'What does it sound', 'What if a caller', 'What if it gets', 'Do I keep', 'Can I switch')
+    qa = sorted(T['faq'], key=lambda x: next((i for i, f in enumerate(first) if x[0].startswith(f)), 99))
+    det = [f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in qa]
+    top, rest = det[:6], det[6:]
+    half = (len(rest) + 1) // 2
+    faq = (f'<div class="faq-col">{"".join(top[:3])}</div><div class="faq-col">{"".join(top[3:])}</div>'
+           f'<div class="faq-extra" id="faq-extra"><div class="faq-col">{"".join(rest[:half])}</div><div class="faq-col">{"".join(rest[half:])}</div></div>'
+           f'<button class="faq-more" type="button" aria-controls="faq-extra" aria-expanded="true" hidden>More questions ({len(rest)})</button>')
     call = ''
-    for i, (line, who) in enumerate(X['call']):
+    for i, (line, who) in enumerate(X['w_call']):
         cls, name = (' class="ai"', B) if who == 'ai' else ('', 'Caller')
         call += f'<p{cls} data-a style="--d:{200 + i * 750}"><b>{name}</b><span>{line}</span></p>'
-    chips = ''.join(f'<span data-a="s" style="--d:{3100 + i * 140}">{c}</span>' for i, c in enumerate(X['chips']))
+    chips = ''.join(f'<span data-a="s" style="--d:{3100 + i * 140}">{c}</span>' for i, c in enumerate(X['w_chips']))
     thread = ''.join(f'<div class="msg{" " + k if k else ""}" data-a style="--d:{200 + i * 1000}"><small>{h}</small>{m}</div>' for i, (h, m, k) in enumerate(X['followups']))
     def feats(items):
         return '<ul class="feats">' + ''.join(f'<li><h4>{h}</h4><p>{d}</p></li>' for h, d in items) + '</ul>'
     m0, m1, m2 = T['moments']
+    rules = ''.join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in X['rules'])
     trade_row = f'<p class="trade-row">{T["trade_row"]}</p>' if T['trade_row'] else ''
     return head(T['title'], T['desc'], T['path'], p, og_title=T['og_title'], og_desc=T['og_desc'], tw_desc=T['tw_desc'],
                 schema=schema(T), T=T) + header(p, T=T) + f"""
@@ -252,7 +262,22 @@ def trade_page(T):
         <div>
           <p class="sub">{T['sub']}</p>
           <div class="act"><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
+          <p class="cta-note">15-minute demo, you'll hear it answer a call. {C['price']} a month, no contract.</p>
           {trade_row}
+        </div>
+      </div>
+      <div class="scene">
+        <div class="scene-pin">
+          <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
+          <div class="stage" role="img" aria-label="{X['flow_aria']}">
+            <div class="beat b1"><div class="ring"><span></span><span></span><span></span></div>
+              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
+            <div class="beat b2"><p class="said ai"><small>{B}</small><span class="type" data-text="{E(X['call'][0][0])}"></span></p><p class="said caller"><small>Caller</small><span>{X['call'][1][0]}</span></p></div>
+            <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts']))}</div></div></div>
+            <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>{X['cal_where']}</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
+              <div class="bubble me sms-pop">{X['sms']}</div></div>
+          </div>
+          <a class="skip-call" href="#leaks">Skip the call</a>
         </div>
       </div>
       <p class="flow-cap">{T['flow_cap']}</p>
@@ -273,23 +298,23 @@ def trade_page(T):
     <div class="rows">
       <div class="row">
         <div class="row-copy"><span class="pill"><i></i>On the call</span><h3>Every call answered and qualified</h3>{feats(m0[2])}</div>
-        <div><div class="ui ondark play" aria-label="Example of a live call">
-          <div class="ui-h">Live call<span class="rec">Recording</span></div>
+        <div><div class="ui ondark play" aria-label="Example of an urgent call transferred to the owner">
+          <div class="ui-h">Live call<span class="rec">Recording<span class="tmr" aria-hidden="true"></span></span></div>
           <div class="tx">{call}</div>
           <div class="chips">{chips}</div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
       </div>
       <div class="row flip">
         <div class="row-copy"><span class="pill ok"><i></i>Right after</span><h3>Booked on your calendar, confirmed by text</h3>{feats(m1[2])}</div>
-        <div><div class="ui onlight play" aria-label="Example of a booking and text confirmation">
-          <div class="ui-h">Monday, October 12<span>Your calendar</span></div>
-          <div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div>
-          <div class="slot"><time>9 AM</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>{X['cal_event']}</b>{X['cal_where']}</span></div></div>
-          <div class="slot"><time>10 AM</time><div></div></div>
+        <div><div class="ui onlight play" aria-label="Example of a web lead texted back and booked">
+          <div class="ui-h">{X['w_day']}<span>Your calendar</span></div>
+          <div class="slot"><time>{X['w_busy'][0]}</time><div><span class="busy">{X['w_busy'][1]}</span></div></div>
+          <div class="slot"><time>{X['w_ev'][0]}</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>{X['w_ev'][1]}</b>{X['w_ev'][2]}</span></div></div>
+          <div class="slot"><time>{X['w_after']}</time><div></div></div>
           <div class="sms">
-            <div class="bubble me" data-a style="--d:1400">{X['sms']}</div>
-            <div class="bubble" data-a style="--d:2300">C. Thank you!</div>
-            <small>Text confirmation, Saturday 7:44 PM</small>
+            <div class="bubble me" data-a style="--d:1400">{X['w_sms']}</div>
+            <div class="bubble" data-a style="--d:2300">{X['w_reply']}</div>
+            <small>{X['w_note']}</small>
           </div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
       </div>
@@ -311,7 +336,7 @@ def trade_page(T):
       </div>
       <div>
         <div class="queue play" aria-label="Example {T['busy_mode']} list, sorted by urgency">
-          <div class="queue-head"><b><span class="switch" aria-hidden="true"></span>{T['busy_mode']}: On</b><span>Sorted by urgency</span></div>
+          <div class="queue-head"><b><span class="switch" aria-hidden="true"></span>{T['busy_mode']}: On</b><span class="q-state">Sorted by urgency</span></div>
           {queue}
         </div>
         <p class="note">{T['busy_note']}</p>
@@ -321,31 +346,38 @@ def trade_page(T):
 """ + connector('Every month', '72%', 'from-dark') + f"""
   <section class="wrap" id="report" aria-labelledby="report-title" style="padding-top:56px;padding-bottom:104px">
     <div class="split"><h2 id="report-title">Your monthly Lead Recovery Report</h2><p>Once a month you get a plain count of what happened to every lead.</p></div>
-    <p class="ex-label"><span class="ex">Example report</span>Illustrative numbers, not real results.</p>
-    <dl class="tiles play">{tiles}<div class="tile total" data-a style="--d:420"><dt>Estimated opportunity value</dt><dd data-count="72000" data-prefix="$">$72,000</dd></div></dl>
-    <p class="report-foot">{T['report_foot']}</p>
-    {month_strip(T['strip_booked'])}
+    <article class="sheet play" aria-label="Example Lead Recovery Report">
+      <header class="sheet-h"><div><b>Lead Recovery Report</b><span>{eb}, September</span></div><span class="ex">Example report</span></header>
+      {month_strip(T['strip_booked'])}
+      <dl class="ledger">{ledger}</dl>
+      <p class="report-foot">{T['report_foot']}</p>
+    </article>
   </section>
 
   <section class="wrap" id="how-it-works" aria-labelledby="how-title" style="padding-bottom:120px">
     <div class="split"><h2 id="how-title">How it works</h2><p>It works with the tools you already use, so there's no new CRM to learn.</p></div>
-    <ol class="steps play">
-      <li data-a style="--d:200"><span class="pill"><i></i>Step 1</span><h3>30-minute setup call</h3><p>Your services, service area, hours, the questions to ask and your booking rules.</p></li>
-      <li data-a style="--d:600"><span class="pill"><i></i>Step 2</span><h3>Forward your calls</h3><p>Missed and after-hours calls go to a number we set up. <strong>You keep your existing number.</strong></p></li>
-      <li data-a style="--d:1000"><span class="pill"><i></i>Step 3</span><h3>Go live</h3><p>Crewwise starts answering. You can listen to any call, and the Lead Recovery Report arrives each month.</p></li>
+    <ol class="journey play">
+      <li data-a style="--d:200"><span class="pill"><i></i>Step 1</span><h3>30-minute setup call</h3><p>Your services, service area, hours, the questions to ask and your booking rules.</p>
+        <div class="fcard jc"><div class="h"><span>Your rules</span><span>Example</span></div><dl class="rules">{rules}</dl></div></li>
+      <li data-a style="--d:700"><span class="pill"><i></i>Step 2</span><h3>Forward your calls</h3><p>Missed and after-hours calls go to a number we set up. <strong>You keep your existing number.</strong></p>
+        <div class="fcard dk jc"><div class="h"><span>Call forwarding</span><span class="fwd"><span class="switch" aria-hidden="true"></span>On</span></div><b>Missed and after-hours calls</b> now ring through to {B}. Your number stays the same.</div></li>
+      <li data-a style="--d:1200"><span class="pill ok"><i></i>Step 3</span><h3>Go live</h3><p>{B} starts answering. You can listen to any call, and the Lead Recovery Report arrives each month.</p>
+        <div class="fcard booked jc"><div class="h"><span>Live</span><span>Usually 1 to 2 weeks</span></div><b>Answering your calls</b><br>Every call recorded, every booking in your calendar.</div></li>
     </ol>
   </section>
 
   <section class="wrap" id="pricing" aria-labelledby="pricing-title" style="padding-bottom:120px">
     <div class="split"><h2 id="pricing-title">One plan, one price</h2><p>{C['price']} a month covers everything on this page.</p></div>
-    <div class="plan">
-      <div>
+    <div class="price">
+      <div class="price-main">
         <p class="plan-name">{T['plan_name']}</p>
-        <p class="amount">{C['price']}<span>/month</span></p>
-        <p class="founding"><b>{T['founding']}:</b> setup fee waived, month-to-month, cancel anytime.</p>
+        <p class="amount">{C['price']}<span>a month</span></p>
+        <ul class="terms"><li>No contract</li><li>Keep your number</li><li>Cancel anytime</li></ul>
+        <p class="founding"><b>{T['founding']}:</b> setup fee waived.</p>
         <a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>
       </div>
-      <div>
+      <div class="price-side">
+        <p class="side-h">Everything included</p>
         <ul class="includes"><li>Calls answered, qualified and booked, 24/7</li><li>Follow-ups, old leads and review requests</li><li>{T['busy_mode']}</li><li>Monthly Lead Recovery Report</li><li>Setup and tuning done for you</li><li>A real person for support</li></ul>
         <p class="fine">Includes a generous monthly allowance of AI call minutes. We'll tell you upfront if you ever get close. Billed monthly in US dollars. See the <a href="{p}refunds/">refund and cancellation policy</a>.</p>
       </div>
@@ -387,6 +419,7 @@ def trade_page(T):
         </form>
         <div class="thanks" tabindex="-1" hidden role="status">
           <h3>Thanks<span class="thanks-name"></span>. We'll call you soon.</h3>
+          <div class="cb-card"><div class="h"><span>Call-back requested</span><span>Just now</span></div><b class="cb-company"></b><p>We'll call <b class="cb-phone"></b>. <button type="button" class="cb-edit">Wrong number? Change it</button></p></div>
           <p>If you'd rather pick a time yourself, book it now.</p>
           <a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>
         </div>
@@ -518,12 +551,19 @@ def notfound():
 """ + footer(p)
 
 # ---------------- Write ----------------
+def minify_css(css):
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)       # comments
+    css = re.sub(r'\s+', ' ', css)                          # whitespace runs
+    css = re.sub(r'\s*([{};,>])\s*', lambda m: m.group(1), css)   # around punctuation (never around ':' or '+'/'-': selectors and calc() need them)
+    return css.replace(';}', '}').strip()
+
 def check(rel, s):
     for bad in ('—', '–', '·'):
         assert bad not in s, f'{repr(bad)} in {rel}'
-    if not rel.startswith('photographers'):
-        for w in ('hotograph', 'HVAC', 'lumbing', 'lectrical', 'Jobstead', 'GoHighLevel', 'Retell', 'Stripe'):
-            assert w not in s, f'{w} in {rel}'
+    if rel == '_redirects':   # routing only, never shown: may name retired paths
+        return
+    for w in ('hotograph', 'HVAC', 'lumbing', 'lectrical', 'Jobstead', 'GoHighLevel', 'Retell', 'Stripe'):
+        assert w not in s, f'{w} in {rel}'
 
 def write(rel, s):
     check(rel, s)
@@ -538,22 +578,16 @@ def main():
         q = os.path.join(OUT, n)
         shutil.rmtree(q) if os.path.isdir(q) else os.remove(q)
     os.makedirs(os.path.join(OUT, 'assets'))
-    for f in ('style.css', 'main.js', 'lenis.min.js'):
+    for f in ('main.js', 'lenis.min.js'):
         shutil.copy(os.path.join(ROOT, 'assets', f), os.path.join(OUT, 'assets', f))
+    # The stylesheet ships minified; assets/style.css stays the readable source
+    open(os.path.join(OUT, 'assets', 'style.css'), 'w', encoding='utf-8').write(minify_css(open(os.path.join(ROOT, 'assets', 'style.css'), encoding='utf-8').read()))
     for T in PAGES:
         write(os.path.join(T['path'].strip('/'), 'index.html'), trade_page(T))
     write(os.path.join('privacy', 'index.html'), legal('privacy', 'Privacy Policy', f'What {B} collects, how it is used, and your choices.', PRIVACY))
     write(os.path.join('terms', 'index.html'), legal('terms', 'Terms of Service', f'The terms for using {B}.', TERMS))
     write(os.path.join('refunds', 'index.html'), legal('refunds', 'Refund and Cancellation Policy', f'How cancelling and refunds work for {B}.', REFUNDS))
     write('404.html', notfound())
-    # Paused page: kept, renamed, noindexed, unlinked. It uses the previous stylesheet.
-    src = os.path.join(ROOT, 'design', 'archive', 'photographers', 'index.html')
-    ph = open(src, encoding='utf-8').read().replace('Jobstead', B).replace('[DOMAIN]', C['domain']).replace('[BUSINESS ADDRESS]', '').replace('tel:[US PHONE]', 'mailto:' + C['email']).replace('[US PHONE]', C['email']).replace('[EMAIL]', C['email']).replace('[CALENDLY LINK]', C['calendly']).replace('action="[FORM ENDPOINT]"', 'action="' + C['form_endpoint'] + '"').replace('[GOVERNING LAW]', C['governing_law']).replace(C['company'], B).replace('[OG IMAGE URL]', f"{C['domain']}/{HOME['og_image']}")
-    if 'name="robots"' not in ph:
-        ph = ph.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
-    write(os.path.join('photographers', 'index.html'), ph)
-    for f in ('site.css', 'site.js'):
-        open(os.path.join(OUT, 'assets', f), 'w', encoding='utf-8').write(open(os.path.join(ROOT, 'design', 'archive', 'assets', f), encoding='utf-8').read().replace('Jobstead', B))
     os.makedirs(os.path.join(OUT, 'brand'), exist_ok=True)
     BA = os.path.join(ROOT, 'design', 'brand', 'crewwise-brand-assets')
     for f in ('crewwise-logo.svg', 'crewwise-logo-on-dark.svg', 'crewwise-icon.svg', 'crewwise-mark.svg'):
@@ -566,7 +600,8 @@ def main():
         s = os.path.join(ROOT, 'design', 'collateral', f)
         if os.path.exists(s):
             shutil.copy(s, os.path.join(OUT, f)); print('copied public/' + f)
-    write('_redirects', ''.join(f'{u:<10} /roofing/  301\n' for u in ('/roofers', '/roofers/', '/roofer', '/roofer/')))
+    write('_redirects', ''.join(f'{u:<10} /roofing/  301\n' for u in ('/roofers', '/roofers/', '/roofer', '/roofer/'))
+          + '/photographers   /  301\n/photographers/  /  301\n')   # the retired photographers page goes to the homepage
     write('robots.txt', f'User-agent: *\nAllow: /\n\nSitemap: {C["domain"]}/sitemap.xml\n')
     urls = ''.join(f'  <url><loc>{C["domain"]}{u}</loc></url>\n' for u in [T['path'] for T in PAGES] + ['/privacy/', '/terms/', '/refunds/'])
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
