@@ -77,8 +77,7 @@
   /* Hero: the example call plays itself along the route once it's on screen (about 9s), pauses while hovered,
      touched, off screen or in a background tab, and rests on Booked with Replay. No scroll coupling, and every card
      keeps its final size from the start, so nothing on the page moves. Without motion the finished call shows. */
-  const route = document.querySelector('.route');
-  if (route && !reduce && 'IntersectionObserver' in window) {
+  if (!reduce && 'IntersectionObserver' in window) document.querySelectorAll('div.route').forEach(route => {
     const typeEl = route.querySelector('.r-type'), ghost = route.querySelector('.r-ghost'), full = ghost ? ghost.textContent : '';
     const replay = route.querySelector('.route-replay');
     const STEPS = [[0, 'at1'], [1400, 'at2'], [1600, 'at-typing'], [3300, 'at-caller'], [5100, 'at3'], [5300, 'at-tags'], [7300, 'at4'], [8000, 'at-sms'], [8700, 'at-done']];
@@ -111,7 +110,7 @@
     route.addEventListener('pointerleave', () => { held = false; });
     route.addEventListener('touchstart', e => { if (!e.target.closest('button')) held = !held; }, { passive: true });
     replay.addEventListener('click', () => { held = false; start(); });
-  }
+  });
 
   /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
      hidden again while the contact form or the closing band is on screen */

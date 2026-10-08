@@ -881,7 +881,6 @@ body::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; 
 .r-sms::before { content: ""; width: 9px; height: 5px; margin-top: -3px; border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); }
 .route-replay { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 10px; padding: 0 2px; border: 0; background: none; font: 600 var(--t-small) var(--font); color: var(--line); cursor: pointer; }
 .route-replay::before { content: ""; width: 11px; height: 11px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; }
-.route-replay[hidden] { display: none; }
 
 /* Playing (JS on, motion allowed): steps wait calmly, then arrive; sizes never change */
 .rplay .rs:not(:last-child)::after { transform: scaleX(0); transition: transform .9s cubic-bezier(.16,1,.3,1); }
@@ -924,3 +923,22 @@ body::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; 
 /* The caller replies only after the greeting, and the text is sent only after the booking */
 .rplay:not(.at-caller) .rs2 .rcard > .r-caller { opacity: 0; transform: translateY(6px); }
 .rplay:not(.at-sms) .rs4 .rcard > .r-sms { opacity: 0; transform: translateY(6px); }
+
+/* Hero route spotlight: the step that's happening now takes the room, finished steps step back; all even again at the end */
+.route-steps { display: flex; }
+.rs { flex: 1 1 0; transition: flex-grow .8s cubic-bezier(.16,1,.3,1), opacity .5s ease; }
+.route .rcard { min-height: 184px; }
+@media (max-width: 1199px) { .route .rcard { min-height: 212px; } }
+/* Replay holds its place while hidden, so its arrival doesn't push the page */
+.rplay .route-replay[hidden] { display: inline-flex !important; visibility: hidden; }
+.route.at1:not(.at2) .rs1, .route.at2:not(.at3) .rs2, .route.at3:not(.at4) .rs3, .route.at4:not(.at-done) .rs4 { flex-grow: 2.2; }
+.route.at2:not(.at-done) .rs1, .route.at3:not(.at-done) :is(.rs1, .rs2), .route.at4:not(.at-done) :is(.rs1, .rs2, .rs3) { opacity: .45; }
+@media (min-width: 1000px) {
+  .route.at2:not(.at3) .rs2 .rcard p { font-size: 1.0625rem; }
+  .route.at3:not(.at4) .rs3 .r-issue, .route.at4:not(.at-done) .rs4 .rcard b { font-size: 1.375rem; }
+}
+@media (max-width: 999px) {
+  .route-steps { flex-direction: column; }
+  .rs { flex: none; }
+  .route .rcard { min-height: 0; }
+}
