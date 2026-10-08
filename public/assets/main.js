@@ -84,7 +84,7 @@
         const VW = document.documentElement.clientWidth, OFF = flow.getBoundingClientRect().left;
         svg.style.left = -OFF + 'px'; svg.style.width = VW + 'px'; svg.style.right = 'auto';
         svg.setAttribute('viewBox', `${-OFF} 0 ${VW} ${H}`); svg.setAttribute('preserveAspectRatio', 'none');
-        const bx = .36 * W, r = 30, y1 = 46, y2 = 170;
+        const bx = .36 * W, r = 30, y1 = 46, y2 = 150;
         const d = end => `M${-OFF} ${y1} H${bx - r} Q${bx} ${y1} ${bx} ${y1 + r} V${y2 - r} Q${bx} ${y2} ${bx + r} ${y2} H${end}`;
         base.setAttribute('d', d(VW - OFF)); live.setAttribute('d', d(nodeX[3] * W));
         base.removeAttribute('pathLength'); live.removeAttribute('pathLength');
@@ -174,6 +174,24 @@
       }, { threshold: .25 }).observe(flow);
       wide.addEventListener('change', () => { stop(); if (wide.matches) { mOff(); layout(); visible && play(); } else { mStart(); } });
     }
+  }
+
+  /* Phones: a booking button in thumb reach, shown once the hero buttons are off screen,
+     hidden again while the contact form or the closing band is on screen */
+  const mcta = document.querySelector('.mcta'), heroAct = document.querySelector('.hero .act');
+  if (mcta && heroAct && 'IntersectionObserver' in window) {
+    mcta.hidden = false;
+    const seen = new Map();
+    const sync = () => {
+      const on = seen.get(heroAct) === false && !seen.get('end');
+      mcta.classList.toggle('on', on);
+      document.documentElement.classList.toggle('mcta-on', on);  /* header button steps aside while the bottom one shows */
+    };
+    const ends = [document.getElementById('contact'), document.querySelector('.closing')].filter(Boolean);
+    const endSeen = new Set();
+    new IntersectionObserver(e => { e.forEach(x => seen.set(heroAct, x.isIntersecting || x.boundingClientRect.top > 0)); sync(); }).observe(heroAct);
+    const eo = new IntersectionObserver(e => { e.forEach(x => x.isIntersecting ? endSeen.add(x.target) : endSeen.delete(x.target)); seen.set('end', endSeen.size > 0); sync(); });
+    ends.forEach(el => eo.observe(el));
   }
 
   /* Phone hero line always ends on the Booked dot, with or without motion */

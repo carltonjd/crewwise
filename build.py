@@ -230,19 +230,19 @@ def trade_page(T):
     <div class="hero-inner">
       <figure class="flow play" aria-label="{X['flow_aria']}">
         <svg class="path" viewBox="0 0 1000 290" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 46 H330 Q360 46 360 76 V140 Q360 170 390 170 H1000"/>
-          <path class="live" d="M0 46 H330 Q360 46 360 76 V140 Q360 170 390 170 H870"/>
+          <path d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H1000"/>
+          <path class="live" d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H870"/>
         </svg>
         <span class="signal" aria-hidden="true"></span>
         <span class="mtip" aria-hidden="true"></span>
         <span class="node pill" data-step="1" style="left:9%;top:46px"><i></i>Incoming call</span>
-        <span class="node pill" data-step="2" style="left:45%;top:170px"><i></i>Answered</span>
-        <span class="node pill" data-step="3" style="left:66%;top:170px"><i></i>Qualified</span>
-        <span class="node pill ok" data-step="4" style="left:87%;top:170px"><i></i>Booked</span>
-        <div class="fcard" data-step="1" style="left:1%;top:84px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><div class="fb">{X['flow_card1']}</div></div>
-        <div class="fcard dk" data-step="2" style="left:29%;top:200px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div><span class="say">"{X['call'][0][0]}"</span></div>
-        <div class="fcard" data-step="3" style="left:53%;top:200px;width:19%"><div class="h"><span>1:05</span></div><div class="fb">{X['flow_card3']}</div></div>
-        <div class="fcard booked" data-step="4" style="left:74.5%;top:200px;width:23%"><div class="h"><span>1:48</span></div><div class="fb"><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
+        <span class="node pill" data-step="2" style="left:45%;top:150px"><i></i>Answered</span>
+        <span class="node pill" data-step="3" style="left:66%;top:150px"><i></i>Qualified</span>
+        <span class="node pill ok" data-step="4" style="left:87%;top:150px"><i></i>Booked</span>
+        <div class="fcard" data-step="1" style="left:1%;top:80px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><div class="fb">{X['flow_card1']}</div></div>
+        <div class="fcard dk" data-step="2" style="left:29%;top:178px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div><span class="say">"{X['call'][0][0]}"</span></div>
+        <div class="fcard" data-step="3" style="left:53%;top:178px;width:19%"><div class="h"><span>1:05</span></div><div class="fb">{X['flow_card3']}</div></div>
+        <div class="fcard booked" data-step="4" style="left:74.5%;top:178px;width:23%"><div class="h"><span>1:48</span></div><div class="fb"><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
       </figure>
       <div class="hero-copy">
         <div>
@@ -321,9 +321,10 @@ def trade_page(T):
 """ + connector('Every month', '72%', 'from-dark') + f"""
   <section class="wrap" id="report" aria-labelledby="report-title" style="padding-top:56px;padding-bottom:104px">
     <div class="split"><h2 id="report-title">Your monthly Lead Recovery Report</h2><p>Once a month you get a plain count of what happened to every lead.</p></div>
+    <p class="ex-label"><span class="ex">Example report</span>Illustrative numbers, not real results.</p>
     <dl class="tiles play">{tiles}<div class="tile total" data-a style="--d:420"><dt>Estimated opportunity value</dt><dd data-count="72000" data-prefix="$">$72,000</dd></div></dl>
-    {month_strip(T['strip_booked'])}
     <p class="report-foot">{T['report_foot']}</p>
+    {month_strip(T['strip_booked'])}
   </section>
 
   <section class="wrap" id="how-it-works" aria-labelledby="how-title" style="padding-bottom:120px">
@@ -345,7 +346,7 @@ def trade_page(T):
         <a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>
       </div>
       <div>
-        <ul class="includes"><li>Everything in What it does</li><li>{T['busy_mode']}</li><li>Monthly Lead Recovery Report</li><li>Setup and tuning done for you</li><li>A real person for support</li></ul>
+        <ul class="includes"><li>Calls answered, qualified and booked, 24/7</li><li>Follow-ups, old leads and review requests</li><li>{T['busy_mode']}</li><li>Monthly Lead Recovery Report</li><li>Setup and tuning done for you</li><li>A real person for support</li></ul>
         <p class="fine">Includes a generous monthly allowance of AI call minutes. We'll tell you upfront if you ever get close. Billed monthly in US dollars. See the <a href="{p}refunds/">refund and cancellation policy</a>.</p>
       </div>
     </div>
@@ -392,6 +393,7 @@ def trade_page(T):
       </div>
     </div>
   </section>
+  <div class="mcta" hidden><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a></div>
 """ + footer(p, home=True, T=T)
 
 # ---------------- Legal pages ----------------

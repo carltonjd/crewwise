@@ -21,16 +21,17 @@ ROOF_EXAMPLE = dict(
     followups=[('Estimate follow-up, day 7', 'Hi Mike, just checking in on the roof estimate we sent last week. Any questions I can answer?', ''),
                ('Reply', 'Yes, can someone call me about the shingle options?', 'reply'),
                ('Review request, after the job', 'Thanks for choosing Oak Ridge Roofing. Would you leave us a quick Google review?', '')],
-    queue=[('urgent', 'Urgent', 'Active leak, kitchen ceiling', '1418 Maple Ct, Round Rock. No claim yet.', 'Sent to you now', ''),
-           ('', 'High', 'Hail damage, shingles missing', '88 Cedar Ridge Dr, Georgetown. Claim filed.', 'Mon 9:00 AM', 'ok'),
-           ('', 'Normal', 'Dented gutters and vents', '2205 Oak Bend, Pflugerville. Claim filed.', 'Mon 11:30 AM', 'ok'),
+    queue=[('urgent', 'Urgent', 'Active leak, water in the bedroom', '305 Brushy Creek Rd, Cedar Park. No claim yet.', 'Sent to you now', ''),
+           ('', 'High', 'Ceiling leak, kitchen', '1418 Maple Ct, Round Rock. Claim filed.', 'Mon 9:00 AM', 'ok'),
+           ('', 'Normal', 'Hail damage, shingles missing', '88 Cedar Ridge Dr, Georgetown. Claim filed.', 'Mon 11:30 AM', 'ok'),
            ('', 'Normal', 'Inspection before adjuster visit', '710 Pecan St, Hutto. Adjuster Thursday.', 'Tue 8:00 AM', 'ok')],
 )
 
 COMMON_FAQ_TAIL = [
-    ('Do I keep my number?', 'Yes. Your number stays the same. You forward missed and after-hours calls to a number we set up.'),
+    ('What does it sound like to my customers?', "You'll hear it answer a call on the demo, before you decide anything. It answers in your company's name, and you can listen to every call it takes afterwards."),
     ('What if a caller wants a real person?', 'It transfers the call to you or takes a message, based on your rules.'),
-    ('Can I hear the calls?', 'Yes. Every call is recorded and transcribed, so you can listen to it or read it.'),
+    ('What if it gets something wrong?', "It can mishear a detail, like any receptionist. Every call is recorded and transcribed, each booking lands in your calendar with the caller's details, and you can change or cancel it. We tune it during setup and after go-live using your real calls."),
+    ('Do I keep my number?', 'Yes. Your number stays the same. You forward missed and after-hours calls to a number we set up.'),
 ]
 FAQ_END = [
     ('Do I need to change my CRM?', "No. It works alongside the tools you already use. There's no new CRM to learn."),
