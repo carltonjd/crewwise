@@ -259,6 +259,19 @@ def trade_page(T):
           {trade_row}
         </div>
       </div>
+      <div class="scene">
+        <div class="scene-pin">
+          <ol class="rail" aria-hidden="true"><li><i></i><b>Incoming call</b><span>0:00</span></li><li><i></i><b>Answered</b><span>0:03</span></li><li><i></i><b>Qualified</b><span>1:05</span></li><li class="ok"><i></i><b>Booked</b><span>1:48</span></li><span class="rail-fill"></span></ol>
+          <div class="stage" role="img" aria-label="{X['flow_aria']}">
+            <div class="beat b1"><div class="ring"><span></span><span></span><span></span></div>
+              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div></div>
+            <div class="beat b2"><p class="said ai"><small>{B}</small><span class="type" data-text="{E(X['call'][0][0])}"></span></p><p class="said caller"><small>Caller</small><span>{X['call'][1][0]}</span></p></div>
+            <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts']))}</div></div></div>
+            <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>{X['cal_where']}</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
+              <div class="bubble me sms-pop">{X['sms']}</div></div>
+          </div>
+        </div>
+      </div>
       <p class="flow-cap">{T['flow_cap']}</p>
     </div>
   </section>

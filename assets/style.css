@@ -663,3 +663,75 @@ html.lenis, html.lenis body { height: auto; }
   .hero-copy > div:last-child { order: 3; margin-top: 36px; }
   .hero-inner .flow-cap { order: 4; }
 }
+
+/* ===== Overdrive: the call as a pinned, scroll-driven scene ===== */
+.scene { display: none; }
+.od .hero-inner .flow { display: none; }
+.od .scene { display: block; position: relative; order: 2; height: 340vh; margin-top: 24px; }
+.scene-pin { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: 26px; padding: 92px 0 28px; }
+.rail { --last: 84px; list-style: none; margin: 0; padding: 0; position: relative; display: grid; grid-template-columns: repeat(3, 1fr) var(--last); }
+.rail::before, .rail-fill { content: ""; position: absolute; left: 8px; right: calc(var(--last) - 8px); top: 7px; height: 2px; border-radius: 2px; background: var(--rule-2); }
+.rail-fill { background: var(--line); transform: scaleX(0); transform-origin: left; }
+.rail li { position: relative; padding-top: 28px; display: grid; gap: 2px; min-width: 0; }
+.rail i { position: absolute; z-index: 1; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--rule-2); box-shadow: 0 0 0 4px var(--ground); transform: scale(.75); transition: background-color .3s, transform .45s var(--spring); }
+.rail li.hit i { background: var(--line); transform: none; }
+.rail li.ok.hit i { background: var(--ok-dot); }
+.rail b { font-size: var(--t-small); font-weight: 600; color: var(--ink-3); transition: color .3s; }
+.rail li.hit b { color: var(--ink); }
+.rail span { font-size: var(--t-meta); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.stage { position: relative; flex: none; height: clamp(300px, 50vh, 440px); }
+.beat { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(26px) scale(.98); transition: opacity .45s ease, transform .7s var(--spring), visibility 0s .45s; }
+.s1 .b1, .s2 .b2, .s3 .b3, .s4 .b4 { opacity: 1; visibility: visible; transform: none; transition: opacity .45s ease, transform .7s var(--spring), visibility 0s; }
+.fcard.big { position: relative; left: auto; top: auto; width: min(440px, 100%); padding: 20px 22px; font-size: 1.125rem; }
+.fcard.big::before { display: none; }
+/* Beat 1: ringing */
+.ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+.ring span { position: absolute; left: -230px; top: -230px; width: 460px; height: 460px; border-radius: 50%; border: 2px solid var(--line); opacity: 0; }
+.s1 .ring span { animation: ripple 2.4s cubic-bezier(.22,1,.36,1) infinite; }
+.s1 .ring span:nth-child(2) { animation-delay: .8s; }
+.s1 .ring span:nth-child(3) { animation-delay: 1.6s; }
+@keyframes ripple { 0% { transform: scale(.35); opacity: .55; } 100% { transform: scale(1.15); opacity: 0; } }
+.ringing { margin: 12px 0 0; display: flex; align-items: center; gap: 8px; font-size: var(--t-meta); font-weight: 600; color: var(--line); }
+.ringing::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: blink 1s ease-in-out infinite; }
+/* Beat 2: the conversation, typed as you scroll */
+.b2 { flex-direction: column; align-items: flex-start; gap: 26px; padding: 0 2%; }
+.said { margin: 0; }
+.said small { display: block; margin-bottom: 8px; font-size: var(--t-meta); font-weight: 600; color: var(--ink-3); }
+.said.ai span { display: block; max-width: 18ch; min-height: 2.2em; font-size: clamp(1.9rem, 1rem + 2.8vw, 3.4rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.08; color: var(--ink); }
+.typing .said.ai .type::after { content: ""; display: inline-block; width: 3px; height: .85em; margin-left: 4px; vertical-align: -.08em; background: var(--line); animation: blink 1s ease-in-out infinite; }
+.said.caller { max-width: 36ch; padding: 14px 18px; border-radius: 16px 16px 16px 4px; background: var(--surface); border: 1px solid var(--rule); font-size: var(--t-lead); color: var(--ink-2); opacity: 0; transform: translateY(12px); transition: opacity .35s ease, transform .5s var(--spring); }
+.said.caller small { margin-bottom: 4px; }
+.scene.caller .said.caller { opacity: 1; transform: none; }
+/* Beat 3: the details land on the card */
+.detail > b { display: block; font-size: 1.625rem; font-weight: 600; letter-spacing: -.02em; }
+.detail .tags span { opacity: 0; transform: translate(calc((var(--k) - 1.5) * 70px), -70px) scale(.7); transition: opacity .3s ease, transform .6s var(--spring); transition-delay: calc(var(--k) * 130ms); font-size: var(--t-small); }
+.scene.tags .detail .tags span { opacity: 1; transform: none; }
+/* Beat 4: dropped into the calendar, confirmed by text */
+.b4 { gap: 28px; }
+.cal { width: min(480px, 100%); background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 16px 18px 4px; box-shadow: 0 1px 2px rgba(21,21,21,.05), 0 24px 48px -30px rgba(21,21,21,.4); }
+.cal-h { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; font-size: var(--t-small); font-weight: 600; }
+.cal-h span { font-weight: 400; color: var(--ink-3); }
+.cal .slot div { min-height: 56px; }
+.cal .drop .ev { display: block; opacity: 0; transform: translateY(-120px) scale(1.06); background: color-mix(in srgb, var(--line) 10%, transparent); border-left-color: var(--line); transition: opacity .25s ease, transform .75s var(--spring), background-color .4s, border-color .4s; }
+.cal .drop .ev b { color: var(--line); transition: color .4s; }
+.scene.drop .cal .drop .ev { opacity: 1; transform: none; }
+.scene.green .cal .drop .ev { background: color-mix(in srgb, var(--ok-dot) 12%, transparent); border-left-color: var(--ok-dot); }
+.scene.green .cal .drop .ev b { color: var(--ok); }
+.sms-pop.bubble { max-width: 280px; opacity: 0; transform: translateY(16px) scale(.92); transition: opacity .3s ease, transform .55s var(--spring); }
+.scene.sms .sms-pop { opacity: 1; transform: none; }
+.scene-cap { margin: 0; max-width: 70ch; font-size: var(--t-meta); color: var(--ink-3); }
+/* main.js moves the hero note into the scene, so the hero ends with the scene */
+.od .scene-cap.flow-cap { margin-top: 0; }
+.od .hero { padding-bottom: 24px; }
+@media (max-width: 999px) {
+  .od .scene { height: 300vh; margin-top: 28px; }
+  .scene-pin { padding: 108px 0 20px; gap: 18px; }
+  .rail { --last: 58px; }
+  .rail b { font-size: var(--t-meta); }
+  .rail span { display: none; }
+  .stage { height: clamp(340px, 54svh, 480px); }
+  .b4 { flex-direction: column; gap: 14px; }
+  .sms-pop.bubble { align-self: flex-end; }
+  .ring span { left: -160px; top: -160px; width: 320px; height: 320px; }
+  .fcard.big { font-size: 1.0625rem; }
+}

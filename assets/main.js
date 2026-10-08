@@ -176,6 +176,46 @@
     }
   }
 
+  /* Overdrive: the hero call as a pinned, scroll-driven scene. Without motion or sticky support,
+     the regular hero flow stays in place, so nothing is lost. */
+  const scene = document.querySelector('.scene');
+  if (scene && !reduce && window.CSS && CSS.supports('position', 'sticky')) {
+    document.documentElement.classList.add('od');
+    /* One hero note in the page: move it into the scene rather than showing a second copy */
+    const note = document.querySelector('.hero-inner .flow-cap');
+    if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
+    const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
+    const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li')];
+    const B = [0, .2, .46, .7];
+    const clamp = v => Math.min(1, Math.max(0, v));
+    let raf = 0, lastP = -1;
+    const set = (c, on) => scene.classList.toggle(c, on);
+    const update = () => {
+      raf = 0;
+      const r = scene.getBoundingClientRect(), span = Math.max(1, scene.offsetHeight - innerHeight);
+      const p = clamp(-r.top / span);
+      if (p === lastP) return;
+      lastP = p;
+      const beat = p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
+      for (let i = 1; i <= 4; i++) set('s' + i, beat === i);
+      nodes.forEach((n, i) => n.classList.toggle('hit', p >= B[i]));
+      if (fill) fill.style.transform = `scaleX(${clamp(p / B[3])})`;
+      const l2 = clamp((p - B[1]) / (B[2] - B[1]));
+      if (type) type.textContent = full.slice(0, Math.round(full.length * clamp(l2 * 1.7)));
+      set('typing', l2 > 0 && l2 < .59);
+      set('caller', l2 > .62 || beat > 2);
+      set('tags', clamp((p - B[2]) / (B[3] - B[2])) > .12 || beat > 3);
+      const l4 = clamp((p - B[3]) / (1 - B[3]));
+      set('drop', l4 > .12);
+      set('green', l4 > .38);
+      set('sms', l4 > .55);
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
+    addEventListener('scroll', kick, { passive: true });
+    addEventListener('resize', () => { lastP = -1; kick(); });
+    update();
+  }
+
   /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,
      hidden again while the contact form or the closing band is on screen */
   const mcta = document.querySelector('.mcta'), heroAct = document.querySelector('.hero .act');

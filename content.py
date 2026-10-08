@@ -8,6 +8,7 @@ PRICE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 # Example screens shared by both pages for now (a roofing company; every screen is labelled Example).
 ROOF_EXAMPLE = dict(
     business='Oak Ridge Roofing',
+    issue='Ceiling leak', facts=['15-year roof', 'Claim filed', 'In your area', '1418 Maple Ct, Round Rock'],
     rules=[('Services', 'Repairs, replacements, inspections'), ('Area', '25 miles around Round Rock'), ('Urgent', 'Active leaks go straight to you'), ('Booking', 'Weekdays, 8 AM to 5 PM')],
     flow_aria='Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.',
     flow_card1="<b>Homeowner calling.</b> You're up on a roof.",
