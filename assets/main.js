@@ -64,7 +64,7 @@
       e.target.classList.add('in');
       e.target.querySelectorAll('[data-count]').forEach(countUp);
       io.unobserve(e.target);
-    }), { threshold: .3, rootMargin: '0px 0px -8% 0px' });
+    }), { threshold: .12, rootMargin: '0px 0px 8% 0px' });
     document.querySelectorAll('.play').forEach(el => io.observe(el));
 
     /* Hero: one clock drives the line, the signal and every checkpoint, so they can never drift apart.
@@ -186,17 +186,29 @@
     if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
     const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
     const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li:not(.rail-fill)')], stage = scene.querySelector('.stage');
-    const B = [0, .2, .46, .7];
+    const B = [0, .16, .40, .72];   /* beat starts; Qualified gets the widest window */
     const clamp = v => Math.min(1, Math.max(0, v));
-    let raf = 0, lastP = -1, autoP = 0, idle = 0, auto = 0;
+    let raf = 0, lastP = -1, cur = 0, idle = 0, auto = 0, playing = false, autoP = 0, anchor = null, collapsed = false;
     const set = (c, on) => scene.classList.toggle(c, on);
     const span = () => Math.max(1, scene.offsetHeight - innerHeight);
     const scrollP = () => clamp(-scene.getBoundingClientRect().top / span());
+    /* Scroll position to scene progress. After autoplay has run ahead, scrolling continues from where the call is
+       (an anchor), so there is no stretch of scroll where nothing happens. */
+    const progress = sp => {
+      if (playing) return Math.max(sp, autoP);
+      if (!anchor) return sp;
+      if (sp >= anchor.sp) return anchor.a + (sp - anchor.sp) * (1 - anchor.a) / Math.max(.001, 1 - anchor.sp);
+      return anchor.sp > 0 ? (sp / anchor.sp) * anchor.a : anchor.a;
+    };
+    const reset = () => {
+      anchor = null; autoP = 0;
+      if (collapsed) { scene.style.height = ''; collapsed = false; }
+    };
     const update = () => {
       raf = 0;
-      const sp = scrollP();
-      if (scene.getBoundingClientRect().top > innerHeight) autoP = 0;   /* back above the scene: start fresh */
-      const p = Math.max(sp, autoP);
+      if (scene.getBoundingClientRect().top > innerHeight * .5 && (anchor || collapsed)) reset();   /* well above the scene again: start fresh */
+      const p = progress(scrollP());
+      cur = p;
       set('moved', p > .06);
       if (p === lastP) return;
       lastP = p;
@@ -215,24 +227,53 @@
       set('sms', l4 > .55);
     };
     const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
-    /* Idle on the first beat for 3s: play the greeting by itself, so the scene shows it is alive.
-       Scrolling takes over at any time; the scene never goes backwards past what autoplay showed. */
+    /* Pause for 3s with the stage in view and the call plays itself to the end: greeting, reply,
+       details, booking, holding on each beat. Scrolling takes over at any time. */
+    let run = 0;
+    const settle = () => { if (playing) { playing = false; anchor = { sp: scrollP(), a: cur }; } };
+    const stopAuto = () => { run++; cancelAnimationFrame(auto); settle(); };
+    /* When the call has played to the end, give back the scene's unused scroll so the next scroll leaves it */
+    const collapse = () => {
+      const top = scene.getBoundingClientRect().top + scrollY;
+      scene.style.height = Math.max(innerHeight + 2, scrollY - top + innerHeight + 2) + 'px';
+      collapsed = true; anchor = { sp: scrollP(), a: 1 }; lastP = -1; update();
+    };
+    const tween = (to, ms, token) => new Promise(res => {
+      const from = cur, t0 = performance.now();
+      const step = now => {
+        if (token !== run) return res(false);
+        const k = clamp((now - t0) / ms); autoP = from + (to - from) * (1 - Math.pow(1 - k, 2)); lastP = -1; update();
+        if (k < 1) auto = requestAnimationFrame(step); else res(true);
+      };
+      auto = requestAnimationFrame(step);
+    });
+    const hold = (ms, token) => new Promise(res => setTimeout(() => res(token === run), ms));
+    const autoplay = async () => {
+      const token = ++run;
+      playing = true; autoP = cur; anchor = null;
+      const stops = [[B[2] - .02, 2600, 1400], [B[3] - .03, 1500, 1800], [1, 1400, 0]];   /* [target, move ms, hold ms] */
+      for (const [to, ms, wait] of stops) {
+        if (cur >= to) continue;
+        if (!(await tween(to, ms, token))) return;
+        if (wait && !(await hold(wait, token))) return;
+      }
+      playing = false;
+      collapse();
+    };
     const armIdle = () => {
       clearTimeout(idle);
       idle = setTimeout(() => {
         const r = stage.getBoundingClientRect();
-        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || Math.max(scrollP(), autoP) >= B[1]) return;
-        const from = Math.max(scrollP(), autoP), to = B[2] - .015, t0 = performance.now(), dur = 3200;
-        cancelAnimationFrame(auto);
-        const step = now => { const k = clamp((now - t0) / dur); autoP = from + (to - from) * (1 - Math.pow(1 - k, 2)); lastP = -1; update(); if (k < 1) auto = requestAnimationFrame(step); };
-        auto = requestAnimationFrame(step);
+        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || cur >= .98 || collapsed) return;
+        autoplay();
       }, 3000);
     };
-    addEventListener('scroll', () => { cancelAnimationFrame(auto); armIdle(); }, { passive: true });
+    addEventListener('scroll', () => { stopAuto(); armIdle(); }, { passive: true });
     addEventListener('scroll', kick, { passive: true });
     armIdle();
     /* Rail steps are buttons: jump to that beat */
     scene.querySelectorAll('.rail button').forEach(btn => btn.addEventListener('click', () => {
+      stopAuto(); anchor = null; if (collapsed) { scene.style.height = ''; collapsed = false; }
       const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + (i === 3 ? .2 : .1));
       if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' });
     }));
@@ -283,6 +324,7 @@
       const arrival = [2, 0, 3, 1].filter(i => i < rows.length);
       if (rows.length === 4) {
         rows.forEach(r => { r.removeAttribute('data-a'); r.style.opacity = '0'; });
+        if (state) state.textContent = 'Incoming calls';
         once(queue, () => {
           const tops = rows.map(r => r.getBoundingClientRect().top), hs = rows.map(r => r.offsetHeight);
           const gap = Math.max(0, tops[1] - tops[0] - hs[0]);
@@ -323,6 +365,13 @@
         requestAnimationFrame(tick);
       });
     });
+  }
+
+  /* FAQ: the first six questions show; the rest open with "More questions". Without JS all of them show. */
+  const more = document.querySelector('.faq-more'), extra = document.getElementById('faq-extra');
+  if (more && extra) {
+    more.hidden = false; extra.hidden = true; more.setAttribute('aria-expanded', 'false');
+    more.addEventListener('click', () => { extra.hidden = false; more.setAttribute('aria-expanded', 'true'); more.hidden = true; const q = extra.querySelector('summary'); if (q) q.focus(); });
   }
 
   function countUp(el) {

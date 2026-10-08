@@ -215,9 +215,14 @@ def trade_page(T):
     leaks = ''.join(f'<li data-a style="--d:{i * 90}"><h3>{a}</h3><p>{b}</p><p class="fix">{c}</p></li>' for i, (a, b, c) in enumerate(T['leaks']))
     queue = ''.join(f'<div class="q {c}" data-a style="--d:{400 + i * 220}"><span class="lvl">{l}</span><span><b>{h}</b><small>{d}</small></span><span class="when {k}">{s}</span></div>' for i, (c, l, h, d, s, k) in enumerate(X['queue']))
     ledger = ''.join(f'<div data-a style="--d:{200 + i * 110}"><dt>{k}</dt><dd data-count="{v}">{v}</dd></div>' for i, (k, v) in enumerate(T['report']))
-    det = [f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in T['faq']]
-    half = (len(det) + 1) // 2
-    faq = f'<div class="faq-col">{"".join(det[:half])}</div><div class="faq-col">{"".join(det[half:])}</div>'
+    first = ('How much', 'What does it sound', 'What if a caller', 'What if it gets', 'Do I keep', 'Can I switch')
+    qa = sorted(T['faq'], key=lambda x: next((i for i, f in enumerate(first) if x[0].startswith(f)), 99))
+    det = [f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in qa]
+    top, rest = det[:6], det[6:]
+    half = (len(rest) + 1) // 2
+    faq = (f'<div class="faq-col">{"".join(top[:3])}</div><div class="faq-col">{"".join(top[3:])}</div>'
+           f'<div class="faq-extra" id="faq-extra"><div class="faq-col">{"".join(rest[:half])}</div><div class="faq-col">{"".join(rest[half:])}</div></div>'
+           f'<button class="faq-more" type="button" aria-controls="faq-extra" aria-expanded="true" hidden>More questions ({len(rest)})</button>')
     call = ''
     for i, (line, who) in enumerate(X['w_call']):
         cls, name = (' class="ai"', B) if who == 'ai' else ('', 'Caller')
@@ -257,7 +262,7 @@ def trade_page(T):
         <div>
           <p class="sub">{T['sub']}</p>
           <div class="act"><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
-          <p class="cta-note">15 minutes. You'll hear it answer a call. No contract.</p>
+          <p class="cta-note">15-minute demo, you'll hear it answer a call. {C['price']} a month, no contract.</p>
           {trade_row}
         </div>
       </div>
@@ -344,7 +349,7 @@ def trade_page(T):
     <article class="sheet play" aria-label="Example Lead Recovery Report">
       <header class="sheet-h"><div><b>Lead Recovery Report</b><span>{eb}, September</span></div><span class="ex">Example report</span></header>
       {month_strip(T['strip_booked'])}
-      <dl class="ledger">{ledger}<div class="total" data-a style="--d:{len(T['report']) * 110 + 200}"><dt>Estimated opportunity value</dt><dd data-count="72000" data-prefix="$">$72,000</dd></div></dl>
+      <dl class="ledger">{ledger}</dl>
       <p class="report-foot">{T['report_foot']}</p>
     </article>
   </section>

@@ -3,7 +3,8 @@
    Type: Archivo for headlines, Hanken Grotesk for body text and the logo (logo blue and logo are fixed). */
 :root {
   color-scheme: light;
-  --ground: #F4F7FE;
+  --ground: #F4F7FE;      /* tinted fills: inputs, tags, busy slots */
+  --page: #FFFFFF;        /* the page itself: crisp white */
   --surface: #FFFFFF;
   --ink: #0B1530;
   --ink-2: #3A4766;
@@ -42,7 +43,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-body { margin: 0; background: radial-gradient(1100px 620px at 88% -8%, color-mix(in srgb, var(--line) 13%, transparent), transparent 70%), radial-gradient(900px 520px at -8% 18%, color-mix(in srgb, var(--line) 7%, transparent), transparent 70%), var(--ground); background-repeat: no-repeat; color: var(--ink); font: 400 var(--t-body)/1.6 var(--font); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { margin: 0; position: relative; background: var(--page); color: var(--ink); font: 400 var(--t-body)/1.6 var(--font); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 a { color: inherit; }
 p { margin: 0; text-wrap: pretty; }
 h1, h2, h3, h4 { margin: 0; text-wrap: balance; font-weight: 500; }
@@ -137,7 +138,7 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   .flow::after { height: var(--fill, var(--track, calc(100% - 50px))); background: var(--line); }
   .flow svg.path, .flow .node { display: none; }
   .fcard { position: relative; width: auto; left: auto !important; top: auto !important; }
-  .fcard::before { content: ""; position: absolute; z-index: 1; left: -29px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px var(--ground); transition: background-color .3s, transform .4s var(--spring); }
+  .fcard::before { content: ""; position: absolute; z-index: 1; left: -29px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px var(--page); transition: background-color .3s, transform .4s var(--spring); }
   .js .flow.mrun .fcard:not(.hit)::before, .js .flow.run .fcard:not(.hit)::before { background: var(--rule-2); transform: scale(.7); }
   .fcard.booked::before { background: var(--ok-dot); }
   .flow-cap { order: 4; }
@@ -148,8 +149,8 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
 .connector { position: relative; height: 104px; }
 .connector::before { content: ""; position: absolute; left: 50%; top: 0; height: calc(100% - 6px); width: 1.5px; margin-left: -.75px; background: var(--line); opacity: .5; }
 .connector .dot { position: absolute; left: 50%; bottom: 0; width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px color-mix(in srgb, var(--line) 18%, transparent); }
-.connector.to-dark { background: linear-gradient(var(--ground) 50%, var(--dark) 50%); }
-.connector.from-dark { background: linear-gradient(var(--dark) 50%, var(--ground) 50%); }
+.connector.to-dark { background: linear-gradient(var(--page) 50%, var(--dark) 50%); }
+.connector.from-dark { background: linear-gradient(var(--dark) 50%, var(--page) 50%); }
 .connector.to-dark .dot { background: var(--accent-on-dark); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-on-dark) 22%, transparent); }
 @media (max-width: 699px) { .connector { height: 72px; } }
 
@@ -403,7 +404,7 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   }
 
   /* Generic choreography: a .play container gets .in when it scrolls into view */
-  .js .play [data-a] { opacity: 0; transform: translateY(12px); transition: opacity .5s var(--ease), transform .6s var(--spring); transition-delay: calc(var(--d, 0) * 1ms); }
+  .js .play [data-a] { opacity: .3; transform: translateY(10px); transition: opacity .45s var(--ease), transform .55s var(--spring); transition-delay: calc(var(--d, 0) * .45ms); }
   .js .play [data-a="s"] { transform: scale(.7); }
   .js .play [data-a="drop"] { transform: translateY(-26px) scale(.96); }
   .js .play.in [data-a] { opacity: 1; transform: none; }
@@ -425,8 +426,6 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
   @keyframes plug { to { opacity: 0; transform: scale(.3); } }
 
   /* Storm switch */
-  .js .queue.play .switch { background: var(--dark-3); transition: background-color .3s .2s; }
-  .js .queue.play .switch::after { transform: translateX(-16px); transition: transform .4s var(--spring) .2s; }
   .js .queue.play.in .switch { background: var(--line); }
   .js .queue.play.in .switch::after { transform: none; }
 
@@ -592,8 +591,6 @@ html.lenis, html.lenis body { height: auto; }
     .js .journey.play::after { transform: scaleX(0); transition: transform 1.6s var(--ease) .2s; }
     .js .journey.play.in::after { transform: none; }
   }
-  .js .journey.play .switch { background: var(--dark-3); transition: background-color .3s 1.4s; }
-  .js .journey.play .switch::after { transform: translateX(-13px); transition: transform .4s var(--spring) 1.4s; }
   .js .journey.play.in .switch { background: var(--line); }
   .js .journey.play.in .switch::after { transform: none; }
   .js .close-card.in .fcard.booked::after { animation: halo 2.4s ease-in-out .9s 3; }
@@ -633,7 +630,7 @@ html.lenis, html.lenis body { height: auto; }
 .rail::before, .rail-fill { content: ""; position: absolute; left: 8px; right: calc(var(--last) - 8px); top: 7px; height: 2px; border-radius: 2px; background: var(--rule-2); }
 .rail-fill { background: var(--line); transform: scaleX(0); transform-origin: left; }
 .rail li { position: relative; padding-top: 28px; display: grid; gap: 2px; min-width: 0; }
-.rail i { position: absolute; z-index: 1; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--rule-2); box-shadow: 0 0 0 4px var(--ground); transform: scale(.75); transition: background-color .3s, transform .45s var(--spring); }
+.rail i { position: absolute; z-index: 1; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--rule-2); box-shadow: 0 0 0 4px var(--page); transform: scale(.75); transition: background-color .3s, transform .45s var(--spring); }
 .rail li.hit i { background: var(--line); transform: none; }
 .rail li.ok.hit i { background: var(--ok-dot); }
 .rail b { font-size: var(--t-small); font-weight: 600; color: var(--ink-3); transition: color .3s; }
@@ -777,3 +774,31 @@ input { caret-color: var(--line); }
   .skip-call { bottom: 92px; }
 }
 @media (forced-colors: active) { .rail button { border: 1px solid transparent; } }
+
+/* Critique round 3 */
+/* Report: counts only, so the last row closes the ledger */
+.ledger > div:last-child { border-bottom: 2px solid var(--ink); }
+/* FAQ: six first, the rest behind a quiet button */
+.faq-extra { display: contents; }
+.faq-extra[hidden] { display: none; }
+.faq-more { grid-column: 1 / -1; justify-self: start; margin-top: 18px; min-height: 44px; padding: 10px 18px; border: 1px solid var(--rule-2); border-radius: 10px; background: var(--surface); font: 600 var(--t-small) var(--font); color: var(--ink); cursor: pointer; }
+.faq-more:hover { border-color: var(--ink-3); }
+@media (max-width: 1099px) { .faq-extra .faq-col:first-child { border-top: 0; } }
+/* Phones: the form comes straight after the heading; the other ways to reach us follow it */
+@media (max-width: 979px) {
+  .contact-grid { gap: 0; }
+  .contact-grid > div:first-child { display: contents; }
+  .contact-grid #contact-title { order: 1; }
+  .contact-grid > div:first-child > p:first-of-type { order: 2; margin-top: 14px; }
+  .contact-grid .form { order: 3; margin-top: 28px; }
+  .contact-grid .reach { order: 4; margin-top: 36px; }
+  .contact-grid .contact-note { order: 5; margin-top: 20px; }
+}
+
+/* Page ground: crisp white, with a fine plan grid in logo blue fading out from the top right of the first screen */
+body::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: 1150px; pointer-events: none;
+  background-image: linear-gradient(to right, rgba(30,91,216,.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(30,91,216,.09) 1px, transparent 1px);
+  background-size: 56px 56px; background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 85% 0%, #000 0%, rgba(0,0,0,.55) 45%, transparent 78%);
+          mask-image: radial-gradient(ellipse 80% 75% at 85% 0%, #000 0%, rgba(0,0,0,.55) 45%, transparent 78%); }
+@media (forced-colors: active) { body::before { display: none; } }
