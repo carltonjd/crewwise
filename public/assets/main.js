@@ -176,8 +176,8 @@
     }
   }
 
-  /* Overdrive: the hero call as a pinned, scroll-driven scene. Without motion or sticky support,
-     the regular hero flow stays in place, so nothing is lost. */
+  /* Overdrive: the hero call as a pinned scene. Scroll decides which beat you are on; a clock plays each beat
+     at a readable pace, one beat at a time. Without motion or sticky support the regular hero flow stays. */
   const scene = document.querySelector('.scene');
   if (scene && !reduce && window.CSS && CSS.supports('position', 'sticky')) {
     document.documentElement.classList.add('od');
@@ -186,99 +186,121 @@
     if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
     const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
     const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li:not(.rail-fill)')], stage = scene.querySelector('.stage');
-    const B = [0, .16, .40, .72];   /* beat starts; Qualified gets the widest window */
+    const B = [0, .10, .50, .76];              /* scroll progress where beats 1 to 4 begin; the dialogue gets the most */
+    const CPS = 34;                            /* greeting typing speed, characters per second */
     const clamp = v => Math.min(1, Math.max(0, v));
-    let raf = 0, lastP = -1, cur = 0, idle = 0, auto = 0, playing = false, autoP = 0, anchor = null, collapsed = false;
     const set = (c, on) => scene.classList.toggle(c, on);
     const span = () => Math.max(1, scene.offsetHeight - innerHeight);
     const scrollP = () => clamp(-scene.getBoundingClientRect().top / span());
-    /* Scroll position to scene progress. After autoplay has run ahead, scrolling continues from where the call is
-       (an anchor), so there is no stretch of scroll where nothing happens. */
-    const progress = sp => {
-      if (playing) return Math.max(sp, autoP);
+    const beatAt = p => p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
+
+    let shown = 1, busy = false, timers = [], typer = 0;
+    let floor = 1;          /* autoplay raises this to 4: the call plays to the end */
+    let anchor = null;      /* after autoplay is interrupted, scrolling continues from the beat it reached */
+    let collapsed = false, idle = 0;
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+    const clearBeat = () => { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(typer); };
+
+    /* The finished look of beats up to n, applied at once (jumping back, or skimming past) */
+    const finalState = n => {
+      if (type) type.textContent = n >= 2 ? full : '';
+      set('typing', false); set('caller', n >= 2); set('tags', n >= 3); set('drop', n >= 4); set('green', n >= 4); set('sms', n >= 4);
+    };
+    const showBeat = n => {
+      for (let i = 1; i <= 4; i++) set('s' + i, i === n);
+      nodes.forEach((li, i) => li.classList.toggle('hit', i < n));
+      if (fill) fill.style.transform = `scaleX(${(n - 1) / 3})`;
+      set('moved', n > 1);
+    };
+
+    /* Each beat's script. done() fires once it has been on screen long enough to read. fast = skimming. */
+    const play = (n, fast, done) => {
+      clearBeat(); showBeat(n); shown = n;
+      const k = fast ? .6 : 1;
+      if (n === 2) {
+        finalState(1);
+        if (fast) { type.textContent = full; later(() => set('caller', true), 150); later(done, 700); return; }
+        set('typing', true);
+        const t0 = performance.now() + 250;   /* begin once the beat has risen in */
+        const tick = now => {
+          const c = Math.max(0, Math.floor((now - t0) / 1000 * CPS));
+          type.textContent = full.slice(0, c);
+          if (c < full.length) typer = requestAnimationFrame(tick);
+          else { set('typing', false); later(() => set('caller', true), 300); later(done, 300 + 2000); }
+        };
+        typer = requestAnimationFrame(tick);
+      } else if (n === 3) {
+        finalState(2); later(() => set('tags', true), 200 * k); later(done, 1800 * k);
+      } else if (n === 4) {
+        finalState(3);
+        later(() => set('drop', true), 150 * k); later(() => set('green', true), 850 * k); later(() => set('sms', true), 1550 * k);
+        later(done, 1900 * k);
+      } else { finalState(1); later(done, 300); }
+    };
+
+    const effP = sp => {
       if (!anchor) return sp;
-      if (sp >= anchor.sp) return anchor.a + (sp - anchor.sp) * (1 - anchor.a) / Math.max(.001, 1 - anchor.sp);
-      return anchor.sp > 0 ? (sp / anchor.sp) * anchor.a : anchor.a;
+      const a = B[anchor.s - 1];
+      return sp >= anchor.sp ? a + (sp - anchor.sp) / Math.max(.001, 1 - anchor.sp) * (1 - a) : (sp / Math.max(.001, anchor.sp)) * a;
     };
-    const reset = () => {
-      anchor = null; autoP = 0;
-      if (collapsed) { scene.style.height = ''; collapsed = false; }
+    const target = () => Math.max(beatAt(effP(scrollP())), floor);
+    /* Scroll leads; the clock only sets the pace and never lags behind it:
+       - one beat ahead: the playing beat wraps up within ~0.6s, then the next plays
+       - two or more ahead (a flick): jump to the beat before, play only the one you're on
+       - scene leaving the screen: show the finished call at once */
+    let hurry = 0;
+    const finishNow = () => { clearTimeout(hurry); hurry = 0; clearBeat(); finalState(shown); busy = false; };
+    const step = () => {
+      const t = target(), auto = floor === 4;
+      if (!auto && scene.getBoundingClientRect().bottom < innerHeight * .5 && shown < 4) {
+        finishNow(); showBeat(4); finalState(4); shown = 4; return;
+      }
+      if (busy) {
+        if (!auto && t > shown && !hurry) hurry = setTimeout(() => { finishNow(); step(); }, 600);
+        if (t < shown) { finishNow(); } else return;
+      }
+      if (t < shown) { clearBeat(); showBeat(t); finalState(t); shown = t; return; }
+      if (t === shown) { if (auto && shown === 4) giveBackScroll(); return; }
+      if (!auto && t - shown >= 2) { showBeat(t - 1); finalState(t - 1); shown = t - 1; }
+      busy = true;
+      play(shown + 1, false, () => { clearTimeout(hurry); hurry = 0; busy = false; step(); });
     };
-    const update = () => {
-      raf = 0;
-      if (scene.getBoundingClientRect().top > innerHeight * .5 && (anchor || collapsed)) reset();   /* well above the scene again: start fresh */
-      const p = progress(scrollP());
-      cur = p;
-      set('moved', p > .06);
-      if (p === lastP) return;
-      lastP = p;
-      const beat = p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
-      for (let i = 1; i <= 4; i++) set('s' + i, beat === i);
-      nodes.forEach((n, i) => n.classList.toggle('hit', p >= B[i]));
-      if (fill) fill.style.transform = `scaleX(${clamp(p / B[3])})`;
-      const l2 = clamp((p - B[1]) / (B[2] - B[1]));
-      if (type) type.textContent = full.slice(0, Math.round(full.length * clamp(l2 * 1.7)));
-      set('typing', l2 > 0 && l2 < .59);
-      set('caller', l2 > .62 || beat > 2);
-      set('tags', clamp((p - B[2]) / (B[3] - B[2])) > .12 || beat > 3);
-      const l4 = clamp((p - B[3]) / (1 - B[3]));
-      set('drop', l4 > .12);
-      set('green', l4 > .38);
-      set('sms', l4 > .55);
-    };
-    const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
-    /* Pause for 3s with the stage in view and the call plays itself to the end: greeting, reply,
-       details, booking, holding on each beat. Scrolling takes over at any time. */
-    let run = 0;
-    const settle = () => { if (playing) { playing = false; anchor = { sp: scrollP(), a: cur }; } };
-    const stopAuto = () => { run++; cancelAnimationFrame(auto); settle(); };
-    /* When the call has played to the end, give back the scene's unused scroll so the next scroll leaves it */
-    const collapse = () => {
+
+    /* When the call has played to the end by itself, give back the scene's unused scroll */
+    const giveBackScroll = () => {
+      if (collapsed) return;
       const top = scene.getBoundingClientRect().top + scrollY;
       scene.style.height = Math.max(innerHeight + 2, scrollY - top + innerHeight + 2) + 'px';
-      collapsed = true; anchor = { sp: scrollP(), a: 1 }; lastP = -1; update();
-    };
-    const tween = (to, ms, token) => new Promise(res => {
-      const from = cur, t0 = performance.now();
-      const step = now => {
-        if (token !== run) return res(false);
-        const k = clamp((now - t0) / ms); autoP = from + (to - from) * (1 - Math.pow(1 - k, 2)); lastP = -1; update();
-        if (k < 1) auto = requestAnimationFrame(step); else res(true);
-      };
-      auto = requestAnimationFrame(step);
-    });
-    const hold = (ms, token) => new Promise(res => setTimeout(() => res(token === run), ms));
-    const autoplay = async () => {
-      const token = ++run;
-      playing = true; autoP = cur; anchor = null;
-      const stops = [[B[2] - .02, 2600, 1400], [B[3] - .03, 1500, 1800], [1, 1400, 0]];   /* [target, move ms, hold ms] */
-      for (const [to, ms, wait] of stops) {
-        if (cur >= to) continue;
-        if (!(await tween(to, ms, token))) return;
-        if (wait && !(await hold(wait, token))) return;
-      }
-      playing = false;
-      collapse();
+      collapsed = true;
     };
     const armIdle = () => {
       clearTimeout(idle);
       idle = setTimeout(() => {
         const r = stage.getBoundingClientRect();
-        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || cur >= .98 || collapsed) return;
-        autoplay();
-      }, 3000);
+        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || shown >= 4 || collapsed) return;
+        floor = 4; anchor = null; step();
+      }, 1500);
     };
-    addEventListener('scroll', () => { stopAuto(); armIdle(); }, { passive: true });
-    addEventListener('scroll', kick, { passive: true });
-    armIdle();
-    /* Rail steps are buttons: jump to that beat */
+
+    let raf = 0;
+    addEventListener('scroll', () => {
+      if (floor === 4 && !collapsed) { anchor = { sp: scrollP(), s: shown }; floor = 1; }   /* scrolling takes over autoplay */
+      if (scene.getBoundingClientRect().top > innerHeight * .5 && (collapsed || anchor || floor > 1)) {   /* well above: start fresh */
+        if (collapsed) { scene.style.height = ''; collapsed = false; }
+        anchor = null; floor = 1;
+      }
+      armIdle();
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; step(); });
+    }, { passive: true });
+    addEventListener('resize', () => step());
+    /* Rail steps are buttons: go to that beat */
     scene.querySelectorAll('.rail button').forEach(btn => btn.addEventListener('click', () => {
-      stopAuto(); anchor = null; if (collapsed) { scene.style.height = ''; collapsed = false; }
-      const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + (i === 3 ? .2 : .1));
+      if (collapsed) { scene.style.height = ''; collapsed = false; }
+      anchor = null; floor = 1;
+      const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + .04);
       if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' });
     }));
-    addEventListener('resize', () => { lastP = -1; kick(); });
-    update();
+    showBeat(1); finalState(1); armIdle();
   }
 
   /* Phones: a booking button in thumb reach, shown whenever the hero buttons are off screen,

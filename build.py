@@ -270,7 +270,7 @@ def trade_page(T):
         <div class="scene-pin">
           <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
           <div class="stage" role="img" aria-label="{X['flow_aria']}">
-            <div class="beat b1"><div class="ring"><span></span><span></span><span></span></div>
+            <div class="beat b1"><div class="ring"><span></span><span></span></div>
               <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
             <div class="beat b2"><p class="said ai"><small>{B}</small><span class="type" data-text="{E(X['call'][0][0])}"></span></p><p class="said caller"><small>Caller</small><span>{X['call'][1][0]}</span></p></div>
             <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts']))}</div></div></div>
