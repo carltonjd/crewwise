@@ -53,22 +53,6 @@
 
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-inner">
-      <figure class="flow play" aria-label="Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.">
-        <svg class="path" viewBox="0 0 1000 290" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H1000"/>
-          <path class="live" d="M0 46 H330 Q360 46 360 76 V120 Q360 150 390 150 H870"/>
-        </svg>
-        <span class="signal" aria-hidden="true"></span>
-        <span class="mtip" aria-hidden="true"></span>
-        <span class="node pill" data-step="1" style="left:9%;top:46px"><i></i>Incoming call</span>
-        <span class="node pill" data-step="2" style="left:45%;top:150px"><i></i>Answered</span>
-        <span class="node pill" data-step="3" style="left:66%;top:150px"><i></i>Qualified</span>
-        <span class="node pill ok" data-step="4" style="left:87%;top:150px"><i></i>Booked</span>
-        <div class="fcard" data-step="1" style="left:1%;top:80px;width:23%"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><div class="fb"><b>Homeowner calling.</b> You're up on a roof.</div></div>
-        <div class="fcard dk" data-step="2" style="left:29%;top:178px;width:22%"><div class="h"><span>0:03</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></div><span class="say">"Thanks for calling Oak Ridge Roofing. How can I help?"</span></div>
-        <div class="fcard" data-step="3" style="left:53%;top:178px;width:19%"><div class="h"><span>1:05</span></div><div class="fb"><b>Ceiling leak</b><div class="tags"><span>15-year roof</span><span>Claim filed</span><span>In your area</span></div></div></div>
-        <div class="fcard booked" data-step="4" style="left:74.5%;top:178px;width:23%"><div class="h"><span>1:48</span></div><div class="fb"><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div></div>
-      </figure>
       <div class="hero-copy">
         <div>
           <a class="back" href="../">&larr; All trades</a><p class="eyebrow">AI front desk for roofing companies</p>
@@ -77,23 +61,21 @@
         <div>
           <p class="sub">It picks up day or night, gets the address, the damage and the insurance details, and books the inspection into your calendar. Then it follows up on your estimates, so the leads you pay for turn into jobs.</p>
           <div class="act"><a class="btn" href="https://calendly.com/roswald-crewwisehq/crewwise-demo" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
-          <p class="cta-note">15-minute demo, you'll hear it answer a call. $499 a month, no contract.</p>
           
         </div>
       </div>
-      <div class="scene">
-        <div class="scene-pin">
-          <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
-          <div class="stage" role="img" aria-label="Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.">
-            <div class="beat b1"><div class="ring"><span></span><span></span></div>
-              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><b>Homeowner calling.</b> You're up on a roof.<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
-            <div class="beat b2"><p class="said ai"><small>Crewwise</small><span class="type" data-text="Thanks for calling Oak Ridge Roofing. How can I help?"></span></p><p class="said caller"><small>Caller</small><span>Water's coming through my kitchen ceiling after the storm.</span></p></div>
-            <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>Ceiling leak</b><div class="tags"><span style="--k:0">15-year roof</span><span style="--k:1">Claim filed</span><span style="--k:2">In your area</span><span style="--k:3">1418 Maple Ct, Round Rock</span></div></div></div>
-            <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">Estimate, Cedar Park</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>1418 Maple Ct, Round Rock</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
-              <div class="bubble me sms-pop">You're booked with Oak Ridge Roofing for Monday at 9:00 AM. Reply C to confirm.</div></div>
-          </div>
-          <a class="skip-call" href="#leaks">Skip the call</a>
-        </div>
+      <div class="route" role="group" aria-label="Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.">
+        <ol class="route-steps">
+          <li class="rs rs1"><span class="pill"><i></i>Incoming call<time>0:00</time></span>
+            <div class="rcard"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><p><b>Homeowner calling.</b> You're up on a roof.</p></div></li>
+          <li class="rs rs2"><span class="pill"><i></i>Answered<time>0:03</time></span>
+            <div class="rcard dk"><p class="r-said"><span class="r-ghost">"Thanks for calling Oak Ridge Roofing. How can I help?"</span><span class="r-type" aria-hidden="true"></span></p><p class="r-caller">"Water's coming through my kitchen ceiling after the storm."</p></div></li>
+          <li class="rs rs3"><span class="pill"><i></i>Qualified<time>1:05</time></span>
+            <div class="rcard"><b class="r-issue">Ceiling leak</b><div class="tags"><span style="--k:0">15-year roof</span><span style="--k:1">Claim filed</span><span style="--k:2">In your area</span></div></div></li>
+          <li class="rs rs4"><span class="pill ok"><i></i>Booked<time>1:48</time></span>
+            <div class="rcard booked"><b>Booked Mon 9:00 AM</b><span class="r-where">1418 Maple Ct, Round Rock</span><span class="r-sms">Text confirmation sent</span></div></li>
+        </ol>
+        <button class="route-replay" type="button" hidden>Replay the call</button>
       </div>
       <p class="flow-cap">Example call. Oak Ridge Roofing is a made-up company. Crewwise doesn't sell leads, never calls customers who haven't contacted you, and there's no call center behind it. It answers the calls your business already gets.</p>
     </div>
