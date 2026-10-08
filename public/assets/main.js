@@ -203,15 +203,41 @@
     const box = form.closest('.form'), btn = form.querySelector('button[type="submit"]'), label = btn.textContent;
     const err = form.querySelector('.form-error'), thanks = box.querySelector('.thanks'), phone = form.dataset.phone || '', email = form.dataset.email || '';
     const show = m => { err.textContent = m; err.hidden = false; };
+    /* Field checks. Each returns an error message, or '' when the value is fine.
+       Phone: a US number, 10 digits, or 11 starting with 1. */
+    const digits = v => v.replace(/\D/g, '');
+    const checks = {
+      name: v => !v ? 'Enter your name.' : v.length < 2 || !/\p{L}/u.test(v) ? 'Enter your name so we know who to ask for.' : '',
+      phone: v => {
+        if (!v) return 'Enter a phone number we can call you back on.';
+        if (/[^\d\s()+.\-]/.test(v)) return 'Use numbers only, like (512) 555-0134.';
+        const d = digits(v);
+        return d.length === 10 || (d.length === 11 && d[0] === '1') ? '' : 'Enter a 10-digit US phone number, like (512) 555-0134.';
+      },
+      company: v => !v ? 'Enter your company name.' : v.length < 2 ? 'Enter your full company name.' : '',
+    };
+    const touched = new Set();
+    const check = input => {
+      const msg = checks[input.name](input.value.trim()), slot = form.querySelector('#e-' + input.name);
+      input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (slot) { slot.textContent = msg; slot.hidden = !msg; }
+      return !msg;
+    };
+    Object.keys(checks).forEach(n => {
+      const input = form.elements[n]; if (!input) return;
+      input.addEventListener('blur', () => {
+        if (n === 'phone') { const d = digits(input.value), t = d.length === 11 && d[0] === '1' ? d.slice(1) : d; if (t.length === 10) input.value = `(${t.slice(0, 3)}) ${t.slice(3, 6)}-${t.slice(6)}`; }
+        if (input.value.trim()) touched.add(n);
+        if (touched.has(n)) check(input);
+      });
+      input.addEventListener('input', () => { if (touched.has(n)) check(input); if (!err.hidden && form.querySelectorAll('[aria-invalid="true"]').length === 0) err.hidden = true; });
+    });
     form.addEventListener('submit', e => {
       e.preventDefault(); err.hidden = true;
-      if (!form.checkValidity()) {
-        const bad = form.querySelector(':invalid');
-        const name = bad && bad.labels && bad.labels[0] ? bad.labels[0].childNodes[0].textContent.trim() : '';
-        show(name ? `Fill in "${name}" to send your details.` : 'Fill in the required fields to send your details.');
-        if (bad) bad.focus();
-        return;
-      }
+      if (btn.disabled) return;
+      const bad = Object.keys(checks).map(n => form.elements[n]).filter(i => i && (touched.add(i.name), !check(i)));
+      if (bad.length) { show(bad.length > 1 ? 'A few details need fixing before we can call you.' : 'One detail needs fixing before we can call you.'); bad[0].focus(); return; }
+      if (form.elements._gotcha && form.elements._gotcha.value) return;
       btn.disabled = true; btn.textContent = 'Sending…';
       fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
         .then(r => { if (!r.ok) throw 0;

@@ -75,7 +75,8 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 """
 
 def nav_items(T):
-    return [('#how-it-works', 'How it works'), ('#' + T['busy_id'], T['busy_nav']), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
+    # Same order as the sections on the page, so each link moves further down
+    return [('#' + T['busy_id'], T['busy_nav']), ('#how-it-works', 'How it works'), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
 
 def header(p, nav=True, T=HOME):
     items = nav_items(T)
@@ -372,9 +373,9 @@ def trade_page(T):
           <p class="form-sub">We'll call you to set up a 15-minute demo.</p>
           <input type="hidden" name="page" value="{T['slug']}">
           <div class="fields">
-            <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
-            <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
-            <div class="field full"><label for="f-company">Company</label><input id="f-company" name="company" type="text" autocomplete="organization" required></div>
+            <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="e-name"><p class="field-err" id="e-name" hidden></p></div>
+            <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20" placeholder="(512) 555-0134" aria-describedby="e-phone"><p class="field-err" id="e-phone" hidden></p></div>
+            <div class="field full"><label for="f-company">Company</label><input id="f-company" name="company" type="text" autocomplete="organization" required minlength="2" maxlength="120" aria-describedby="e-company"><p class="field-err" id="e-company" hidden></p></div>
             <div class="hp" aria-hidden="true"><label for="f-gotcha">Leave this field empty</label><input id="f-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
           </div>
           <div class="form-foot">
@@ -545,7 +546,7 @@ def main():
     write('404.html', notfound())
     # Paused page: kept, renamed, noindexed, unlinked. It uses the previous stylesheet.
     src = os.path.join(ROOT, 'design', 'archive', 'photographers', 'index.html')
-    ph = open(src, encoding='utf-8').read().replace('Jobstead', B).replace('[DOMAIN]', C['domain']).replace('[BUSINESS ADDRESS]', '').replace('tel:[US PHONE]', 'mailto:' + C['email']).replace('[US PHONE]', C['email']).replace('[EMAIL]', C['email']).replace('[GOVERNING LAW]', C['governing_law']).replace(C['company'], B).replace('[OG IMAGE URL]', f"{C['domain']}/{HOME['og_image']}")
+    ph = open(src, encoding='utf-8').read().replace('Jobstead', B).replace('[DOMAIN]', C['domain']).replace('[BUSINESS ADDRESS]', '').replace('tel:[US PHONE]', 'mailto:' + C['email']).replace('[US PHONE]', C['email']).replace('[EMAIL]', C['email']).replace('[CALENDLY LINK]', C['calendly']).replace('action="[FORM ENDPOINT]"', 'action="' + C['form_endpoint'] + '"').replace('[GOVERNING LAW]', C['governing_law']).replace(C['company'], B).replace('[OG IMAGE URL]', f"{C['domain']}/{HOME['og_image']}")
     if 'name="robots"' not in ph:
         ph = ph.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
     write(os.path.join('photographers', 'index.html'), ph)

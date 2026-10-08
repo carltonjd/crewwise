@@ -321,7 +321,9 @@ h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -.015em; }
 .field input { width: 100%; min-height: 50px; padding: 12px 14px; font: inherit; font-size: 1rem; color: var(--ink); background: var(--ground); border: 1px solid var(--rule-2); border-radius: 10px; transition: border-color .15s, box-shadow .15s, background-color .15s; }
 .field input::placeholder { color: var(--ink-3); }
 .field input:focus { outline: none; background: var(--surface); border-color: var(--line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--line) 25%, transparent); }
-.field input:user-invalid { border-color: #B42318; }
+.field input[aria-invalid="true"] { border-color: #B42318; }
+.field input[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px color-mix(in srgb, #B42318 22%, transparent); }
+.field-err { margin-top: 6px; font-size: var(--t-small); font-weight: 600; color: #B42318; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form-foot { margin-top: 24px; }
 .form-foot .btn { width: 100%; }
