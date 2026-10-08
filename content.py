@@ -20,6 +20,14 @@ ROOF_EXAMPLE = dict(
     chips=['Leak, kitchen ceiling', 'Residential', 'Repair', 'Claim filed', 'In service area'],
     cal_busy='Estimate, Cedar Park', cal_event='Inspection booked', cal_where='1418 Maple Ct, Round Rock',
     sms='You\'re booked with Oak Ridge Roofing for Monday at 9:00 AM. Reply C to confirm.',
+    # 'What it does' shows other moments than the hero call: an urgent transfer, and a web lead texted back and booked
+    w_call=[("Oak Ridge Roofing, how can I help?", 'ai'),
+            ("Water's pouring through the light in our hallway right now.", 'caller'),
+            ("That sounds urgent. I'm putting you through to the owner now. Please stay on the line.", 'ai'),
+            ("Okay, thank you.", 'caller')],
+    w_chips=['Active leak', 'Urgent', 'Transferred to owner', 'In service area'],
+    w_day='Tuesday, October 13', w_busy=('9 AM', 'Roof repair, Leander'), w_ev=('10 AM', 'Hail inspection booked', '88 Cedar Ridge Dr, Georgetown'), w_after='11 AM',
+    w_sms="Hi Dana, thanks for your request about hail damage. Could we come out Tuesday at 10 AM?", w_reply='Tuesday at 10 works.', w_note='Web lead, replied within a minute',
     followups=[('Estimate follow-up, day 7', 'Hi Mike, just checking in on the roof estimate we sent last week. Any questions I can answer?', ''),
                ('Reply', 'Yes, can someone call me about the shingle options?', 'reply'),
                ('Review request, after the job', 'Thanks for choosing Oak Ridge Roofing. Would you leave us a quick Google review?', '')],
@@ -66,7 +74,7 @@ HOME = dict(
            ('Silent quotes', 'Quotes or estimates sent, never followed up.', 'Followed up automatically'),
            ('Old leads', 'Past inquiries never contacted again.', 'Contacted again')],
     leakmap_start='Customer calls',
-    what_title="Your front desk while you're on the job",
+    what_title="What happens after the phone rings",
     moments=[('0:00', 'On the call', [
                 ('Answers every call, 24/7', "In your company's name, nights, weekends and holidays included."),
                 ('Qualifies every customer', "Asks the questions you'd ask: address, what's wrong, how urgent, and anything specific to your trade."),
@@ -123,7 +131,7 @@ ROOFING = dict(
            ('Silent estimates', 'Quotes sent, never followed up.', 'Followed up automatically'),
            ('Old leads', 'Past inquiries never contacted again.', 'Contacted again')],
     leakmap_start='Homeowner calls',
-    what_title="Your front desk while you're on the roof",
+    what_title="What happens after the phone rings",
     moments=[('0:00', 'On the call', [
                 ('Answers every call, 24/7', "In your company's name, nights, weekends and holidays included."),
                 ('Qualifies every homeowner', 'Address, leak or damage, roof age, insurance claim, repair or replacement, residential or commercial.'),

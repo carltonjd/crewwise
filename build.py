@@ -66,7 +66,7 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 <link rel="manifest" href="{p}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{p}assets/style.css">
 <script>document.documentElement.classList.add('js')</script>
 {schema}</head>
@@ -75,13 +75,14 @@ def head(title, desc, path, p, extra='', comment='', og_title=None, og_desc=None
 """
 
 def nav_items(T):
-    # Same order as the sections on the page, so each link moves further down
-    return [('#' + T['busy_id'], T['busy_nav']), ('#how-it-works', 'How it works'), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
+    # Same order as the sections on the page, so each link moves further down; Roofing first on the general pages
+    trades = [('roofing/', 'Roofing')] if T['slug'] == 'home' else []
+    return trades + [('#' + T['busy_id'], T['busy_nav']), ('#how-it-works', 'How it works'), ('#pricing', 'Pricing'), ('#faq', 'FAQ')]
 
 def header(p, nav=True, T=HOME):
     items = nav_items(T)
     href = lambda h: h if nav else f'{p}{h}'
-    links = ''.join(f'<a href="{href(h)}" data-spy="{h[1:]}">{t}</a>' for h, t in items)
+    links = ''.join(f'<a href="{href(h)}" data-spy="{h[1:]}">{t}</a>' if h.startswith('#') else f'<a href="{p}{h}">{t}</a>' for h, t in items)
     login = f'<a class="login" href="{LOGIN}">Client login</a>' if LOGIN else ''
     return f"""<header class="site-header">
   <div class="wrap">
@@ -218,10 +219,10 @@ def trade_page(T):
     half = (len(det) + 1) // 2
     faq = f'<div class="faq-col">{"".join(det[:half])}</div><div class="faq-col">{"".join(det[half:])}</div>'
     call = ''
-    for i, (line, who) in enumerate(X['call']):
+    for i, (line, who) in enumerate(X['w_call']):
         cls, name = (' class="ai"', B) if who == 'ai' else ('', 'Caller')
         call += f'<p{cls} data-a style="--d:{200 + i * 750}"><b>{name}</b><span>{line}</span></p>'
-    chips = ''.join(f'<span data-a="s" style="--d:{3100 + i * 140}">{c}</span>' for i, c in enumerate(X['chips']))
+    chips = ''.join(f'<span data-a="s" style="--d:{3100 + i * 140}">{c}</span>' for i, c in enumerate(X['w_chips']))
     thread = ''.join(f'<div class="msg{" " + k if k else ""}" data-a style="--d:{200 + i * 1000}"><small>{h}</small>{m}</div>' for i, (h, m, k) in enumerate(X['followups']))
     def feats(items):
         return '<ul class="feats">' + ''.join(f'<li><h4>{h}</h4><p>{d}</p></li>' for h, d in items) + '</ul>'
@@ -256,20 +257,22 @@ def trade_page(T):
         <div>
           <p class="sub">{T['sub']}</p>
           <div class="act"><a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
+          <p class="cta-note">15 minutes. You'll hear it answer a call. No contract.</p>
           {trade_row}
         </div>
       </div>
       <div class="scene">
         <div class="scene-pin">
-          <ol class="rail" aria-hidden="true"><li><i></i><b>Incoming call</b><span>0:00</span></li><li><i></i><b>Answered</b><span>0:03</span></li><li><i></i><b>Qualified</b><span>1:05</span></li><li class="ok"><i></i><b>Booked</b><span>1:48</span></li><span class="rail-fill"></span></ol>
+          <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
           <div class="stage" role="img" aria-label="{X['flow_aria']}">
             <div class="beat b1"><div class="ring"><span></span><span></span><span></span></div>
-              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div></div>
+              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div>{X['flow_card1']}<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
             <div class="beat b2"><p class="said ai"><small>{B}</small><span class="type" data-text="{E(X['call'][0][0])}"></span></p><p class="said caller"><small>Caller</small><span>{X['call'][1][0]}</span></p></div>
             <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>{X['issue']}</b><div class="tags">{"".join(f'<span style="--k:{i}">{f}</span>' for i, f in enumerate(X['facts']))}</div></div></div>
             <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>{X['cal_where']}</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
               <div class="bubble me sms-pop">{X['sms']}</div></div>
           </div>
+          <a class="skip-call" href="#leaks">Skip the call</a>
         </div>
       </div>
       <p class="flow-cap">{T['flow_cap']}</p>
@@ -290,7 +293,7 @@ def trade_page(T):
     <div class="rows">
       <div class="row">
         <div class="row-copy"><span class="pill"><i></i>On the call</span><h3>Every call answered and qualified</h3>{feats(m0[2])}</div>
-        <div><div class="ui ondark play" aria-label="Example of a live call">
+        <div><div class="ui ondark play" aria-label="Example of an urgent call transferred to the owner">
           <div class="ui-h">Live call<span class="rec">Recording<span class="tmr" aria-hidden="true"></span></span></div>
           <div class="tx">{call}</div>
           <div class="chips">{chips}</div>
@@ -298,15 +301,15 @@ def trade_page(T):
       </div>
       <div class="row flip">
         <div class="row-copy"><span class="pill ok"><i></i>Right after</span><h3>Booked on your calendar, confirmed by text</h3>{feats(m1[2])}</div>
-        <div><div class="ui onlight play" aria-label="Example of a booking and text confirmation">
-          <div class="ui-h">Monday, October 12<span>Your calendar</span></div>
-          <div class="slot"><time>8 AM</time><div><span class="busy">{X['cal_busy']}</span></div></div>
-          <div class="slot"><time>9 AM</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>{X['cal_event']}</b>{X['cal_where']}</span></div></div>
-          <div class="slot"><time>10 AM</time><div></div></div>
+        <div><div class="ui onlight play" aria-label="Example of a web lead texted back and booked">
+          <div class="ui-h">{X['w_day']}<span>Your calendar</span></div>
+          <div class="slot"><time>{X['w_busy'][0]}</time><div><span class="busy">{X['w_busy'][1]}</span></div></div>
+          <div class="slot"><time>{X['w_ev'][0]}</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>{X['w_ev'][1]}</b>{X['w_ev'][2]}</span></div></div>
+          <div class="slot"><time>{X['w_after']}</time><div></div></div>
           <div class="sms">
-            <div class="bubble me" data-a style="--d:1400">{X['sms']}</div>
-            <div class="bubble" data-a style="--d:2300">C. Thank you!</div>
-            <small>Text confirmation, Saturday 7:44 PM</small>
+            <div class="bubble me" data-a style="--d:1400">{X['w_sms']}</div>
+            <div class="bubble" data-a style="--d:2300">{X['w_reply']}</div>
+            <small>{X['w_note']}</small>
           </div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
       </div>

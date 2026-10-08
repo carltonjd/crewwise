@@ -46,6 +46,7 @@ It does not sell leads, never calls people who haven't contacted the business, a
 
 - Name: Crewwise (capital C in text; the lowercase wordmark is logo-only). Domain crewwisehq.com, email hello@crewwisehq.com.
 - Logo and brand assets from `design/brand/crewwise-brand-assets/`, following the user's Crewwise logo spec.
+- Fixed (confirmed 2026-10-08): the logo blue `#1E5BD8` and the logo itself (icon plus the "crewwise" wordmark in Hanken Grotesk 650). Everything else visual is open to change: other colours, section backgrounds, textures, the site's headline and body fonts, and the type scale.
 - Voice: plain, specific, human. No em or en dashes in copy, no sales hype, no invented claims; copy is run through the humanizer rules.
 - Reference site the user chose for feel: https://www.auxia.io/
 

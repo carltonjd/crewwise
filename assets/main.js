@@ -185,15 +185,19 @@
     const note = document.querySelector('.hero-inner .flow-cap');
     if (note) { note.classList.add('scene-cap'); scene.querySelector('.scene-pin').appendChild(note); }
     const type = scene.querySelector('.type'), full = type ? type.dataset.text : '';
-    const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li')];
+    const fill = scene.querySelector('.rail-fill'), nodes = [...scene.querySelectorAll('.rail li:not(.rail-fill)')], stage = scene.querySelector('.stage');
     const B = [0, .2, .46, .7];
     const clamp = v => Math.min(1, Math.max(0, v));
-    let raf = 0, lastP = -1;
+    let raf = 0, lastP = -1, autoP = 0, idle = 0, auto = 0;
     const set = (c, on) => scene.classList.toggle(c, on);
+    const span = () => Math.max(1, scene.offsetHeight - innerHeight);
+    const scrollP = () => clamp(-scene.getBoundingClientRect().top / span());
     const update = () => {
       raf = 0;
-      const r = scene.getBoundingClientRect(), span = Math.max(1, scene.offsetHeight - innerHeight);
-      const p = clamp(-r.top / span);
+      const sp = scrollP();
+      if (scene.getBoundingClientRect().top > innerHeight) autoP = 0;   /* back above the scene: start fresh */
+      const p = Math.max(sp, autoP);
+      set('moved', p > .06);
       if (p === lastP) return;
       lastP = p;
       const beat = p >= B[3] ? 4 : p >= B[2] ? 3 : p >= B[1] ? 2 : 1;
@@ -211,7 +215,27 @@
       set('sms', l4 > .55);
     };
     const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
+    /* Idle on the first beat for 3s: play the greeting by itself, so the scene shows it is alive.
+       Scrolling takes over at any time; the scene never goes backwards past what autoplay showed. */
+    const armIdle = () => {
+      clearTimeout(idle);
+      idle = setTimeout(() => {
+        const r = stage.getBoundingClientRect();
+        if (r.top > innerHeight * .55 || r.bottom < innerHeight * .45 || Math.max(scrollP(), autoP) >= B[1]) return;
+        const from = Math.max(scrollP(), autoP), to = B[2] - .015, t0 = performance.now(), dur = 3200;
+        cancelAnimationFrame(auto);
+        const step = now => { const k = clamp((now - t0) / dur); autoP = from + (to - from) * (1 - Math.pow(1 - k, 2)); lastP = -1; update(); if (k < 1) auto = requestAnimationFrame(step); };
+        auto = requestAnimationFrame(step);
+      }, 3000);
+    };
+    addEventListener('scroll', () => { cancelAnimationFrame(auto); armIdle(); }, { passive: true });
     addEventListener('scroll', kick, { passive: true });
+    armIdle();
+    /* Rail steps are buttons: jump to that beat */
+    scene.querySelectorAll('.rail button').forEach(btn => btn.addEventListener('click', () => {
+      const i = +btn.dataset.beat, y = scene.getBoundingClientRect().top + scrollY + span() * Math.min(.99, B[i] + (i === 3 ? .2 : .1));
+      if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' });
+    }));
     addEventListener('resize', () => { lastP = -1; kick(); });
     update();
   }
@@ -330,6 +354,8 @@
       company: v => !v ? 'Enter your company name.' : v.length < 2 ? 'Enter your full company name.' : '',
     };
     const touched = new Set();
+    let pressing = false;
+    btn.addEventListener('pointerdown', () => { pressing = true; setTimeout(() => { pressing = false; }, 700); });
     const check = input => {
       const msg = checks[input.name](input.value.trim()), slot = form.querySelector('#e-' + input.name);
       input.setAttribute('aria-invalid', msg ? 'true' : 'false');
@@ -338,8 +364,10 @@
     };
     Object.keys(checks).forEach(n => {
       const input = form.elements[n]; if (!input) return;
-      input.addEventListener('blur', () => {
+      input.addEventListener('blur', e => {
         if (n === 'phone') { const d = digits(input.value), t = d.length === 11 && d[0] === '1' ? d.slice(1) : d; if (t.length === 10) input.value = `(${t.slice(0, 3)}) ${t.slice(3, 6)}-${t.slice(6)}`; }
+        /* Heading for the submit button: let submit validate, so an error message can't shift the button out from under the tap */
+        if (e.relatedTarget === btn || pressing) return;
         if (input.value.trim()) touched.add(n);
         if (touched.has(n)) check(input);
       });

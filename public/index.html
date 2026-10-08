@@ -30,7 +30,7 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://crewwisehq.com/#org", "name": "Crewwise", "url": "https://crewwisehq.com/", "logo": "https://crewwisehq.com/icon-512.png", "email": "hello@crewwisehq.com"}, {"@type": "WebSite", "@id": "https://crewwisehq.com/#site", "url": "https://crewwisehq.com/", "name": "Crewwise", "publisher": {"@id": "https://crewwisehq.com/#org"}}, {"@type": "Service", "name": "Crewwise", "serviceType": "AI receptionist and answering service for home-service businesses", "url": "https://crewwisehq.com/", "provider": {"@id": "https://crewwisehq.com/#org"}, "areaServed": "US", "offers": {"@type": "Offer", "price": "499", "priceCurrency": "USD"}}]}</script>
@@ -41,7 +41,7 @@
   <div class="wrap">
     <div class="bar">
       <a class="logo" href="./" aria-label="Crewwise home"><span class="logo-icon"><svg aria-hidden="true" focusable="false" shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" rx="10" fill="#1E5BD8"/><polyline points="8,16 14.5,31 22,10.5 29.5,31 36,16" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="logo-text">crewwise</span></a>
-      <nav class="nav" id="site-nav" aria-label="Main"><a href="#busy-days" data-spy="busy-days">Busy days</a><a href="#how-it-works" data-spy="how-it-works">How it works</a><a href="#pricing" data-spy="pricing">Pricing</a><a href="#faq" data-spy="faq">FAQ</a></nav>
+      <nav class="nav" id="site-nav" aria-label="Main"><a href="roofing/">Roofing</a><a href="#busy-days" data-spy="busy-days">Busy days</a><a href="#how-it-works" data-spy="how-it-works">How it works</a><a href="#pricing" data-spy="pricing">Pricing</a><a href="#faq" data-spy="faq">FAQ</a></nav>
       <div class="top-act">
         <a class="btn sm" href="https://calendly.com/roswald-crewwisehq/crewwise-demo" target="_blank" rel="noopener">Book a demo</a>
         <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr">Menu</span><i aria-hidden="true"></i></button>
@@ -77,20 +77,22 @@
         <div>
           <p class="sub">It picks up day or night, gets the job details and books the visit into your calendar. Then it follows up on your quotes, so the leads you pay for turn into jobs.</p>
           <div class="act"><a class="btn" href="https://calendly.com/roswald-crewwisehq/crewwise-demo" target="_blank" rel="noopener">Book a 15-min demo</a><a class="link" href="#how-it-works">See how it works</a></div>
+          <p class="cta-note">15 minutes. You'll hear it answer a call. No contract.</p>
           <p class="trade-row"><a href="roofing/">Built for roofing companies &rarr;</a><span>More trades coming soon.</span></p>
         </div>
       </div>
       <div class="scene">
         <div class="scene-pin">
-          <ol class="rail" aria-hidden="true"><li><i></i><b>Incoming call</b><span>0:00</span></li><li><i></i><b>Answered</b><span>0:03</span></li><li><i></i><b>Qualified</b><span>1:05</span></li><li class="ok"><i></i><b>Booked</b><span>1:48</span></li><span class="rail-fill"></span></ol>
+          <ol class="rail" aria-label="Steps of the example call"><li><button type="button" data-beat="0" aria-label="Show the incoming call step"><i></i><b>Incoming call</b><span>0:00</span></button></li><li><button type="button" data-beat="1" aria-label="Show the answered step"><i></i><b>Answered</b><span>0:03</span></button></li><li><button type="button" data-beat="2" aria-label="Show the qualified step"><i></i><b>Qualified</b><span>1:05</span></button></li><li class="ok"><button type="button" data-beat="3" aria-label="Show the booked step"><i></i><b>Booked</b><span>1:48</span></button></li><li class="rail-fill" aria-hidden="true"></li></ol>
           <div class="stage" role="img" aria-label="Example: a Saturday evening call to Oak Ridge Roofing, a made-up roofing company. The call is answered, qualified as a ceiling leak on a 15-year-old roof with a claim filed, and booked for Monday at 9 AM.">
             <div class="beat b1"><div class="ring"><span></span><span></span><span></span></div>
-              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><b>Homeowner calling.</b> You're up on a roof.<p class="ringing">Ringing</p></div></div>
+              <div class="fcard big"><div class="h"><span>Saturday, 7:42 PM</span><span>Example</span></div><b>Homeowner calling.</b> You're up on a roof.<p class="ringing">Ringing</p></div><p class="scroll-cue">Scroll to follow the call</p></div>
             <div class="beat b2"><p class="said ai"><small>Crewwise</small><span class="type" data-text="Thanks for calling Oak Ridge Roofing. How can I help?"></span></p><p class="said caller"><small>Caller</small><span>Water's coming through my kitchen ceiling after the storm.</span></p></div>
             <div class="beat b3"><div class="fcard big detail"><div class="h"><span>1:05</span><span>Qualified</span></div><b>Ceiling leak</b><div class="tags"><span style="--k:0">15-year roof</span><span style="--k:1">Claim filed</span><span style="--k:2">In your area</span><span style="--k:3">1418 Maple Ct, Round Rock</span></div></div></div>
             <div class="beat b4"><div class="cal"><div class="cal-h">Monday, October 12<span>Your calendar</span></div><div class="slot"><time>8 AM</time><div><span class="busy">Estimate, Cedar Park</span></div></div><div class="slot"><time>9 AM</time><div class="drop"><span class="ev"><b>Booked Mon 9:00 AM</b>1418 Maple Ct, Round Rock</span></div></div><div class="slot"><time>10 AM</time><div></div></div></div>
               <div class="bubble me sms-pop">You're booked with Oak Ridge Roofing for Monday at 9:00 AM. Reply C to confirm.</div></div>
           </div>
+          <a class="skip-call" href="#leaks">Skip the call</a>
         </div>
       </div>
       <p class="flow-cap">Example call. Names are made up. Crewwise is live for roofing companies today, with more trades coming soon. It never calls customers who haven't contacted you, and there's no call center behind it.</p>
@@ -111,27 +113,27 @@
   <div class="connector play from-dark" aria-hidden="true"><span class="dot"></span></div>
 
   <section class="wrap" id="what-it-does" aria-labelledby="what-title" style="padding-top:56px;padding-bottom:40px">
-    <div class="split"><h2 id="what-title">Your front desk while you're on the job</h2><p>It answers in your company's name and handles each step, from the first ring to the review request.</p></div>
+    <div class="split"><h2 id="what-title">What happens after the phone rings</h2><p>It answers in your company's name and handles each step, from the first ring to the review request.</p></div>
     <div class="rows">
       <div class="row">
         <div class="row-copy"><span class="pill"><i></i>On the call</span><h3>Every call answered and qualified</h3><ul class="feats"><li><h4>Answers every call, 24/7</h4><p>In your company's name, nights, weekends and holidays included.</p></li><li><h4>Qualifies every customer</h4><p>Asks the questions you'd ask: address, what's wrong, how urgent, and anything specific to your trade.</p></li><li><h4>Checks your service area</h4><p>Only books jobs inside the radius and towns you choose.</p></li><li><h4>Hands off to you</h4><p>Urgent jobs, upset callers and complex questions go straight to you.</p></li></ul></div>
-        <div><div class="ui ondark play" aria-label="Example of a live call">
+        <div><div class="ui ondark play" aria-label="Example of an urgent call transferred to the owner">
           <div class="ui-h">Live call<span class="rec">Recording<span class="tmr" aria-hidden="true"></span></span></div>
-          <div class="tx"><p class="ai" data-a style="--d:200"><b>Crewwise</b><span>Thanks for calling Oak Ridge Roofing. How can I help?</span></p><p data-a style="--d:950"><b>Caller</b><span>Water's coming through my kitchen ceiling after the storm.</span></p><p class="ai" data-a style="--d:1700"><b>Crewwise</b><span>Let's get someone out. What's the address, and is there an insurance claim?</span></p><p data-a style="--d:2450"><b>Caller</b><span>1418 Maple Court, Round Rock. We filed a claim this morning.</span></p></div>
-          <div class="chips"><span data-a="s" style="--d:3100">Leak, kitchen ceiling</span><span data-a="s" style="--d:3240">Residential</span><span data-a="s" style="--d:3380">Repair</span><span data-a="s" style="--d:3520">Claim filed</span><span data-a="s" style="--d:3660">In service area</span></div>
+          <div class="tx"><p class="ai" data-a style="--d:200"><b>Crewwise</b><span>Oak Ridge Roofing, how can I help?</span></p><p data-a style="--d:950"><b>Caller</b><span>Water's pouring through the light in our hallway right now.</span></p><p class="ai" data-a style="--d:1700"><b>Crewwise</b><span>That sounds urgent. I'm putting you through to the owner now. Please stay on the line.</span></p><p data-a style="--d:2450"><b>Caller</b><span>Okay, thank you.</span></p></div>
+          <div class="chips"><span data-a="s" style="--d:3100">Active leak</span><span data-a="s" style="--d:3240">Urgent</span><span data-a="s" style="--d:3380">Transferred to owner</span><span data-a="s" style="--d:3520">In service area</span></div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
       </div>
       <div class="row flip">
         <div class="row-copy"><span class="pill ok"><i></i>Right after</span><h3>Booked on your calendar, confirmed by text</h3><ul class="feats"><li><h4>Books visits and inspections into your calendar</h4><p>With a text confirmation and reminders for the customer.</p></li><li><h4>Texts back missed calls and web leads</h4><p>Anyone who hangs up, and every web lead, gets a reply within a minute.</p></li></ul></div>
-        <div><div class="ui onlight play" aria-label="Example of a booking and text confirmation">
-          <div class="ui-h">Monday, October 12<span>Your calendar</span></div>
-          <div class="slot"><time>8 AM</time><div><span class="busy">Estimate, Cedar Park</span></div></div>
-          <div class="slot"><time>9 AM</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>Inspection booked</b>1418 Maple Ct, Round Rock</span></div></div>
-          <div class="slot"><time>10 AM</time><div></div></div>
+        <div><div class="ui onlight play" aria-label="Example of a web lead texted back and booked">
+          <div class="ui-h">Tuesday, October 13<span>Your calendar</span></div>
+          <div class="slot"><time>9 AM</time><div><span class="busy">Roof repair, Leander</span></div></div>
+          <div class="slot"><time>10 AM</time><div><span class="ev" data-a="drop" style="display:block;--d:500"><b>Hail inspection booked</b>88 Cedar Ridge Dr, Georgetown</span></div></div>
+          <div class="slot"><time>11 AM</time><div></div></div>
           <div class="sms">
-            <div class="bubble me" data-a style="--d:1400">You're booked with Oak Ridge Roofing for Monday at 9:00 AM. Reply C to confirm.</div>
-            <div class="bubble" data-a style="--d:2300">C. Thank you!</div>
-            <small>Text confirmation, Saturday 7:44 PM</small>
+            <div class="bubble me" data-a style="--d:1400">Hi Dana, thanks for your request about hail damage. Could we come out Tuesday at 10 AM?</div>
+            <div class="bubble" data-a style="--d:2300">Tuesday at 10 works.</div>
+            <small>Web lead, replied within a minute</small>
           </div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
       </div>
@@ -259,7 +261,7 @@
     </div>
     <a class="foot-logo" href="./" aria-label="Crewwise home"><span class="logo-icon"><svg aria-hidden="true" focusable="false" shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" rx="10" fill="#1E5BD8"/><polyline points="8,16 14.5,31 22,10.5 29.5,31 36,16" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="logo-text">crewwise</span></a>
     <div class="foot">
-      <nav aria-label="Product"><h3>Product</h3><a href="#busy-days">Busy days</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></nav>
+      <nav aria-label="Product"><h3>Product</h3><a href="roofing/">Roofing</a><a href="#busy-days">Busy days</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></nav>
       <nav aria-label="Legal"><h3>Legal</h3><a href="privacy/">Privacy</a><a href="terms/">Terms</a><a href="refunds/">Refunds</a></nav>
       <div><h3>Contact</h3><a href="mailto:hello@crewwisehq.com">hello@crewwisehq.com</a></div>
     </div>
