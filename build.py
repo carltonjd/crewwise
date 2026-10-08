@@ -551,12 +551,19 @@ def notfound():
 """ + footer(p)
 
 # ---------------- Write ----------------
+def minify_css(css):
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)       # comments
+    css = re.sub(r'\s+', ' ', css)                          # whitespace runs
+    css = re.sub(r'\s*([{};,>])\s*', lambda m: m.group(1), css)   # around punctuation (never around ':' or '+'/'-': selectors and calc() need them)
+    return css.replace(';}', '}').strip()
+
 def check(rel, s):
     for bad in ('—', '–', '·'):
         assert bad not in s, f'{repr(bad)} in {rel}'
-    if not rel.startswith('photographers'):
-        for w in ('hotograph', 'HVAC', 'lumbing', 'lectrical', 'Jobstead', 'GoHighLevel', 'Retell', 'Stripe'):
-            assert w not in s, f'{w} in {rel}'
+    if rel == '_redirects':   # routing only, never shown: may name retired paths
+        return
+    for w in ('hotograph', 'HVAC', 'lumbing', 'lectrical', 'Jobstead', 'GoHighLevel', 'Retell', 'Stripe'):
+        assert w not in s, f'{w} in {rel}'
 
 def write(rel, s):
     check(rel, s)
@@ -571,22 +578,16 @@ def main():
         q = os.path.join(OUT, n)
         shutil.rmtree(q) if os.path.isdir(q) else os.remove(q)
     os.makedirs(os.path.join(OUT, 'assets'))
-    for f in ('style.css', 'main.js', 'lenis.min.js'):
+    for f in ('main.js', 'lenis.min.js'):
         shutil.copy(os.path.join(ROOT, 'assets', f), os.path.join(OUT, 'assets', f))
+    # The stylesheet ships minified; assets/style.css stays the readable source
+    open(os.path.join(OUT, 'assets', 'style.css'), 'w', encoding='utf-8').write(minify_css(open(os.path.join(ROOT, 'assets', 'style.css'), encoding='utf-8').read()))
     for T in PAGES:
         write(os.path.join(T['path'].strip('/'), 'index.html'), trade_page(T))
     write(os.path.join('privacy', 'index.html'), legal('privacy', 'Privacy Policy', f'What {B} collects, how it is used, and your choices.', PRIVACY))
     write(os.path.join('terms', 'index.html'), legal('terms', 'Terms of Service', f'The terms for using {B}.', TERMS))
     write(os.path.join('refunds', 'index.html'), legal('refunds', 'Refund and Cancellation Policy', f'How cancelling and refunds work for {B}.', REFUNDS))
     write('404.html', notfound())
-    # Paused page: kept, renamed, noindexed, unlinked. It uses the previous stylesheet.
-    src = os.path.join(ROOT, 'design', 'archive', 'photographers', 'index.html')
-    ph = open(src, encoding='utf-8').read().replace('Jobstead', B).replace('[DOMAIN]', C['domain']).replace('[BUSINESS ADDRESS]', '').replace('tel:[US PHONE]', 'mailto:' + C['email']).replace('[US PHONE]', C['email']).replace('[EMAIL]', C['email']).replace('[CALENDLY LINK]', C['calendly']).replace('action="[FORM ENDPOINT]"', 'action="' + C['form_endpoint'] + '"').replace('[GOVERNING LAW]', C['governing_law']).replace(C['company'], B).replace('[OG IMAGE URL]', f"{C['domain']}/{HOME['og_image']}")
-    if 'name="robots"' not in ph:
-        ph = ph.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
-    write(os.path.join('photographers', 'index.html'), ph)
-    for f in ('site.css', 'site.js'):
-        open(os.path.join(OUT, 'assets', f), 'w', encoding='utf-8').write(open(os.path.join(ROOT, 'design', 'archive', 'assets', f), encoding='utf-8').read().replace('Jobstead', B))
     os.makedirs(os.path.join(OUT, 'brand'), exist_ok=True)
     BA = os.path.join(ROOT, 'design', 'brand', 'crewwise-brand-assets')
     for f in ('crewwise-logo.svg', 'crewwise-logo-on-dark.svg', 'crewwise-icon.svg', 'crewwise-mark.svg'):
@@ -599,7 +600,8 @@ def main():
         s = os.path.join(ROOT, 'design', 'collateral', f)
         if os.path.exists(s):
             shutil.copy(s, os.path.join(OUT, f)); print('copied public/' + f)
-    write('_redirects', ''.join(f'{u:<10} /roofing/  301\n' for u in ('/roofers', '/roofers/', '/roofer', '/roofer/')))
+    write('_redirects', ''.join(f'{u:<10} /roofing/  301\n' for u in ('/roofers', '/roofers/', '/roofer', '/roofer/'))
+          + '/photographers   /  301\n/photographers/  /  301\n')   # the retired photographers page goes to the homepage
     write('robots.txt', f'User-agent: *\nAllow: /\n\nSitemap: {C["domain"]}/sitemap.xml\n')
     urls = ''.join(f'  <url><loc>{C["domain"]}{u}</loc></url>\n' for u in [T['path'] for T in PAGES] + ['/privacy/', '/terms/', '/refunds/'])
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
