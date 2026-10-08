@@ -550,3 +550,21 @@ html.lenis, html.lenis body { height: auto; }
   .mcta[hidden] { display: none; }
 }
 @media (max-width: 759px) and (prefers-reduced-motion: reduce) { .mcta { transition: none; } }
+
+/* Delight: the product doing its job */
+.tmr { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .queue.sorted .q.urgent { animation: urgent 1.6s var(--ease) .7s 2; }
+  @keyframes urgent { 0%, 100% { background: transparent; } 40% { background: color-mix(in srgb, var(--accent-on-dark) 14%, transparent); } }
+  .js .month.play .storm-tag { opacity: 0; transform: translateY(6px); transform-box: fill-box; transition: opacity .4s var(--ease), transform .5s var(--spring); transition-delay: calc(var(--d) * 1ms); }
+  .js .month.play.in .storm-tag { opacity: 1; transform: none; }
+  .thanks.in .cb-card { animation: pop .55s var(--spring) .1s both; }
+}
+.storm-tag text { font-size: 12px; font-weight: 600; fill: var(--line); letter-spacing: .02em; }
+.cb-card { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--ok-dot); border-radius: 14px; background: var(--surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok-dot) 12%, transparent); }
+.cb-card .h { display: flex; justify-content: space-between; gap: 10px; font-size: var(--t-meta); color: var(--ok); font-weight: 600; margin-bottom: 6px; }
+.cb-card .h span:last-child { color: var(--ink-3); font-weight: 400; }
+.cb-card > b { display: block; font-weight: 600; }
+.cb-card p { margin-top: 4px; font-size: var(--t-small); color: var(--ink-2); }
+.cb-card p b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cb-edit { font: inherit; color: var(--line); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 24px; }

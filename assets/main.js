@@ -206,6 +206,61 @@
     size(); addEventListener('resize', size); addEventListener('load', size);
   }
 
+  if (!reduce && 'IntersectionObserver' in window) {
+    const once = (el, fn, threshold = .35) => {
+      const o = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { o.disconnect(); fn(); } }, { threshold });
+      o.observe(el);
+    };
+
+    /* Busy-day list: calls show up in the order they came in, then sort themselves by urgency */
+    const queue = document.querySelector('.queue');
+    if (queue) {
+      const rows = [...queue.querySelectorAll('.q')], state = queue.querySelector('.q-state');
+      const arrival = [2, 0, 3, 1].filter(i => i < rows.length);
+      if (rows.length === 4) {
+        rows.forEach(r => { r.removeAttribute('data-a'); r.style.opacity = '0'; });
+        once(queue, () => {
+          const tops = rows.map(r => r.getBoundingClientRect().top), hs = rows.map(r => r.offsetHeight);
+          const gap = Math.max(0, tops[1] - tops[0] - hs[0]);
+          let y = tops[0]; const slot = [];
+          arrival.forEach(i => { slot[i] = y; y += hs[i] + gap; });
+          rows.forEach((r, i) => { r.style.transition = 'none'; r.style.transform = `translateY(${slot[i] - tops[i]}px)`; });
+          if (state) state.textContent = 'Incoming calls';
+          /* If the rows change size mid-sequence (fonts, translation, rotation), stop and show the sorted list */
+          const timers = []; let done = false;
+          const finish = () => { if (done) return; done = true; timers.forEach(clearTimeout); ro.disconnect();
+            rows.forEach(r => { r.style.transition = ''; r.style.transform = ''; r.style.opacity = ''; });
+            if (state) state.textContent = 'Sorted by urgency'; queue.classList.add('sorted'); };
+          const w0 = queue.offsetWidth, h0 = rows.map(r => r.offsetHeight).join();
+          const ro = new ResizeObserver(() => { if (queue.offsetWidth !== w0 || rows.map(r => r.offsetHeight).join() !== h0) finish(); });
+          ro.observe(queue); rows.forEach(r => ro.observe(r));
+          arrival.forEach((i, k) => timers.push(setTimeout(() => { rows[i].style.transition = 'opacity .4s ease'; rows[i].style.opacity = '1'; }, 350 + k * 380)));
+          timers.push(setTimeout(() => {
+            if (state) state.textContent = 'Sorted by urgency';
+            rows.forEach(r => { r.style.transition = 'transform .8s cubic-bezier(.22,1,.36,1), opacity .25s ease'; r.style.transform = ''; r.style.opacity = '.45'; });
+            timers.push(setTimeout(() => rows.forEach(r => { r.style.opacity = '1'; }), 650));
+            queue.classList.add('sorted');
+            timers.push(setTimeout(() => { done = true; ro.disconnect(); }, 900));
+          }, 350 + arrival.length * 380 + 700));
+        });
+      }
+    }
+
+    /* Live call: the recording timer runs while the transcript types in */
+    document.querySelectorAll('.tmr').forEach(t => {
+      const card = t.closest('.ui');
+      once(card, () => {
+        const end = 24, dur = 3600, t0 = performance.now();
+        const tick = now => {
+          const s = Math.min(end, Math.floor((now - t0) / dur * end));
+          t.textContent = ` 0:${String(s).padStart(2, '0')}`;
+          if (s < end) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    });
+  }
+
   function countUp(el) {
     const to = +el.dataset.count, pre = el.dataset.prefix || '', dur = 1400, t0 = performance.now();
     const step = now => {
@@ -250,6 +305,11 @@
       });
       input.addEventListener('input', () => { if (touched.has(n)) check(input); if (!err.hidden && form.querySelectorAll('[aria-invalid="true"]').length === 0) err.hidden = true; });
     });
+    const edit = box.querySelector('.cb-edit');
+    if (edit) edit.addEventListener('click', () => {
+      thanks.hidden = true; form.hidden = false; btn.disabled = false; btn.textContent = 'Send again';
+      form.elements.phone.focus(); form.elements.phone.select();
+    });
     form.addEventListener('submit', e => {
       e.preventDefault(); err.hidden = true;
       if (btn.disabled) return;
@@ -261,7 +321,10 @@
         .then(r => { if (!r.ok) throw 0;
           const first = (form.elements.name.value || '').trim().split(/\s+/)[0];
           const n = thanks.querySelector('.thanks-name'); if (n) n.textContent = first ? ', ' + first : '';
-          form.hidden = true; thanks.hidden = false; thanks.focus(); })
+          const cbP = thanks.querySelector('.cb-phone'), cbC = thanks.querySelector('.cb-company');
+          if (cbP) cbP.textContent = form.elements.phone.value.trim();
+          if (cbC) cbC.textContent = form.elements.company.value.trim();
+          form.hidden = true; thanks.hidden = false; thanks.classList.remove('in'); void thanks.offsetWidth; thanks.classList.add('in'); thanks.focus(); })
         .catch(() => { show(`Your details didn’t send. Check your connection and try again${phone ? ', or call us at ' + phone : email ? ', or email us at ' + email : ''}.`); btn.disabled = false; btn.textContent = label; });
     });
   });

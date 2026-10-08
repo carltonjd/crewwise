@@ -171,6 +171,8 @@ def month_strip(booked_label):
             anc = 'start' if d == 0 else 'end' if d == 29 else 'middle'
             tx = d * step + 1 if d == 0 else W - 1 if d == 29 else x
             out.append(f'<text x="{tx:.1f}" y="{base + 26}" text-anchor="{anc}">Sep {d + 1}</text>')
+    peak = max(range(30), key=lambda d: calls[d]); px = peak * step + step / 2; py = base - 6 - calls[peak] * 5 - 22
+    out.append(f'<g class="storm-tag" style="--d:{30 * 45 + 300}"><text x="{px:.1f}" y="{py:.1f}" text-anchor="middle">Storm</text></g>')
     out.insert(0, f'<line x1="0" x2="{W}" y1="{base}" y2="{base}" stroke="var(--ink-2)"/>')
     return (f'<figure class="month play"><div class="month-scroll"><svg viewBox="0 0 {W} {H}" role="img" aria-label="Example: calls answered each day in September, 180 in total, with a spike mid-month after a storm, and the 24 days with a booking marked.">{"".join(out)}</svg></div>'
             '<p class="swipe">Scroll for the full month</p><figcaption><span><i class="k-call"></i>One call answered</span><span><i class="k-book"></i>' + booked_label + '</span></figcaption></figure>')
@@ -274,7 +276,7 @@ def trade_page(T):
       <div class="row">
         <div class="row-copy"><span class="pill"><i></i>On the call</span><h3>Every call answered and qualified</h3>{feats(m0[2])}</div>
         <div><div class="ui ondark play" aria-label="Example of a live call">
-          <div class="ui-h">Live call<span class="rec">Recording</span></div>
+          <div class="ui-h">Live call<span class="rec">Recording<span class="tmr" aria-hidden="true"></span></span></div>
           <div class="tx">{call}</div>
           <div class="chips">{chips}</div>
         </div><p class="ui-cap">Example. Names and addresses are made up.</p></div>
@@ -311,7 +313,7 @@ def trade_page(T):
       </div>
       <div>
         <div class="queue play" aria-label="Example {T['busy_mode']} list, sorted by urgency">
-          <div class="queue-head"><b><span class="switch" aria-hidden="true"></span>{T['busy_mode']}: On</b><span>Sorted by urgency</span></div>
+          <div class="queue-head"><b><span class="switch" aria-hidden="true"></span>{T['busy_mode']}: On</b><span class="q-state">Sorted by urgency</span></div>
           {queue}
         </div>
         <p class="note">{T['busy_note']}</p>
@@ -387,6 +389,7 @@ def trade_page(T):
         </form>
         <div class="thanks" tabindex="-1" hidden role="status">
           <h3>Thanks<span class="thanks-name"></span>. We'll call you soon.</h3>
+          <div class="cb-card"><div class="h"><span>Call-back requested</span><span>Just now</span></div><b class="cb-company"></b><p>We'll call <b class="cb-phone"></b>. <button type="button" class="cb-edit">Wrong number? Change it</button></p></div>
           <p>If you'd rather pick a time yourself, book it now.</p>
           <a class="btn" href="{C['calendly']}" target="_blank" rel="noopener">Book a 15-min demo</a>
         </div>
