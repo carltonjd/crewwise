@@ -981,7 +981,6 @@ p, li, .fcard, .rcard { text-wrap: pretty; }
 }
 
 /* Phones: the floating header sits flush to the top, so no page text shows above it */
-@media (max-width: 759px) { .site-header.scrolled { transform: translateY(-10px); } }
 
 /* Phones: call-back sits beside booking in the thumb bar */
 @media (max-width: 759px) {
@@ -1001,4 +1000,48 @@ p, li, .fcard, .rcard { text-wrap: pretty; }
 .dlg-x::after { transform: rotate(-45deg); }
 .dlg-x:hover { border-color: var(--line); }
 @media (forced-colors: active) { .dlg-x::before, .dlg-x::after { background: CanvasText; } }
+
+/* ===== Phone hero card and quick wins (round 7) ===== */
+/* Before the call starts, step 1 shows solid, not as a waiting step */
+.rplay:not(.at1) .rs1 .rcard { border-style: solid; border-color: var(--rule); background: var(--surface); box-shadow: 0 1px 2px rgba(11,21,48,.06), 0 4px 8px -4px rgba(11,21,48,.16); }
+.rplay:not(.at1) .rs1 .rcard > * { opacity: 1; }
+/* Phones: the call plays in one card that changes in place, under four step markers on one line.
+   Every card shares the same grid cell, so the stage keeps its height from start to Booked. */
+@media (max-width: 999px) {
+  .rplay .route-steps { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; }
+  .rplay .rs { display: contents; }
+  .rplay .rs:not(:last-child)::before, .rplay .rs:not(:last-child)::after { display: none; }
+  .rplay .route-steps::before, .rplay .route-steps::after { content: ""; position: absolute; left: 9px; top: 8px; width: calc(75% + 6px); height: 2px; border-radius: 2px; background: var(--rule-2); }
+  .rplay .route-steps::after { background: var(--line); transform-origin: left; transform: scaleX(0); transition: transform .9s cubic-bezier(.16,1,.3,1); }
+  .rplay.at2 .route-steps::after { transform: scaleX(.3333); }
+  .rplay.at3 .route-steps::after { transform: scaleX(.6667); }
+  .rplay.at4 .route-steps::after { transform: scaleX(1); }
+  .rplay .pill { grid-row: 1; z-index: 1; flex-direction: column; align-items: flex-start; gap: 6px; padding: 0; border: 0; background: none; white-space: normal; font-size: .75rem; line-height: 1.25; }
+  .rplay .pill i { box-shadow: 0 0 0 4px var(--page); }
+  .rplay .pill time { display: none; }
+  .rplay .rs1 .pill { grid-column: 1; } .rplay .rs2 .pill { grid-column: 2; } .rplay .rs3 .pill { grid-column: 3; } .rplay .rs4 .pill { grid-column: 4; }
+  .rplay .rs .rcard { grid-row: 2; grid-column: 1 / -1; margin: 14px 0 0; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .3s ease, transform .45s cubic-bezier(.16,1,.3,1), visibility 0s .3s, background-color .35s ease, border-color .35s ease, box-shadow .35s ease; }
+  .rplay:not(.at1) .rs1 .rcard, .rplay.at1:not(.at2) .rs1 .rcard, .rplay.at2:not(.at3) .rs2 .rcard, .rplay.at3:not(.at4) .rs3 .rcard, .rplay.at4 .rs4 .rcard { opacity: 1; visibility: visible; transform: none; transition: opacity .35s ease .12s, transform .45s cubic-bezier(.16,1,.3,1) .12s, visibility 0s, background-color .35s ease, border-color .35s ease, box-shadow .35s ease; }
+}
+
+/* Hero: the trade links step back behind the two main actions */
+.trade-row a { color: var(--ink-2); border-bottom-color: var(--rule-2); }
+.trade-row a:hover { color: var(--line); border-bottom-color: var(--line); }
+
+/* What happens after the phone rings: on phones, feature titles only */
+@media (max-width: 759px) {
+  .feats p { display: none; }
+  .feats li { padding: 12px 0; }
+  .feats h4 { font-size: 1.125rem; }
+}
+
+/* Floating header sits flush to the top, so no page text shows above it */
+.site-header.scrolled { transform: translateY(-10px); }
+.site-header.scrolled .bar { border-top-left-radius: 0; border-top-right-radius: 0; border-top-color: transparent; }
+
+/* Pricing: the price leads; the terms support it */
+.terms li { font-size: clamp(1.25rem, 1.1rem + .5vw, 1.5rem); }
+
+/* Waitlist dialog: elevation from the shadow alone */
+.join-dialog .form { border: 0; }
 
