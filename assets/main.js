@@ -105,7 +105,7 @@
     new IntersectionObserver(es => {
       onScreen = es[0].isIntersecting;
       if (onScreen && !started) { started = true; start(); }
-    }, { threshold: .4 }).observe(route);
+    }, { threshold: .3 }).observe(route);
     const hold = v => { held = v; set('r-held', v); };
     route.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hold(true); });
     route.addEventListener('pointerleave', () => hold(false));
