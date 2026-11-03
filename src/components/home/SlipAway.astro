@@ -211,7 +211,7 @@ const winNear = [
     /* sun and moon live in a clear strip of sky at the right edge, never behind running text */
     --sun-r: -0.9rem;
     --sun-alt: 30svh;
-    --moon-r: 1.1rem;
+    --moon-r: 0.6rem;
     --moon-alt: calc(var(--town-h) * 0.35 + 3rem);
     /* how far the sun drops to set fully behind the town */
     --set: calc(var(--sun-alt) + var(--sun) + var(--horizon) * 0.3);
@@ -257,7 +257,8 @@ const winNear = [
   .scene {
     position: sticky;
     top: 0;
-    z-index: 0;
+    /* the skyline is the foreground plane: slips rise from behind its ridge, never across it */
+    z-index: 2;
     grid-area: 1 / 1;
     align-self: start;
     height: 100svh;
@@ -472,10 +473,10 @@ const winNear = [
       max-width: min(46ch, calc(100% - 2.25rem));
     }
     .slip-li {
-      margin-right: 1.75rem;
+      margin-right: 2.5rem;
     }
     .slip-li:nth-child(2) {
-      margin: 0 0.75rem 0 1rem;
+      margin: 0 1.5rem 0 1rem;
     }
   }
   .slip-li {

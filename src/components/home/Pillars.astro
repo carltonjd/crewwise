@@ -146,12 +146,12 @@ const { heading, lead } = Astro.props;
 
 <style>
   .pillars {
-    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    padding-block: clamp(3rem, 2rem + 2.5vw, 4.25rem);
   }
   .head {
     display: grid;
     gap: 1.25rem;
-    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+    margin-bottom: clamp(1.75rem, 1.25rem + 1.2vw, 2.5rem);
   }
   .head .h2 {
     font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
@@ -250,11 +250,11 @@ const { heading, lead } = Astro.props;
     position: relative;
   }
   .pillar-desk {
-    margin-bottom: clamp(2rem, 1.25rem + 3vw, 4rem);
+    margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
   }
   .duo {
     display: grid;
-    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+    gap: clamp(1.75rem, 1.25rem + 1.5vw, 2.25rem);
   }
   /* on a phone the tall automation plate stays narrower than the wide one */
   .plate-desk,
@@ -271,7 +271,7 @@ const { heading, lead } = Astro.props;
       gap: clamp(2.5rem, 1rem + 3vw, 4.5rem);
     }
     .plate-desk {
-      width: min(100%, 32rem);
+      width: min(100%, 28rem);
       justify-self: end;
     }
     /* unequal on purpose: the website plate is wide and leads; the automation plate is tall,
@@ -295,7 +295,7 @@ const { heading, lead } = Astro.props;
       width: 100%;
     }
     .plate-auto {
-      width: 75%;
+      width: 56%;
     }
   }
 </style>

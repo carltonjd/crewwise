@@ -91,7 +91,6 @@ const plates = [`<svg class="illo" viewBox="0 0 240 168" focusable="false">
   }
   .aud:nth-child(2) .aud-plate {
     rotate: 1.5deg;
-    width: clamp(8.5rem, 7rem + 6vw, 11rem);
   }
   .aud-title {
     font-size: clamp(1.75rem, 1.35rem + 1.3vw, 2.5rem);
@@ -119,7 +118,8 @@ const plates = [`<svg class="illo" viewBox="0 0 240 168" focusable="false">
     color: var(--ink-2);
     max-width: 40ch;
   }
-  /* unequal on purpose: the first audience leads with a large plate; the second is smaller, set lower and to the right */
+  /* equal weight: both audiences get the same plate scale and heading tier, tops aligned;
+     the pair differs by subject, opposite tilt and a slight offset of the second plate only */
   @media (min-width: 56rem) {
     .split {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -129,16 +129,18 @@ const plates = [`<svg class="illo" viewBox="0 0 240 168" focusable="false">
     .aud:nth-child(1) {
       grid-column: 1 / span 6;
     }
-    .aud:nth-child(1) .aud-plate {
+    .aud:nth-child(2) {
+      grid-column: 7 / span 6;
+    }
+    .aud .aud-plate {
       width: 100%;
       max-width: 30rem;
     }
-    .aud:nth-child(1) .aud-title {
-      max-width: 14ch;
+    .aud:nth-child(2) .aud-plate {
+      translate: 1.5rem 0.75rem;
     }
-    .aud:nth-child(2) {
-      grid-column: 8 / span 5;
-      margin-top: clamp(7rem, 3rem + 9vw, 13rem);
+    .aud-title {
+      max-width: 16ch;
     }
   }
 </style>

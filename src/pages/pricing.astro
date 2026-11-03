@@ -183,21 +183,24 @@ const jsonLd = [
     display: grid;
     gap: 0.3rem;
     justify-items: start;
-    padding: clamp(1.25rem, 1rem + 1.2vw, 1.75rem) clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.6rem) clamp(1.75rem, 1rem + 2.4vw, 3.25rem);
     background: var(--white);
     color: var(--navy);
     clip-path: polygon(0 1.4%, 41% 0, 74% 1%, calc(100% - 1.5rem) 0, 100% 1.5rem, 99.6% 52%, 100% 99%, 58% 100%, 23% 98.8%, 0.5% 100%);
   }
   .slip-wrap {
-    width: min(100%, 20rem);
-    max-width: 22rem;
-    margin-inline: auto 0;
+    width: min(28rem, calc(100vw - 2 * var(--gutter)));
     filter: var(--drop-paper);
     transform: rotate(-1.2deg);
   }
+  @media (min-width: 56rem) {
+    .slip-wrap {
+      width: min(28rem, 36vw);
+    }
+  }
   .slip-name {
     font-weight: 800;
-    font-size: var(--step-1);
+    font-size: var(--step-2);
     letter-spacing: -0.02em;
   }
   .slip-item {
@@ -205,13 +208,13 @@ const jsonLd = [
     padding-top: 0.6rem;
     border-top: 1px solid var(--rule-strong);
     width: 100%;
-    font-size: var(--step-0);
+    font-size: var(--step-1);
     font-weight: 650;
     letter-spacing: -0.01em;
   }
   .slip-note {
     color: var(--ink-2);
-    font-size: 0.9375rem;
+    font-size: var(--step-0);
   }
   .plans {
     padding-block: 0 clamp(4.5rem, 3rem + 6vw, 8rem);
