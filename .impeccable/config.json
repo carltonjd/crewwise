@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/components/Header.astro"
+        ],
+        "createdAt": "2026-11-03T09:14:46.454Z",
+        "reason": "assistant triage: L520 is a CSS chevron arrow (border-right + border-top on a 12px ::after rotated 45deg) in the mobile menu, not a side-tab card accent"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/components/home/WhoFor.astro"
+        ],
+        "createdAt": "2026-11-03T15:16:40.377Z",
+        "reason": "assistant triage: .aud::before is a full-width 3px TOP rule above each audience column (left:0;right:0;top:0), not a one-side card accent; earlier critiques also classed it a false positive"
+      }
+    ]
+  }
+}

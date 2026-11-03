@@ -1,0 +1,611 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/hanken-grotesk';
+
+@theme {
+  --color-navy: #0f1b33;
+  --color-blue: #1e5bd8;
+  --color-light-blue: #8fb3ff;
+  --color-soft: #f4f7fc;
+  --color-white: #ffffff;
+  --color-orange: #c94708;
+  --color-success: #1f7547;
+
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Crewwise studio: tokens
+   Full-bleed blue, white and soft bands; crisp white cards on a soft paper shadow.
+   ------------------------------------------------------------------ */
+:root {
+  --navy: #0f1b33;
+  --navy-2: #16264a;
+  --blue: #1e5bd8;
+  --blue-ink: #1a4fbd;
+  --blue-deep: #1749b0; /* pressed state on the blue room; the hero floor */
+  --blue-sheet: color-mix(in oklab, var(--blue-deep), var(--navy) 30%); /* derived: the offset cut-paper sheet behind the hero phone, one step darker than the floor */
+  --light-blue: #8fb3ff;
+  --soft: #f4f7fc;
+  --white: #ffffff;
+  --orange: #c94708;
+  --orange-press: #a93b06;
+  --orange-deep: color-mix(in oklab, var(--orange-press), var(--navy) 16%); /* pressed: one step deeper than hover */
+  --green: #1f7547;
+
+  --ink: var(--navy);
+  --ink-2: rgb(15 27 51 / 0.74);
+  --ink-3: rgb(15 27 51 / 0.6);
+  --on-navy: #ffffff;
+  --on-navy-2: rgb(255 255 255 / 0.78);
+  --on-blue-2: rgb(255 255 255 / 0.86);
+
+  --rule: rgb(15 27 51 / 0.1);
+  --rule-strong: rgb(15 27 51 / 0.22);
+  --rule-navy: rgb(143 179 255 / 0.18);
+  --rule-navy-strong: rgb(143 179 255 / 0.36);
+  --rule-blue: rgb(255 255 255 / 0.28);
+
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  --page-max: 84rem;
+  --measure: 62ch;
+
+  --radius-card: 16px;
+  /* depth: a soft, tight paper shadow for white slips only; never offset-solid or coloured */
+  --shadow-paper: 0 1px 2px rgb(15 27 51 / 0.16), 0 10px 24px -12px rgb(15 27 51 / 0.35);
+  --drop-paper: drop-shadow(0 1px 1.5px rgb(15 27 51 / 0.2)) drop-shadow(0 9px 9px rgb(15 27 51 / 0.2)); /* --shadow-paper for SVG groups */
+  --rule-strong-blue: var(--rule-strong);
+
+  /* motion: three durations and two decelerations, used by every section and control */
+  --dur-1: 160ms; /* feedback: press, hover, focus */
+  --dur-2: 320ms; /* state: tabs, disclosure, underline */
+  --dur-3: 640ms; /* authored: a timed entrance (demo scene change) */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: var(--ease-out-expo);
+  --ease-ink: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-light: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* type: one fluid scale.
+     micro, label, ui-small, ui, body, title, subhead, headline, statement, display */
+  --step--2: 0.75rem;
+  --step--1: 0.8125rem;
+  --step-sm: 0.9375rem;
+  --step-ui: 1.0625rem;
+  --step-0: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  --step-1: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --step-2: clamp(1.625rem, 1.3rem + 1.3vw, 2.25rem);
+  --step-3: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+  --step-4: clamp(2.75rem, 1.5rem + 4.6vw, 5rem);
+  --step-display: clamp(3rem, min(1.2rem + 6.6vw, 0.5rem + 11vh), 6rem);
+
+  color-scheme: light;
+  accent-color: var(--blue);
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+    scrollbar-color: var(--navy) var(--soft);
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--soft);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--navy);
+    border-radius: 999px;
+    border: 3px solid var(--soft);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    font-weight: 420;
+    font-feature-settings: 'ss01' on;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .band-navy ::selection,
+  .band-blue ::selection,
+  .ground-blue ::selection {
+    background: var(--white);
+    color: var(--navy);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+    color: inherit;
+  }
+  p,
+  li,
+  summary {
+    text-wrap: pretty;
+  }
+  a {
+    color: var(--blue);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
+  }
+  a:hover {
+    color: var(--blue-ink);
+  }
+  a:focus-visible {
+    border-radius: 3px;
+  }
+  /* on navy and blue grounds a hover keeps the surrounding text colour (blue-ink on navy fails contrast) */
+  :where(.band-navy, .ground-navy, .band-blue, .ground-blue, footer) a:hover {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+  }
+  .band-navy :focus-visible,
+  .band-blue :focus-visible,
+  .ground-navy :focus-visible,
+  .ground-blue :focus-visible {
+    outline-color: var(--white);
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+  input,
+  textarea {
+    caret-color: var(--blue);
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Components
+   ------------------------------------------------------------------ */
+@layer components {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 650;
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    top: 1rem;
+    color: var(--white);
+  }
+  .skip-link:focus-visible {
+    outline-color: var(--white);
+    outline-offset: -4px;
+  }
+
+  .page {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* bands: full-bleed, one flat ground each (.ground-* are legacy aliases) */
+  .band {
+    position: relative;
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+  }
+  .band-blue,
+  .ground-blue {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .band-soft,
+  .ground-soft {
+    background-color: var(--soft);
+  }
+  .band-white {
+    background-color: var(--white);
+  }
+  .band-navy,
+  .ground-navy {
+    position: relative;
+    background-color: var(--navy);
+    color: var(--on-navy);
+  }
+  .display {
+    font-size: var(--step-display);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    font-weight: 830;
+  }
+  .h2 {
+    font-size: var(--step-3);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    font-weight: 820;
+  }
+  .h3 {
+    font-size: var(--step-1);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 750;
+  }
+  .lead {
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--ink-2);
+    max-width: 46ch;
+    font-weight: 430;
+  }
+  .band-navy .lead,
+  .ground-navy .lead {
+    color: var(--on-navy-2);
+  }
+  .band-blue .lead,
+  .ground-blue .lead {
+    color: var(--on-blue-2);
+  }
+  .time {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' on;
+    font-size: var(--step--1);
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .band-navy .time,
+  .ground-navy .time {
+    color: var(--light-blue);
+  }
+  .band-blue .time,
+  .ground-blue .time {
+    color: var(--on-blue-2);
+  }
+
+  /* buttons: orange is action, nothing else is */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 720;
+    font-size: var(--step-ui);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform var(--dur-2) var(--ease-out-expo),
+      background-color var(--dur-1) var(--ease-out-quart);
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: var(--white);
+  }
+  .btn-primary:hover {
+    color: var(--white);
+    background: var(--orange-press);
+    transform: translateY(-1px);
+  }
+  /* the press: the pill gives under the finger and the fill goes one step deeper */
+  .btn-primary:active {
+    background: var(--orange-deep);
+    transform: scale(0.98);
+    transition-duration: var(--dur-1);
+  }
+  .btn:focus-visible {
+    border-radius: 999px;
+  }
+  .btn-primary[disabled],
+  .btn-primary[aria-busy='true'] {
+    cursor: progress;
+    opacity: 0.72;
+    transform: none;
+  }
+  .btn-sm {
+    min-height: 2.75rem;
+    padding: 0.5rem 1.05rem;
+    font-size: var(--step-sm);
+  }
+  /* quiet links: a faint rule at rest; on hover (and focus) a 2px line draws across it
+     from the left, and retracts to the right. .link-draw does the same for single-line
+     links set in running text. */
+  .link-quiet,
+  .link-draw {
+    --rest: var(--rule-strong);
+    --ink-line: var(--blue);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-color: var(--rest);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+  }
+  .link-quiet {
+    color: var(--navy);
+  }
+  .link-quiet::after,
+  .link-draw::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% + 0.8em - 1px);
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink-line);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--dur-2) var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .link-quiet:hover::after,
+  .link-draw:hover::after,
+  .link-quiet:focus-visible::after,
+  .link-draw:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  .link-quiet:hover {
+    color: var(--navy);
+  }
+  .ground-blue .link-quiet,
+  .band-blue .link-quiet,
+  .band-navy .link-quiet,
+  .ground-navy .link-quiet,
+  :is(.ground-blue, .band-blue, .band-navy, .ground-navy) .link-draw {
+    --rest: var(--rule-blue);
+    --ink-line: var(--white);
+    color: var(--white);
+  }
+
+  /* a card: crisp white, soft paper shadow */
+  .card {
+    position: relative;
+    background: var(--white);
+    color: var(--ink);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-paper);
+  }
+  .stamp-booked {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--green);
+    color: var(--white);
+    font-weight: 720;
+    font-size: var(--step-sm);
+    line-height: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  /* a plain text label, not a control: no border, no fill, no pill */
+  .tag-example {
+    display: inline-block;
+    font-size: var(--step--1);
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+  .band-blue .tag-example,
+  .ground-blue .tag-example {
+    color: var(--white);
+  }
+  .band-navy .tag-example,
+  .ground-navy .tag-example {
+    color: var(--on-navy-2);
+  }
+
+  .section-head {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2.5rem, 1.8rem + 3vw, 5rem);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Cut-paper illustration set (.illo): flat planes, no strokes.
+   Light comes from the top left and is told in tonal steps, never shadows:
+   lit facets step up (navy-2 on navy, light blue on blue), the sheet steps down
+   toward the bottom right (blue, blue-deep, blue-sheet). Every piece is hand-cut
+   with one nicked top-right corner. Only white slips carry the paper drop.
+   ------------------------------------------------------------------ */
+.illo {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-sans);
+}
+.illo .f-lb { fill: var(--light-blue); }
+.illo .f-b { fill: var(--blue); }
+.illo .f-bd { fill: var(--blue-deep); }
+.illo .f-bs { fill: var(--blue-sheet); }
+.illo .f-n2 { fill: var(--navy-2); }
+.illo .f-n { fill: var(--navy); }
+.illo .f-w { fill: var(--white); }
+.illo .f-g { fill: var(--green); }
+.illo .tx-w { fill: var(--white); }
+.illo .tx-n { fill: var(--navy); }
+.illo .tx-n2 { fill: var(--navy); fill-opacity: 0.74; }
+.illo .tx-lb { fill: var(--light-blue); }
+.illo .slip { filter: var(--drop-paper); }
+
+/* ------------------------------------------------------------------
+   Motion: content is visible and at rest by default, always.
+   The page has two authored moments (the hero call and the working day);
+   everything else is feedback, plus at most one quiet shared verb:
+     settle  [data-enter] (any value): an 8px slide to rest over --dur-2,
+             from a fully visible state. Base.astro marks pieces that start
+             below the fold with [data-pending] and clears it as they enter,
+             so nothing on the first screen moves and nothing is ever hidden.
+     draw    [data-enter='draw']: decorative rules only; they may scale from 0.
+   Stagger with --i (0, 1, 2...), capped at three steps. Without JS, with
+   reduced motion, or in print, everything is at rest. Removing the
+   attribute removes the motion; nothing depends on it.
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-enter] {
+    transition:
+      translate var(--dur-2) var(--ease-out-quart),
+      scale var(--dur-3) var(--ease-out-quart);
+    transition-delay: calc(min(var(--i, 0), 3) * 60ms);
+  }
+  [data-enter][data-pending] {
+    translate: 0 0.5rem;
+    transition-duration: 0s;
+  }
+  [data-enter='draw'] {
+    transform-origin: left center;
+  }
+  [data-enter='draw'][data-pending] {
+    translate: none;
+    scale: 0 1;
+  }
+}
+/* decorative line draws, for scroll-driven rules (HowItWorks route) */
+@keyframes enter-draw {
+  from {
+    scale: 0 1;
+  }
+}
+@keyframes enter-draw-y {
+  from {
+    scale: 1 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 280ms var(--ease-ink) both fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 520ms var(--ease-out) both fade-in;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  /* print shows every section complete and at rest */
+  [data-enter],
+  [data-enter] *,
+  .aud::before {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    rotate: none !important;
+  }
+  .mast,
+  .mast-spacer,
+  .panel,
+  .skip-link,
+  .site-footer .rows {
+    display: none !important;
+  }
+  html,
+  body,
+  .ground-blue,
+  .band-blue,
+  .site-footer {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  :is(.ground-blue, .band-blue) :is(h1, h2, h3, p, .lead, time, .time, .lbl, .tag-example),
+  .site-footer * {
+    color: #000 !important;
+  }
+  .site-footer img {
+    display: none;
+  }
+  .site-footer {
+    border-top: 1px solid #000;
+  }
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+  article a[href^='http']::after,
+  article a[href^='mailto']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  li,
+  tr {
+    break-inside: avoid;
+  }
+}

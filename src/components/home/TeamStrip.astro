@@ -1,0 +1,85 @@
+---
+import { SITE } from '../../config/site';
+/** The team behind the work. Facts from the brief only, presented as the team, not as client proof. */
+const facts = [
+  { figure: '2017', label: 'Octalogic founded' },
+  { figure: '40+', label: 'engineers' },
+  { figure: '10+', label: 'countries with clients' },
+  { figure: '8 years', label: 'longest client relationship' },
+];
+---
+
+<section class="team band-navy" aria-labelledby="team-title">
+  <div class="page inner">
+    <h2 id="team-title" class="team-title">
+      You deal with Crewwise. The building is done by our engineering partner{' '}
+      <a href={SITE.OCTALOGIC_URL}>Octalogic</a>.
+    </h2>
+    <ul class="facts">
+      {
+        facts.map((f) => (
+          <li>
+            <span class="figure">{f.figure}</span>
+            <span class="label">{f.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .team {
+    padding-block: clamp(3rem, 2rem + 3vw, 4.5rem);
+  }
+  .inner {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .inner {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 4rem;
+    }
+  }
+  .team-title {
+    font-size: var(--step-1);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    max-width: 34ch;
+  }
+  .team-title a {
+    color: var(--light-blue);
+  }
+  .team-title a:hover {
+    color: var(--white);
+  }
+  .facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 1rem;
+  }
+  .facts li {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.07);
+  }
+  .figure {
+    font-size: var(--step-2);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+  .label {
+    font-size: 0.875rem;
+    color: var(--on-navy-2);
+  }
+</style>

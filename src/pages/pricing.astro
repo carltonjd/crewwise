@@ -1,0 +1,380 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { SITE, BUILDER } from '../config/site';
+import { faqJsonLd, serviceJsonLd } from '../lib/jsonld';
+
+const [priceFrom, ...priceRest] = SITE.PRICE_FRONT_DESK.split(' ');
+const priceAmt = priceRest.join(' ');
+
+const deskIncludes = [
+  '24/7 answering',
+  'Booking into your calendar',
+  'Urgent-call alerts',
+  'Follow-ups so leads don’t go cold',
+  'A monthly report',
+];
+
+const websiteIncludes = [
+  `Design and build by ${BUILDER}`,
+  'Phone-friendly pages',
+  'Call and booking buttons',
+  'Google Business Profile setup',
+  'Search basics: page titles, speed and correct business details',
+];
+
+const automationSteps = [
+  { title: 'A free 30-minute call', text: 'We learn what your team still does by hand.' },
+  { title: 'A paid automation review', text: 'Credited against any build.' },
+  { title: 'Fixed-price projects', text: 'You know the cost before we start.' },
+];
+
+const faq = [
+  {
+    question: 'What does the free audit cost?',
+    answer:
+      'Nothing. We review your website and Google profile, call your line like a customer would, and send you what we found.',
+  },
+  {
+    question: 'How much does a website cost?',
+    answer:
+      'It depends on what your business needs, so it’s scoped in your free audit. You see the scope before anything starts.',
+  },
+  {
+    question: 'How long does setup take?',
+    answer:
+      'About a week for the AI front desk and about 10 days for a new website. Two rounds of changes are included.',
+  },
+  {
+    question: 'Do I have to replace my website to use the AI front desk?',
+    answer: 'No. The AI front desk works with the website you already have.',
+  },
+  {
+    question: 'Can I keep my phone number?',
+    answer: 'Yes. Calls forward to the AI front desk when you don’t pick up, or after hours. You choose.',
+  },
+];
+
+const jsonLd = [
+  serviceJsonLd({
+    name: 'AI front desk',
+    serviceType: 'AI phone answering and appointment booking',
+    description: `Answers every call 24/7, books into your calendar, alerts you to urgent calls, follows up and sends a monthly report. ${SITE.PRICE_FRONT_DESK}.`,
+    path: '/pricing/',
+  }),
+  serviceJsonLd({
+    name: 'Websites',
+    serviceType: 'Small business website design and build',
+    description:
+      `Phone-friendly websites with call and booking buttons, designed and built by ${BUILDER}, scoped in your free audit.`,
+    path: '/pricing/',
+  }),
+  serviceJsonLd({
+    name: 'AI automation',
+    serviceType: 'Business process automation',
+    description:
+      'A free 30-minute call, then a paid automation review credited against any build, then fixed-price projects.',
+    path: '/pricing/',
+  }),
+  faqJsonLd(faq),
+];
+---
+
+<Base
+  title="Pricing | Crewwise"
+  description="The AI front desk is from $299/month. Websites are scoped in your free audit. AI automation starts with a free 30-minute call."
+  current="pricing"
+  jsonLd={jsonLd}
+>
+  <PageHead
+    heading="Simple pricing, set up for you"
+    lead="One monthly price for the AI front desk. Websites are scoped in your free audit. AI automation starts with a free 30-minute call."
+  >
+    <div slot="aside" class="slip-wrap" aria-hidden="true">
+      <div class="slip">
+        <span class="slip-name">AI front desk</span>
+        <span class="slip-note">Month to month</span>
+        <span class="slip-item">{deskIncludes[0]}</span>
+      </div>
+    </div>
+  </PageHead>
+
+  <section class="plans ground-soft" aria-label="Services and prices">
+    <div class="page stack">
+      <article class="desk" id="ai-front-desk" aria-labelledby="desk-title">
+        <div class="desk-main">
+          <h2 id="desk-title" class="h2">AI front desk</h2>
+          <p class="price">{priceFrom} <span class="amt">{priceAmt}</span></p>
+          <p class="note">Month to month.</p>
+          <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
+        </div>
+        <div class="desk-list">
+          <h3 class="h3">What’s included</h3>
+          <ul class="ticks">
+            {deskIncludes.map((i) => <li>{i}</li>)}
+          </ul>
+        </div>
+      </article>
+
+      <div class="lighter">
+        <article class="plan" id="websites" aria-labelledby="websites-title">
+          <div class="plan-head">
+            <h2 id="websites-title" class="plan-title">Websites</h2>
+            <p class="line">Scoped in your free audit</p>
+          </div>
+          <div class="plan-body">
+            <h3 class="h3">What’s included</h3>
+            <ul class="ticks">
+              {websiteIncludes.map((i) => <li>{i}</li>)}
+            </ul>
+            <!-- TODO-confirm: "Hosting and small edits" included or not. Do not show until confirmed. -->
+          </div>
+          <div class="plan-action">
+            <a href="/free-audit/" class="link-quiet">Get my free audit</a>
+          </div>
+        </article>
+
+        <article class="plan" id="ai-automation" aria-labelledby="automation-title">
+          <div class="plan-head">
+            <h2 id="automation-title" class="plan-title">AI automation</h2>
+            <p class="line">Starts with a free 30-minute call</p>
+          </div>
+          <div class="plan-body">
+            <h3 class="h3">How it runs</h3>
+            <ol class="steps">
+              {
+                automationSteps.map((s) => (
+                  <li>
+                    <strong>{s.title}</strong>
+                    <span>{s.text}</span>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+          <div class="plan-action">
+            <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="carrier">
+        Texting features switch on once your business number is registered with the phone carriers,
+        usually within 1 to 3 weeks.
+      </p>
+    </div>
+  </section>
+
+  <Faq heading="Pricing questions" items={faq} />
+
+  <FinalCta
+    heading="Get a free audit"
+    text="We review your website and your phone line and send you what we found within two business days."
+    ctaLabel="Get my free audit"
+    ctaHref="/free-audit/"
+  />
+</Base>
+
+<style>
+  /* the price slip: one white sheet on the head band's offset plane, same paper as the home hero's booking slip */
+  .slip {
+    display: grid;
+    gap: 0.3rem;
+    justify-items: start;
+    padding: clamp(1.25rem, 1rem + 1.2vw, 1.75rem) clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+    background: var(--white);
+    color: var(--navy);
+    clip-path: polygon(0 1.4%, 41% 0, 74% 1%, calc(100% - 1.5rem) 0, 100% 1.5rem, 99.6% 52%, 100% 99%, 58% 100%, 23% 98.8%, 0.5% 100%);
+  }
+  .slip-wrap {
+    width: min(100%, 20rem);
+    max-width: 22rem;
+    margin-inline: auto 0;
+    filter: var(--drop-paper);
+    transform: rotate(-1.2deg);
+  }
+  .slip-name {
+    font-weight: 800;
+    font-size: var(--step-1);
+    letter-spacing: -0.02em;
+  }
+  .slip-item {
+    margin-top: 0.5rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule-strong);
+    width: 100%;
+    font-size: var(--step-0);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .slip-note {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+  .plans {
+    padding-block: 0 clamp(4.5rem, 3rem + 6vw, 8rem);
+  }
+  .stack {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 3vw, 4rem);
+  }
+
+  /* AI front desk: the lead plan, a navy cut-paper plate with hand-cut edges, pulled up over the blue head band so the price shows in the first viewport */
+  .desk {
+    display: grid;
+    gap: 2rem clamp(2rem, 1rem + 5vw, 6rem);
+    padding: clamp(1.75rem, 1rem + 2.5vw, 3rem) clamp(1.75rem, 1rem + 4vw, 4.5rem) clamp(2rem, 1rem + 3vw, 3.5rem);
+    background: var(--navy);
+    color: var(--white);
+    clip-path: polygon(0 1.2%, 99.6% 0, 100% 98.6%, 0.4% 100%);
+    position: relative;
+    margin-top: calc(-1 * clamp(3rem, 1.5rem + 5vw, 6.5rem));
+  }
+  @media (min-width: 52rem) {
+    .desk {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: start;
+    }
+  }
+  .desk ::selection {
+    background: var(--white);
+    color: var(--navy);
+  }
+  .desk-main {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+  }
+  .desk-main h2 {
+    margin: 0;
+    color: var(--white);
+  }
+  .price {
+    font-size: var(--step-1);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--white);
+    margin-top: 0.5rem;
+  }
+  .amt {
+    white-space: nowrap;
+  }
+  .note {
+    color: var(--on-blue-2);
+    margin-bottom: 0.75rem;
+  }
+  .desk-list {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .desk-list h3,
+  .plan-body h3 {
+    margin: 0;
+  }
+  .desk-list h3 {
+    color: var(--white);
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .ticks li {
+    position: relative;
+    padding-left: 2rem;
+    max-width: 44ch;
+  }
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8.5' fill='none' stroke='%231E5BD8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / 100% no-repeat;
+  }
+  .desk .ticks li::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8.5' fill='none' stroke='%238FB3FF' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  /* Websites and AI automation: lighter, ruled rows */
+  .lighter {
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .plan {
+    display: grid;
+    gap: 1.25rem clamp(1.5rem, 1rem + 3vw, 4rem);
+    padding-block: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+    border-top: 1px solid var(--rule-strong);
+    align-items: start;
+  }
+  @media (min-width: 60rem) {
+    .plan {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) auto;
+    }
+  }
+  .plan-head {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .plan-title {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .line {
+    font-size: var(--step-0);
+    font-weight: 650;
+    color: var(--blue);
+    line-height: 1.25;
+  }
+  .plan-body {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .plan-action {
+    align-self: start;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+    counter-reset: step;
+  }
+  .steps li {
+    display: grid;
+    gap: 0.15rem;
+    padding-left: 2rem;
+    position: relative;
+    counter-increment: step;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--blue);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps span {
+    color: var(--ink-2);
+  }
+
+  .carrier {
+    max-width: 62ch;
+    color: var(--ink-2);
+  }
+</style>

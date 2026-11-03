@@ -1,0 +1,591 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { SITE } from '../config/site';
+import { faqJsonLd, serviceJsonLd } from '../lib/jsonld';
+
+const entry = await getEntry('pages', 'roofing');
+if (!entry) throw new Error('Missing src/content/pages/roofing.md');
+const c = entry.data;
+
+const token = (s: string) => s.replaceAll('{{PRICE_FRONT_DESK}}', SITE.PRICE_FRONT_DESK);
+
+// Owner decision 2026-11-01: the only price is SITE.PRICE_FRONT_DESK. The founding-roofers setup fee offer is dropped.
+const faqItems = c.faq.items.map((i) => ({
+  question: i.question,
+  answer:
+    i.question === 'How much does it cost?'
+      ? `${token('{{PRICE_FRONT_DESK}}')}. There’s no contract, and plans are month to month.`
+      : token(i.answer),
+}));
+
+const ex = c.example;
+const queue = ex.queue;
+
+const jsonLd = [
+  serviceJsonLd({
+    name: c.service.name,
+    serviceType: c.service.type,
+    description: c.seo.description,
+    path: c.path,
+  }),
+  faqJsonLd(faqItems),
+];
+---
+
+<Base
+  title={c.seo.title}
+  description={c.seo.description}
+  ogTitle={c.seo.ogTitle}
+  ogDescription={c.seo.ogDescription}
+  image={c.seo.ogImage}
+  imageAlt={c.seo.ogAlt}
+  current="other"
+  jsonLd={jsonLd}
+>
+  <PageHead heading={c.hero.h1} lead={c.hero.sub} size="large">
+    <div class="actions">
+      <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
+      <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
+    </div>
+    <div slot="aside" class="slotted-wrap">
+      <div class="slotted hero-slip">
+        <span class="detail when">Saturday evening, {ex.business}</span>
+        <strong>{ex.calendar.event}</strong>
+        <span class="detail">{ex.calendar.where}</span>
+        <span class="stamp-booked">Monday 9:00 AM</span>
+        <span class="tag-example">Example booking</span>
+      </div>
+    </div>
+  </PageHead>
+
+  <section class="sec example band-white" aria-labelledby="example-title">
+    <div class="page">
+      <div class="example-head">
+        <h2 id="example-title" class="h2">One call, start to booking</h2>
+        <p class="tag-line"><span class="tag-example">Example</span> {c.exampleCaption}</p>
+      </div>
+      <div class="example-grid">
+        <div class="call" aria-label={ex.ariaDescription}>
+          <p class="when-line">Saturday evening, {ex.business}</p>
+          <ol class="lines">
+            {
+              ex.call.map((l) => (
+                <li class={l.speaker === 'ai' ? 'ai' : 'caller'}>
+                  <span class="who">{l.speaker === 'ai' ? 'AI front desk' : 'Homeowner'}</span>
+                  <span class="say">{l.text}</span>
+                </li>
+              ))
+            }
+          </ol>
+          <ul class="chips">
+            {ex.chips.map((chip) => <li>{chip}</li>)}
+          </ul>
+        </div>
+        <div class="result">
+          <p class="sms">
+            <strong>Text to the homeowner</strong>
+            <span>{ex.sms}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec leaks ground-soft" aria-labelledby="leaks-title">
+    <div class="page">
+      <div class="section-head">
+        <h2 id="leaks-title" class="h2">{c.leaks.title}</h2>
+        <p class="lead">{c.leaks.intro}</p>
+      </div>
+      <ul class="leak-list">
+        {
+          c.leaks.items.map((item) => (
+            <li class="leak">
+              <div>
+                <h3 class="h3">{item.problem}</h3>
+                <p class="detail">{item.detail}</p>
+              </div>
+              <p class="fix">{item.fix}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec happens" aria-labelledby="happens-title">
+    <div class="page">
+      <div class="section-head">
+        <h2 id="happens-title" class="h2">{c.whatHappens.title}</h2>
+      </div>
+      <ol class="moments">
+        {
+          c.whatHappens.moments.map((m) => (
+            <li class="moment">
+              <div class="when">
+                <h3 class="when-label">{m.label}</h3>
+                <span class="when-time">{m.time}</span>
+              </div>
+              <ul class="things">
+                {m.items.map((it) => (
+                  <li>
+                    <h3 class="h3">{it.title}</h3>
+                    <p>{it.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section id={c.stormMode.id} class="sec storm ground-navy" aria-labelledby="storm-title">
+    <div class="page">
+      <div class="storm-head">
+        <h2 id="storm-title" class="h2">{c.stormMode.title}</h2>
+        <p class="lead">{c.stormMode.copy}</p>
+        <p><span class="tag-example">Example</span> <span class="note">{c.stormMode.note}</span></p>
+      </div>
+      <div class="storm-grid">
+        <ol class="queue" aria-label="Example storm queue, sorted by urgency">
+          {
+            queue.map((q) => (
+              <li class:list={['q', { urgent: q.priority === 'urgent' }]}>
+                <span class="level">{q.level}</span>
+                <span class="q-main">
+                  <strong>{q.title}</strong>
+                  <span class="detail">{q.detail}</span>
+                </span>
+                <span class="slot-when">
+                  {q.status === 'ok' ? (
+                    <span class="stamp-booked">{q.slot}</span>
+                  ) : (
+                    <span class="time">{q.slot}</span>
+                  )}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="report">
+          <ul class="log" aria-label="Example call log after the storm">
+            {
+              c.stormMode.report.map((r) => (
+                <li>
+                  <span class="n">{r.value}</span> {r.label.charAt(0).toLowerCase() + r.label.slice(1)}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="foot">{c.stormMode.reportFootnote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec cost ground-soft" aria-labelledby="cost-title">
+    <div class="page">
+      <div class="cost-block">
+        <div>
+          <h2 id="cost-title" class="h2">What it costs</h2>
+        </div>
+        <div class="cost-body">
+          <p class="price">{SITE.PRICE_FRONT_DESK}</p>
+          <p>Month to month, with no contract. Setup is done for you.</p>
+          <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Faq heading={c.faq.title} items={faqItems} />
+
+  <FinalCta
+    heading={c.closing}
+    text="We review your website and your phone line and send you what we found within two business days."
+    ctaLabel="Get my free audit"
+    ctaHref="/free-audit/"
+    secondaryLabel="Book a free 30-minute call"
+    secondaryHref={SITE.CALENDLY_URL}
+  />
+</Base>
+
+<style>
+  .sec {
+    padding-block: clamp(4rem, 2.5rem + 6vw, 8rem);
+  }
+  .sec h2 {
+    margin: 0;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+  .detail {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+
+  /* example call: ruled lines on white, the booking as one white slip */
+  .example-head {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  }
+  .tag-line {
+    max-width: 62ch;
+    color: var(--ink-2);
+  }
+  .example-grid {
+    display: grid;
+    gap: 2.5rem clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+  }
+  @media (min-width: 56rem) {
+    .example-grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+  .call {
+    display: grid;
+    gap: 1rem;
+  }
+  .when-line {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .lines li {
+    display: grid;
+    gap: 0.2rem 1.5rem;
+    padding-block: 0.95rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  @media (min-width: 40rem) {
+    .lines li {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+    }
+  }
+  .who {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .ai .who {
+    color: var(--blue-ink);
+  }
+  .say {
+    font-size: var(--step-0);
+    font-weight: 500;
+    line-height: 1.45;
+    max-width: 56ch;
+  }
+  .ai .say {
+    font-weight: 650;
+  }
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    color: var(--ink-2);
+    font-size: 0.875rem;
+    font-weight: 650;
+  }
+  .result {
+    display: grid;
+    gap: 2rem;
+  }
+  .slotted {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.5rem;
+    justify-items: start;
+    background: var(--white);
+    clip-path: polygon(0 1.4%, 41% 0, 74% 1%, calc(100% - 1.5rem) 0, 100% 1.5rem, 99.6% 52%, 100% 99%, 58% 100%, 23% 98.8%, 0.5% 100%);
+  }
+  /* the slip's paper shadow sits on the wrapper, because the cut would clip it off the sheet itself */
+  .slotted-wrap {
+    filter: var(--drop-paper);
+    max-width: 28rem;
+    margin-inline: auto 0;
+    transform: rotate(-1.4deg);
+  }
+  .slotted strong {
+    font-size: var(--step-1);
+    letter-spacing: -0.015em;
+  }
+  .slotted .stamp-booked {
+    margin-top: 0.6rem;
+  }
+  /* the booking slip lives in the blue head band: proof in the first viewport */
+  .hero-slip {
+    color: var(--navy);
+    min-height: 2.75rem;
+    gap: 0.4rem;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  }
+  .hero-slip strong {
+    font-size: var(--step-2);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+  .hero-slip .detail {
+    font-size: var(--step-0);
+  }
+  .hero-slip .tag-example {
+    color: var(--ink-2);
+  }
+  .hero-slip .time,
+  .hero-slip .detail {
+    color: var(--ink-2);
+  }
+  .sms {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 40ch;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .sms span {
+    color: var(--ink-2);
+  }
+
+  /* leaks: ruled rows, problem on the left, what changes on the right */
+  .leak-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .leak {
+    display: grid;
+    gap: 0.5rem 2rem;
+    align-items: baseline;
+    padding-block: 1.4rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .leak h3 {
+    margin: 0 0 0.25rem;
+  }
+  @media (min-width: 48rem) {
+    .leak {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+  .fix {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    color: var(--blue-ink);
+  }
+
+  /* what happens: ruled timeline rows, the moment named inside each row */
+  .moments {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .moment {
+    display: grid;
+    gap: 1.25rem clamp(2rem, 1rem + 4vw, 4rem);
+    padding-block: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    border-top: 1px solid var(--rule-strong);
+  }
+  @media (min-width: 52rem) {
+    .moment {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+  }
+  .when {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+  }
+  .when-label {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  .when-time {
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .things {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem 2.5rem;
+  }
+  @media (min-width: 64rem) {
+    .things {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .things li {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 44ch;
+  }
+  .things h3 {
+    margin: 0;
+  }
+  .things p {
+    color: var(--ink-2);
+  }
+
+  /* storm mode: navy band, ruled queue, the example report as one white slip */
+  .storm-head {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+  }
+  .storm-head .h2 {
+    max-width: 20ch;
+    color: #fff;
+  }
+  .storm-head .lead {
+    max-width: 60ch;
+    margin: 0;
+  }
+  .storm .tag-example {
+    color: var(--light-blue);
+  }
+  .note {
+    color: var(--on-navy-2);
+  }
+  .storm-grid {
+    display: grid;
+    gap: 3rem clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+  }
+  @media (min-width: 60rem) {
+    .storm-grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+  }
+  .queue {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule-navy-strong);
+  }
+  .q {
+    display: grid;
+    gap: 0.5rem 1rem;
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--rule-navy-strong);
+    color: var(--white);
+  }
+  @media (min-width: 40rem) {
+    .q {
+      grid-template-columns: 5rem minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+  .level {
+    font-size: var(--step--1);
+    font-weight: 750;
+    color: var(--light-blue);
+  }
+  .q.urgent .level {
+    justify-self: start;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--navy);
+  }
+  .q-main {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .q-main strong {
+    letter-spacing: -0.01em;
+  }
+  .q .detail,
+  .q .time {
+    color: var(--on-navy-2);
+  }
+  .report {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--white);
+    color: var(--navy);
+    border-radius: 12px;
+    box-shadow: var(--shadow-paper);
+  }
+  /* a plain call log: one ruled line per entry, no hero numerals */
+  .log {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .log li {
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--rule);
+    font-weight: 600;
+  }
+  .log li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .log .n {
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+  }
+  .foot {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+
+  /* cost: ruled, one price */
+  .cost-block {
+    display: grid;
+    gap: 2rem clamp(2rem, 1rem + 5vw, 6rem);
+    padding-block: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+    border-block: 1px solid var(--rule-strong);
+  }
+  @media (min-width: 52rem) {
+    .cost-block {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: center;
+    }
+  }
+  .cost-body {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+  .price {
+    font-size: clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--blue);
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Seo from '../components/Seo.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { organizationJsonLd, websiteJsonLd, type JsonLdObject } from '../lib/jsonld';
+import '../styles/global.css';
+// the Latin face is on every first screen; preloading it keeps the swap from re-wrapping the headline
+import hankenLatin from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  image?: string;
+  imageAlt?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD for this page (Service, FAQPage, ...). Organization and WebSite are added on the home page. */
+  jsonLd?: JsonLdObject[];
+  /** Which nav item is current. */
+  current?: 'home' | 'pricing' | 'free-audit' | 'other';
+  /** Rooms on this page, listed in the left-margin index on wide screens. */
+}
+
+const { jsonLd = [], current, ...seo } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const schema = [...(isHome ? [organizationJsonLd(), websiteJsonLd()] : []), ...jsonLd];
+---
+
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={hankenLatin} as="font" type="font/woff2" crossorigin />
+    <meta name="generator" content={Astro.generator} />
+    <Seo {...seo} />
+    <JsonLd data={schema} />
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <slot name="header">
+      <Header current={current} tone={current === 'home' ? 'blue' : 'light'} />
+    </slot>
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer">
+      <Footer />
+    </slot>
+    <script>
+      // Keep the js flag across page turns.
+      document.addEventListener('astro:after-swap', () =>
+        document.documentElement.classList.add('js'),
+      );
+
+      // The shared settle ([data-enter] in global.css). Content is never hidden: a piece that
+      // starts below the fold is only nudged 8px down ([data-pending]) while it is off screen,
+      // and slides back to rest as it enters. Pieces on the first screen never move.
+      let settle: IntersectionObserver | undefined;
+      const initSettle = () => {
+        settle?.disconnect();
+        const els = document.querySelectorAll<HTMLElement>('[data-enter]');
+        if (!els.length || !('IntersectionObserver' in window)) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.matchMedia('print').matches) return;
+        const seen = new WeakSet<Element>();
+        settle = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const el = e.target as HTMLElement;
+              if (e.isIntersecting) {
+                el.removeAttribute('data-pending');
+                settle?.unobserve(el);
+              } else if (!seen.has(el) && e.boundingClientRect.top > 0) {
+                el.setAttribute('data-pending', '');
+              }
+              seen.add(el);
+            }
+          },
+          { rootMargin: '0px 0px -6% 0px' },
+        );
+        els.forEach((el) => settle!.observe(el));
+      };
+      document.addEventListener('astro:page-load', initSettle);
+      window.addEventListener('beforeprint', () =>
+        document.querySelectorAll('[data-pending]').forEach((el) => el.removeAttribute('data-pending')),
+      );
+    </script>
+  </body>
+</html>

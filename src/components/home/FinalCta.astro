@@ -1,0 +1,231 @@
+---
+/**
+ * The close: Crewwise blue band, left-aligned. At desktop the copy (heading, lead, orange action, reassurance) sits on
+ * the left and the audit deliverable itself, a white cut-paper sheet (real words from the audit offer), on the
+ * right. Stacked on phones: copy, sheet, action. No phone: the hero owns the device.
+ */
+interface Props {
+  heading: string;
+  text: string;
+  ctaLabel: string;
+  ctaHref: string;
+  reassurance?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  /** legacy props, ignored */
+  slotLabel?: string;
+  slotTime?: string;
+  slotDetail?: string;
+}
+const {
+  heading,
+  text,
+  ctaLabel,
+  ctaHref,
+  reassurance = 'Free, with no obligation. You keep your number and your website.',
+  secondaryLabel,
+  secondaryHref,
+} = Astro.props;
+---
+
+<section class="close band band-blue" aria-labelledby="close-title" data-close>
+  <div class="page stack">
+    <div class="copy">
+      <h2 id="close-title" class="display close-title">{heading}</h2>
+      <p class="lead">{text}</p>
+      <div class="actions">
+        <a href={ctaHref} class="btn btn-primary">{ctaLabel}</a>
+        {
+          secondaryLabel && secondaryHref && (
+            <a href={secondaryHref} class="link-quiet" target="_blank" rel="noopener">
+              {secondaryLabel}
+            </a>
+          )
+        }
+      </div>
+      <p class="reassure">{reassurance}</p>
+    </div>
+
+    <div class="sheet-wrap" aria-hidden="true">
+      <div class="audit">
+        <p class="a-title">Your free audit</p>
+        <ul class="a-rows">
+          <li style="--k:0"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Your website, checked on a phone</span></li>
+          <li style="--k:1"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Your phone line, called like a customer would</span></li>
+        </ul>
+        <p class="a-foot" style="--k:2"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Within two business days</span></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .close {
+    isolation: isolate;
+    overflow: clip;
+    padding-block: clamp(4rem, 2.75rem + 5vw, 7rem);
+  }
+  .stack {
+    display: grid;
+    gap: 2.25rem;
+    align-items: center;
+  }
+  .copy {
+    display: grid;
+    justify-items: start;
+    gap: 1.5rem;
+  }
+  @media (min-width: 62.5625rem) {
+    .stack {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+    }
+    /* the sheet rests on the copy block's last line, so no blue is left empty under it */
+    .sheet-wrap {
+      --tilt: 1.2deg;
+      justify-self: end;
+      align-self: end;
+    }
+  }
+  .close-title {
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 1.2rem + 4.2vw, 4.75rem);
+    text-wrap: balance;
+  }
+  .lead {
+    max-width: 48ch;
+  }
+  /* the deliverable: a white sheet with a hand-cut, slightly irregular edge; the soft paper shadow sits on the wrapper
+     so the clip never cuts it */
+  .sheet-wrap {
+    --tilt: 0deg;
+    width: min(100%, 30rem);
+    margin-block: 0;
+    filter: var(--drop-paper);
+    transform: rotate(var(--tilt));
+  }
+  .audit {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem) clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+    background: var(--white);
+    color: var(--navy);
+    text-align: left;
+    clip-path: polygon(0 1.5%, 38% 0, 71% 1.2%, 100% 0, 99.4% 48%, 100% 100%, 62% 98.6%, 27% 100%, 0.6% 98.8%, 0 52%);
+  }
+  .a-title {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .a-rows {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .a-rows li,
+  .a-foot {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .tk {
+    flex: none;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-top: 0.02em;
+    fill: none;
+    stroke: var(--navy);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tk path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .a-rows li {
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--rule-strong);
+    font-size: var(--step-1);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .a-foot {
+    margin: 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+  .a-foot .tk {
+    stroke: var(--navy);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 0.5rem;
+  }
+  .reassure {
+    color: var(--on-blue-2);
+    font-size: var(--step--1);
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: 40ch;
+  }
+  /* the action presses in: a touch smaller and a deeper orange under the finger */
+  .actions .btn {
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 160ms var(--ease-out);
+  }
+  .actions .btn:active {
+    transform: scale(0.98);
+    background: var(--orange-deep);
+  }
+
+  /* the sheet is static and settled at rest. Only its three ticks draw, in turn, when the section scrolls into view.
+     Visible by default (no JS, reduced motion). */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .close .tk path {
+      stroke-dashoffset: 1;
+    }
+    :global(.js) .close[data-in] .tk path {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.45s var(--ease-out) calc(0.2s + var(--k) * 0.28s);
+    }
+  }
+</style>
+
+<script>
+  let io: IntersectionObserver | undefined;
+  function initClose() {
+    io?.disconnect();
+    const el = document.querySelector<HTMLElement>('[data-close]');
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) {
+      el.setAttribute('data-in', '');
+      return;
+    }
+    io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          el.setAttribute('data-in', '');
+          io?.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+  }
+  document.addEventListener('astro:page-load', initClose);
+</script>

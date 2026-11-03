@@ -1,0 +1,13 @@
+---
+import type { JsonLdObject } from '../lib/jsonld';
+
+interface Props {
+  data: JsonLdObject | JsonLdObject[];
+}
+const { data } = Astro.props;
+const items = Array.isArray(data) ? data : [data];
+---
+
+{items.map((d) => (
+  <script type="application/ld+json" set:html={JSON.stringify(d).replaceAll('<', '\\u003c')} />
+))}

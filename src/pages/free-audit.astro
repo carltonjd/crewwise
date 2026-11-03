@@ -1,0 +1,267 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import AuditForm from '../components/AuditForm.astro';
+
+const covers = [
+  'First, we review your website and your Google profile.',
+  'Then we call your line like a customer would, and note what happens.',
+  'We write up what we found, in plain words.',
+  'Within two business days, your audit lands in your inbox.',
+];
+---
+
+<Base
+  title="Get a free audit | Crewwise"
+  description="Tell us about your business. We review your website and Google profile, call your line like a customer would, and send you what we found."
+  current="free-audit"
+>
+  <PageHead
+    heading="Get a free audit"
+    lead="Tell us a little about your business, and we’ll check it the way a new customer would."
+  >
+    <div class="audit" slot="aside" aria-hidden="true">
+      <p class="a-title">Your free audit</p>
+      <ul class="a-rows">
+        <li>
+          <svg
+            class="tk"
+            viewBox="0 0 20 20"
+            width="20"
+            height="20"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <path d="M4 10.5l4 4 8-9" />
+          </svg>
+          <span>Your website, checked on a phone</span>
+        </li>
+        <li>
+          <svg
+            class="tk"
+            viewBox="0 0 20 20"
+            width="20"
+            height="20"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <path d="M4 10.5l4 4 8-9" />
+          </svg>
+          <span>Your phone line, called like a customer would</span>
+        </li>
+      </ul>
+      <p class="a-foot">
+        <svg
+          class="tk"
+          viewBox="0 0 20 20"
+          width="20"
+          height="20"
+          focusable="false"
+          aria-hidden="true"
+        >
+          <path d="M4 10.5l4 4 8-9" />
+        </svg>
+        <span>Within two business days</span>
+      </p>
+    </div>
+  </PageHead>
+
+  <section class="body ground-soft" aria-label="Free audit request">
+    <div class="page layout">
+      <div class="sheet">
+        <div class="form-col">
+          <AuditForm />
+        </div>
+      </div>
+
+      <aside class="covers" aria-labelledby="covers-title">
+        <div class="covers-in">
+          <h2 id="covers-title" class="h3">
+            How your audit works
+          </h2>
+          <ol>
+            {covers.map((c) => (
+              <li class="what">{c}</li>
+            ))}
+          </ol>
+          <p class="quiet">It costs nothing, and you decide what happens next.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .body {
+    position: relative;
+    isolation: isolate;
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(4.5rem, 3rem + 6vw, 8rem);
+  }
+  /* the head band's floor runs on behind the sheet: blue-deep paper with a hand-cut lower edge */
+  .body::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    /* overlaps the head band by 2px so a fractional band edge can't show a hairline between the two blues */
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: calc(clamp(8rem, 6rem + 6vw, 11rem) + 2px);
+    background: var(--blue-deep);
+    clip-path: polygon(0 0, 100% 0, 100% 34%, 82% 52%, 61% 70%, 38% 86%, 17% 96%, 0 100%);
+  }
+  @media print {
+    .body::before {
+      display: none;
+    }
+  }
+  /* the checklist sheet on the head's navy plate: white cut paper, the soft paper shadow on its own wrapper edge */
+  .audit {
+    display: grid;
+    gap: 1.1rem;
+    width: min(100%, 26rem);
+    padding: clamp(1.25rem, 1rem + 1.5vw, 2rem) clamp(1.25rem, 1rem + 1.5vw, 2rem);
+    background: var(--white);
+    color: var(--navy);
+    filter: var(--drop-paper);
+    clip-path: polygon(
+      0 1.5%,
+      38% 0,
+      71% 1.2%,
+      100% 0,
+      99.4% 48%,
+      100% 100%,
+      62% 98.6%,
+      27% 100%,
+      0.6% 98.8%,
+      0 52%
+    );
+    rotate: 1.2deg;
+  }
+  /* on phones the form comes first; the sheet sits with the desktop plate */
+  @media (max-width: 55.99rem) {
+    .audit {
+      display: none;
+    }
+  }
+  .a-title {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .a-rows {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .a-rows li,
+  .a-foot {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  .a-rows li {
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--rule-strong);
+    font-size: var(--step-0);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .a-foot {
+    margin: 0;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+  .tk {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: none;
+    stroke: var(--navy);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .layout {
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    align-items: start;
+  }
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+    .covers {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+  /* the form is a white paper sheet: a hand-cut top edge and one nicked top-right corner, lifted by the soft paper shadow.
+     The shadow sits on the wrapper because the clip would cut it off the sheet itself. */
+  .sheet {
+    filter: var(--drop-paper);
+  }
+  .form-col {
+    padding: clamp(1.75rem, 1rem + 2.5vw, 3rem) clamp(1.25rem, 0.5rem + 2.5vw, 2.5rem)
+      clamp(1.25rem, 0.5rem + 2.5vw, 2.5rem);
+    background: var(--white);
+    clip-path: polygon(
+      0 0.4rem,
+      46% 0,
+      78% 0.2rem,
+      calc(100% - 2.5rem) 0,
+      100% 2.5rem,
+      100% 100%,
+      0 100%
+    );
+  }
+  .covers {
+    filter: var(--drop-paper);
+  }
+  .covers-in {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    background: var(--white);
+    clip-path: polygon(0 1.4%, 41% 0, 74% 1%, calc(100% - 1.5rem) 0, 100% 1.5rem, 99.6% 52%, 100% 99%, 58% 100%, 23% 98.8%, 0.5% 100%);
+  }
+  .covers h2 {
+    margin: 0;
+  }
+  .covers ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    counter-reset: step;
+  }
+  .covers li {
+    display: grid;
+    gap: 0.2rem;
+    counter-increment: step;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    padding-block: 0.9rem;
+    border-top: 1.5px solid var(--rule);
+  }
+  .covers li::before {
+    content: counter(step);
+    font-weight: 820;
+    font-variant-numeric: tabular-nums;
+    color: var(--blue);
+  }
+  .what {
+    font-weight: 560;
+    letter-spacing: -0.01em;
+  }
+  .quiet {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+</style>

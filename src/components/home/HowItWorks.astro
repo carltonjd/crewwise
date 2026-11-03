@@ -1,0 +1,254 @@
+---
+/**
+ * Setup as a route built from paper: a hand-cut blue-deep strip laid across a soft ground,
+ * four numbered markers pinned on it, a light line from marker to marker, and each stop's words
+ * on a white slip hung from its marker. A real sequence, so the numbers carry meaning.
+ * The first stop leads and carries the audit action.
+ * Entrance (scroll-driven, see global.css): each leg of the line cuts across to the next stop.
+ */
+interface Step {
+  title: string;
+  text: string;
+  when: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+interface Props {
+  id: string;
+  heading: string;
+  steps: Step[];
+}
+const { id, heading, steps } = Astro.props;
+// four markers from the cut-paper set: each hand-cut differently, nicked top right, lit top left
+const markers = [
+  '<svg class="illo" viewBox="0 0 64 64" focusable="false"><clipPath id="rm-0"><path d="M5.5 4 49.6 4.2 61.5 15 61.8 59.8 30.4 60.9 2.1 60.9 5.2 33.3Z"></path></clipPath><path class="f-n" d="M5.5 4 49.6 4.2 61.5 15 61.8 59.8 30.4 60.9 2.1 60.9 5.2 33.3Z"></path><g clip-path="url(#rm-0)"><path class="f-n2" d="M-0.4 -0.6 37.5 0.2 0.2 34.5Z"></path></g></svg>',
+  '<svg class="illo" viewBox="0 0 64 64" focusable="false"><clipPath id="rm-1"><path d="M5.5 2.5 47.2 5.3 60.6 15 60.1 59.5 33.3 61.8 4.5 61.1 6.1 29.6Z"></path></clipPath><path class="f-n" d="M5.5 2.5 47.2 5.3 60.6 15 60.1 59.5 33.3 61.8 4.5 61.1 6.1 29.6Z"></path><g clip-path="url(#rm-1)"><path class="f-n2" d="M0.1 0.4 38.8 0.5 -0.9 33.4Z"></path></g></svg>',
+  '<svg class="illo" viewBox="0 0 64 64" focusable="false"><clipPath id="rm-2"><path d="M4.6 2.2 48.9 4.2 60 15.7 60.8 60.4 33.1 61.7 1.9 60.3 2.3 31.9Z"></path></clipPath><path class="f-n" d="M4.6 2.2 48.9 4.2 60 15.7 60.8 60.4 33.1 61.7 1.9 60.3 2.3 31.9Z"></path><g clip-path="url(#rm-2)"><path class="f-n2" d="M0.5 -0.6 37.4 -0.2 -0.9 33.6Z"></path></g></svg>',
+  '<svg class="illo" viewBox="0 0 64 64" focusable="false"><clipPath id="rm-3"><path d="M4.2 2.3 48.3 2.1 58.2 17.1 58.5 58.9 33.2 60 5.8 58.7 6.4 31.9Z"></path></clipPath><path class="f-n" d="M4.2 2.3 48.3 2.1 58.2 17.1 58.5 58.9 33.2 60 5.8 58.7 6.4 31.9Z"></path><g clip-path="url(#rm-3)"><path class="f-n2" d="M-0.5 -0.8 37.6 -0.9 -0.2 34.7Z"></path></g></svg>',
+];
+---
+
+<section class="route band band-soft" id={id} aria-labelledby="route-title">
+  <div class="page">
+    <h2 id="route-title" class="h2 route-title">{heading}</h2>
+    <ol class="stops">
+      {
+        steps.map((s, i) => (
+          <li class="stop" style={`--d:${i}`}>
+            <span class="marker" aria-hidden="true">
+              <Fragment set:html={markers[i % markers.length]} />
+              <b>{i + 1}</b>
+            </span>
+            <div class="slip">
+              <div class="tag">
+                <h3 class="stop-title">{s.title}</h3>
+                <p class="when">{s.when}</p>
+                <p>{s.text}</p>
+                {s.ctaLabel && s.ctaHref && (
+                  <a href={s.ctaHref} class="link-quiet stop-cta">
+                    {s.ctaLabel}
+                  </a>
+                )}
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .route {
+    overflow-x: clip;
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6.5rem);
+  }
+  .route-title {
+    max-width: 16ch;
+    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  }
+  .stops {
+    --dot: 3.5rem;
+    --gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--gap);
+    position: relative;
+    view-timeline: --route;
+  }
+  /* the strip: one hand-cut blue-deep plane laid down the route, nicked at its top-right corner,
+     lit from the top left by the tone of the marker pieces on it */
+  .stops::before {
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    width: 4.25rem;
+    top: -1rem;
+    bottom: -1rem;
+    background: var(--blue-deep);
+    clip-path: polygon(0 1.2%, 62% 0, calc(100% - 1.25rem) 0.4%, 100% 1.2rem, 99.2% 52%, 100% 99%, 38% 100%, 0.6% 98.8%);
+  }
+  .stop {
+    position: relative;
+    padding-left: 4.25rem;
+    display: grid;
+    view-timeline: --stop;
+  }
+  .marker {
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    z-index: 1;
+    width: var(--dot);
+    height: var(--dot);
+  }
+  .marker :global(svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .marker b {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    font-size: var(--step-1);
+    font-weight: 820;
+    font-variant-numeric: tabular-nums;
+  }
+  /* the route: a light line from this stop to the next, and nothing after the last */
+  .stop:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--dot) / 2 - 2px);
+    top: calc(var(--dot) / 2 + 0.5rem);
+    bottom: calc(var(--dot) / -2 - var(--gap) + 0.5rem);
+    width: 4px;
+    background: var(--light-blue);
+    transform-origin: center top;
+  }
+  /* the slip: white paper, soft drop shadow outside the cut, nicked top right */
+  .slip {
+    filter: var(--drop-paper);
+  }
+  .tag {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    justify-items: start;
+    padding: 1.1rem 1.1rem 1.25rem;
+    background: var(--white);
+    clip-path: polygon(0 0.8%, 55% 0, calc(100% - 1.5rem) 0.5%, 100% 1.5rem, 99.5% 60%, 100% 100%, 45% 99.4%, 0.4% 100%);
+  }
+  .stop:nth-child(even) .tag {
+    clip-path: polygon(0.4% 0, 48% 0.6%, calc(100% - 1.5rem) 0, 99.6% 1.5rem, 100% 45%, 99.4% 99.2%, 52% 100%, 0 99.4%);
+  }
+  .stop-title {
+    font-size: var(--step-2);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: var(--navy);
+  }
+  .tag p {
+    color: var(--ink-2);
+    max-width: 34ch;
+  }
+  .tag .when {
+    color: var(--blue-deep);
+    font-size: var(--step-sm);
+    font-weight: 700;
+  }
+  .stop-cta {
+    margin-top: 0.6rem;
+  }
+  @media (min-width: 56rem) {
+    /* the audit leads: a wider first stop with a larger marker; the strip runs across the band
+       edge to edge and every marker centre sits on the same line */
+    .stops {
+      --gap: clamp(1rem, 0.25rem + 1.6vw, 2rem);
+      grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+      align-items: start;
+    }
+    .stops::before {
+      left: calc(50% - 50vw);
+      width: 100vw;
+      top: -1.25rem;
+      bottom: auto;
+      height: 8.25rem;
+      clip-path: polygon(0 4%, 30% 0, 70% 2%, calc(100% - 1.5rem) 0, 100% 1.5rem, 99.7% 62%, 100% 100%, 64% 97%, 31% 100%, 0 96%);
+    }
+    .stop {
+      padding-left: 0;
+      padding-top: 6.5rem;
+      grid-template-rows: auto 1fr;
+    }
+    .slip {
+      grid-row: 2;
+    }
+    .marker {
+      top: calc(3rem - var(--dot) / 2);
+    }
+    .stop:first-child {
+      --dot: 5rem;
+    }
+    .stop:first-child .marker b,
+    .stop:first-child .stop-title {
+      font-size: var(--step-2);
+    }
+    .stop:first-child .tag p {
+      max-width: 38ch;
+    }
+    .stop:not(:last-child)::after {
+      left: calc(var(--dot) / 2);
+      right: calc(var(--dot) / -2 - var(--gap));
+      top: calc(3rem - 2px);
+      bottom: auto;
+      width: auto;
+      height: 4px;
+      transform-origin: left center;
+    }
+    .stop-title {
+      font-size: var(--step-1);
+    }
+    .tag {
+      padding: 1.5rem 1.5rem 1.75rem;
+    }
+    /* each slip is as tall as its words; a small deliberate stagger runs along the strip */
+    .stop:nth-child(2) .slip {
+      margin-top: 1.5rem;
+    }
+    .stop:nth-child(3) .slip {
+      margin-top: 0.5rem;
+    }
+    .stop:nth-child(4) .slip {
+      margin-top: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* stacked: each leg draws as its stop enters on its own */
+      .stop:not(:last-child)::after {
+        animation-name: enter-draw-y;
+        animation-duration: auto;
+        animation-timing-function: var(--ease-out-quart);
+        animation-fill-mode: both;
+        animation-timeline: --stop;
+        animation-range: entry 40% cover 55%;
+      }
+      /* in a row: one timeline for the whole route, so the legs run in sequence */
+      @media (min-width: 56rem) {
+        .stop:not(:last-child)::after {
+          animation-name: enter-draw;
+          animation-timeline: --route;
+          animation-range: cover calc(14% + var(--d) * 6%) cover calc(30% + var(--d) * 6%);
+        }
+      }
+    }
+  }
+</style>

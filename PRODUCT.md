@@ -8,56 +8,72 @@ web
 
 ## Users
 
-Owners of small US roofing companies: owner-operators and crews of roughly 1 to 20 people, where the owner answers the phone themselves today. When calls come in they are often on a roof, on the road or done for the day, so calls go to voicemail and the homeowner calls the next roofer. They pay for leads (ads, lead services) and lose a share of them to missed calls, slow callbacks and quotes nobody follows up.
+Two audiences, one site (the AI front desk is described without a personal name; each client can choose a name for their own):
 
-Crewwise sells only to roofing companies today. Other home-service trades (plumbing, HVAC, electrical and so on) are planned but not served yet; no page may claim we already serve them.
+- **Home-service companies:** HVAC, plumbing, roofing, electrical and cleaning businesses, usually owner-operators with small crews. The owner is on a job when the next customer calls; calls go to voicemail, web enquiries get answered that evening, quotes go unchased, and the customer books someone else.
+- **Small professional firms:** law firms, architects and accounting firms. No medical practices or clinic examples anywhere for now (patient calls bring US health privacy rules not yet set up). A new client enquiry deserves a reply in minutes; partners are in meetings or with clients, so enquiries wait and go cold.
+
+Both read the site on a phone, between jobs or meetings, short on time and wary of hype. The hero must feel calm and credible to a lawyer and still friendly to a plumber.
+
+Core idea (owner brief, 2026-11-02): new clients decide in their first minute of contact, a glance at the website and then a call. Crewwise covers that whole minute: a website that makes the business easy to choose and an AI front desk that answers every call. Hero headline: "Win the first minute with every new client." (backup in constants).
 
 ## Product Purpose
 
-Crewwise is an AI front desk. It answers the calls a roofing company already gets, 24/7, in the company's name; qualifies the caller; checks the service area; books the inspection into the owner's calendar with a text confirmation; texts back missed calls and web leads; follows up unsold estimates; reactivates old leads; and asks for Google reviews after the job. Success for the customer is fewer paid leads lost and more booked jobs, reported back to them in a monthly Lead Recovery Report.
+Crewwise is the tech crew a small business never had to hire: a done-for-you tech partner that sells three services under its own name.
 
-The website's job is to get a roofer to book a 15-minute demo (Calendly) or leave their details for a call back (Formspree form).
+- **The AI front desk:** answers every call 24/7, books appointments, captures the caller's details, flags urgent calls and follows up.
+- **Websites:** modern, fast, phone-friendly websites with clear call and booking buttons, designed and built by Octalogic's engineers.
+- **AI automation:** a free 30-minute AI audit call, then automations that take repetitive manual work off a team (for example, matching purchase orders to invoices).
+
+The website's single job is to push every visitor towards one action: the free audit (`/free-audit`, Formspree form). Booking a call (Calendly) is the secondary route.
 
 ## Positioning
 
-- **Trade-specific:** it asks the questions a roofer would ask (address, leak or damage, roof age, insurance claim, repair or replacement, residential or commercial) and books inspections, rather than taking a generic message.
-- **Recovers revenue, not just answers:** estimate follow-up, old-lead reactivation, review requests and the monthly Lead Recovery Report.
-- **Storm surge handling:** Storm Mode (called "Busy-day mode" on the general homepage) takes many calls at once, flags active leaks as urgent and books in priority order.
-- **Done for you:** we set it up and tune it; one flat price, $499/month, month to month, no contract. Setup fee waived for founding customers.
+- **Your crew:** "Crew" means the people and tools working on the owner's behalf. Done for you: we set it up, we tune it, we report back monthly.
+- **Jobs are lost in the first few minutes,** long before anyone compares quotes: slow mobile site, missed call, late reply, no follow-up. Crewwise covers those minutes.
+- **Built by real engineers:** Octalogic (founded 2017, Goa; 40+ engineers; clients in more than 10 countries; longest client relationship 8 years). ON HOLD: every Octalogic mention is hidden behind `SHOW_OCTALOGIC` (off) until Carlton confirms the partners agree.
+- **Pricing on the site:** only "from $299/month" for the AI front desk. No other prices are shown anywhere (owner decision 2026-11-01). Website and automation work is scoped after the free audit.
 
-It does not sell leads, never calls people who haven't contacted the business, and there is no call center behind it.
+Octalogic's extended engineering teams and product builds are not sold here; they get one footer line linking to https://octalogic.tech.
 
 ## Operating Context
 
-- Owner forwards missed and after-hours calls to a number we set up and keeps their existing number. Turning off forwarding sends calls straight back.
-- Setup: a 30-minute setup call (services, area, hours, questions, booking rules); go-live in about 1 to 2 weeks, mostly waiting on US text-message (A2P) registration.
-- Works alongside the owner's existing tools; no new CRM to learn.
-- Calls are recorded and transcribed; callers who want a person are transferred or a message is taken; complex insurance, pricing or technical questions go to the owner.
+- The AI front desk works with the business's existing website and number: calls forward to it when unanswered or after hours, the owner chooses. It says it is an AI assistant if a caller asks. On law-firm calls it never gives legal advice.
+- Setup: about a week for the AI front desk, about 10 days for a new website, two rounds of changes included. Texting switches on once the number is registered with carriers, usually 1 to 3 weeks.
+- Free audit: we review the website and Google profile, call the line like a customer would, and send what we found (within two business days, pending confirmation).
+- Monthly check-in: a short report on what came in and what was followed up.
 
 ## Capabilities and Constraints
 
-- Site: static HTML generated by `build.py` from `content.py` (page text, one block per trade page) and `site.config.json` (brand details). Deployed on Cloudflare Workers static assets from `public/`, pushed via GitHub (carltonjd/crewwise). Pages: `/` (general home-service), `/roofing/`, legal pages. New trade pages are added only once that trade is actually sold.
-- Company: Crewwise is a brand of Hallmark Data Systems Pvt Ltd, Panaji, Goa, India. The site must not say or imply the company is US-based; the registered address appears in the footer and Terms only. Governing law: India (courts of Goa).
-- No US phone number yet; phone and client login are hidden until they exist (empty values in config hide them).
+- Site: Astro 7, static output, Tailwind 4, MDX content, TypeScript; deployed on Cloudflare Workers static assets from `dist/`. All prices, links, phone numbers and emails live in `src/config/site.ts`.
+- Phase 1 pages: `/`, `/pricing`, `/free-audit`, `/roofing` (existing copy incl. Storm Mode), `/terms`, `/privacy`, `/refunds`. Phase 2: `/ai-front-desk`, `/websites`, `/ai-automation`, `/hvac`, `/plumbing`, `/law-firms`, `/accounting-firms`, `/about`. Never link to a page that doesn't exist yet; no "coming soon".
+- Company: Crewwise is a brand of Hallmark Data Systems Pvt Ltd, Panaji, Goa, India. Never say or imply US-based. Footer legal line is fixed text.
+- No demo phone number until a non-roofing demo line exists. No recorded sample call yet: the example call on the page is a read-along transcript until a recorded sample exists.
+- Must be SEO and AI-search ready: unique titles/descriptions, canonical, OG, sitemap, JSON-LD, llms.txt, all crawlers allowed.
+- Accessibility: one H1 per page, AA contrast, visible focus, reduced motion respected. Fast: no heavy libraries for simple effects.
 - Never push to GitHub without the user's explicit approval for that push.
-- Undecided: demo phone line, client app login, other trades' launch dates.
 
 ## Brand Commitments
 
 - Name: Crewwise (capital C in text; the lowercase wordmark is logo-only). Domain crewwisehq.com, email hello@crewwisehq.com.
-- Logo and brand assets from `design/brand/crewwise-brand-assets/`, following the user's Crewwise logo spec.
-- Fixed (confirmed 2026-10-08): the logo blue `#1E5BD8` and the logo itself (icon plus the "crewwise" wordmark in Hanken Grotesk 650). Everything else visual is open to change: other colours, section backgrounds, textures, the site's headline and body fonts, and the type scale.
-- Voice: plain, specific, human. No em or en dashes in copy, no sales hype, no invented claims; copy is run through the humanizer rules.
-- Reference site the user chose for feel: https://www.auxia.io/
+- No personal name for the AI front desk on the site (owner decision 2026-11-02): it is described as the AI front desk to avoid confusion.
+- Owner decision (2026-11-03): the hero action stays a button linking to `/free-audit/`. This is an exception to mode-persuade's "action in working form"; the form page is the dedicated surface for the audit request.
+- Logo: existing files in `design/brand/crewwise-brand-assets/`, unchanged unless the owner confirms the refined version.
+- Fixed palette (brief, 2026-11-01): navy `#0F1B33` (text, dark sections), Crewwise blue `#1E5BD8` (brand, links, accents), light blue `#8FB3FF` (accents on navy only), soft background `#F4F7FC`, white `#FFFFFF`, action orange `#C94708` (primary buttons only), success green `#1F7547` (success states only). Derived tints for cut-paper planes: blue-deep `#1749B0` (hero floor, pressed states) and `--blue-sheet` = `color-mix(in oklab, blue-deep, navy 30%)` (the hero's offset sheet; documented in `src/styles/global.css`). Every text/background pair meets WCAG AA.
+- Fixed type: Hanken Grotesk throughout; bold to extra-bold headlines with tight tracking, never tighter than -0.04em; regular to medium body; body measure under about 75 characters.
+- Standing preference (owner, 2026-11-01, after three direction rounds): a clean, premium product site, the category standard executed at top craft, executed in a cut-paper world (owner confirmed 2026-11-03): flat Crewwise blue fields, navy and white shapes with slightly irregular hand-cut edges, depth from overlapping flat planes and one soft paper shadow, no photographs or screenshots. Bar: Goodcall (labelled example call that plays), Avoca (timestamped call timeline), Dialzara (plain receptionist headline); the price lands with the AI front desk details in the services section. Lead with the AI front desk, an AI receptionist for any business; websites and AI automation shown as part of the same offer.
+- Everything else (layout, composition, texture, motion, imagery approach) is open; the owner wants a bold, incredible showpiece with brilliant motion, while boldness is spent mostly on the hero call moment.
+- Avoid: identical rounded cards in endless grids, gradient washes, stock photos, fake product screenshots, a single highlighted word in a headline, all-caps labels, eyebrow labels above headings (banned outright).
+- Voice: plain, direct, practical, for a busy owner on a phone. Short sentences, specific over clever, confident never hypey. Sentence case for headings and buttons. Buttons say exactly what happens ("Get my free audit", "Book a call"). No "it's not X, it's Y", no "the difference between X and Y", no tidy triads in running copy, no clipped two-word closers, no buzzwords (leverage, unlock, supercharge, seamless, cutting-edge, game-changer, revolutionise), no meta strings joined by middle dots (the one exception is the fixed legal line in the footer), no "→" on buttons, no em or en dashes in copy.
 
 ## Evidence on Hand
 
-None yet: no customers, testimonials, call recordings, logos, case studies or results. The product is pre-launch with a founding-customer offer. All example screens, businesses (e.g. "Oak Ridge Roofing"), names, addresses and report numbers are made up and must be labelled as examples. Never fabricate proof.
+No customers, testimonials, ratings, call recordings, case studies, results or client logos yet. Safe facts: Octalogic founded 2017, Goa; 40+ engineers; clients in more than 10 countries (never list them); longest client relationship 8 years. Never name clients (including TKO or UFC). Never promise rankings, leads, revenue or percentage savings. Example screens and transcripts are synthetic and labelled as examples.
 
 ## Product Principles
 
-1. Honest before impressive: every example is labelled, every claim is something the product does today.
-2. Speak roofer: the trade's words and situations (on the roof, storm, inspection, estimate, claim), not generic AI talk.
-3. Revenue, not features: frame everything as leads kept and jobs booked.
-4. Low commitment: one price, no contract, keep your number, switch off anytime.
-5. One trade at a time: say only what is true for the trades we serve now.
+1. Honest before impressive: every example labelled, every claim something we do today.
+2. One action: every page leads to the free audit.
+3. Speak the customer's day: on a job, mid-install, burst pipe at 9 PM, tax season; never generic AI talk.
+4. The first few minutes: frame everything around the moment a customer reaches out.
+5. Done for you: low effort, keep your number, keep your site, we set it up.

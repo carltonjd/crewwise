@@ -1,0 +1,301 @@
+---
+import { SITE, BUILDER } from '../../config/site';
+/**
+ * The whole offer at a glance: three outcomes, the AI front desk leading.
+ * Plain type on white; each service has a plate from the cut-paper set (.illo in global.css):
+ * hand-cut planes, light from the top left told in tonal steps, one nicked corner per piece.
+ * Websites and automation are deliberately unequal: a wide plate first, a tall one set lower.
+ */
+interface Props {
+  heading: string;
+  lead: string;
+}
+const { heading, lead } = Astro.props;
+---
+
+<section class="pillars band band-white" aria-labelledby="pillars-title">
+  <div class="page">
+    <div class="head">
+      <h2 id="pillars-title" class="h2">{heading}</h2>
+      <p class="lead">{lead}</p>
+    </div>
+
+    <article class="pillar pillar-desk" id="ai-front-desk">
+      <div class="copy">
+        <h3 class="title title-lead">Answer every call with an AI front desk</h3>
+        <p class="text">
+          It answers every call in your business name, day or night. It books the visit or
+          consultation, flags anything urgent to you and follows up so leads don’t go cold.
+        </p>
+        <ul class="ticks">
+          <li>Keeps your number</li>
+          <li>Books into your calendar</li>
+          <li>Texts a confirmation, once texting is on</li>
+          <li>Says it’s an AI if asked</li>
+        </ul>
+        <p class="price">{SITE.PRICE_FRONT_DESK}</p>
+      </div>
+
+      <figure class="plate plate-desk" aria-hidden="true">
+        <svg class="illo" viewBox="0 0 600 420" focusable="false">
+<clipPath id="pa-g"><path d="M0 0.1 95.8 1.1 190.9 0.6 291 -0.8 379.3 -0.4 478.7 -0.1 576.3 0.3 601.1 24.1 601.5 124.4 599.7 223.6 598.3 319.8 598.7 420.1 509 419.3 430.2 419.7 345.6 421.2 253.5 418.6 174.1 420.9 82.5 420.3 0.3 419.8 0.5 335.2 -0.8 247.3 1.1 163.3 -1.2 85.6Z"></path></clipPath><path class="f-b" d="M0 0.1 95.8 1.1 190.9 0.6 291 -0.8 379.3 -0.4 478.7 -0.1 576.3 0.3 601.1 24.1 601.5 124.4 599.7 223.6 598.3 319.8 598.7 420.1 509 419.3 430.2 419.7 345.6 421.2 253.5 418.6 174.1 420.9 82.5 420.3 0.3 419.8 0.5 335.2 -0.8 247.3 1.1 163.3 -1.2 85.6Z"></path><g clip-path="url(#pa-g)"><path class="f-bd" d="M203.6 423.2 286.4 367.5 364.8 314.7 438.5 265.4 521.8 207.8 604.2 152.1 603.5 246 602.9 333.2 603.3 423 495.4 423.7 406.6 422.1 305.3 423.3Z"></path><path class="f-bs" d="M432.1 423.7 511.9 362.4 603.1 293.1 603.1 423 516.8 422.6Z"></path></g>
+<clipPath id="pa-n"><path d="M35.5 57 110.7 58.7 198.2 59.1 211.2 70.8 212.5 174.3 126.7 174.4 36.1 174.6Z"></path></clipPath><path class="f-n" d="M35.5 57 110.7 58.7 198.2 59.1 211.2 70.8 212.5 174.3 126.7 174.4 36.1 174.6Z"></path><g clip-path="url(#pa-n)"><path class="f-n2" d="M31.1 53.7 132.7 54.5 33 129.6Z"></path></g>
+<text class="tx-w" x="124" y="111" text-anchor="middle" font-size="23" font-weight="800">Your</text>
+<text class="tx-w" x="124" y="137" text-anchor="middle" font-size="23" font-weight="800">number</text>
+<path class="f-lb" d="M222 110 248 110.6 247.4 100 268 116.2 247.6 132 248 121.4 222 122Z"></path>
+<clipPath id="pa-d"><path d="M280.2 35.7 372.7 35.9 457.7 34.6 551 34.9 568.9 52.8 569.2 133 569 211.7 471.5 211.9 382.2 212.2 280.1 212.9 280.4 125.2Z"></path></clipPath><path class="f-n" d="M280.2 35.7 372.7 35.9 457.7 34.6 551 34.9 568.9 52.8 569.2 133 569 211.7 471.5 211.9 382.2 212.2 280.1 212.9 280.4 125.2Z"></path><g clip-path="url(#pa-d)"><path class="f-n2" d="M276.5 31.8 361.1 32.4 439.7 31.6 358.4 86.5 275.9 144.5Z"></path></g>
+<text class="tx-w" x="425" y="104" text-anchor="middle" font-size="34" font-weight="800">AI front</text>
+<text class="tx-w" x="425" y="142" text-anchor="middle" font-size="34" font-weight="800">desk</text>
+<path class="f-lb" d="M352.3 174.3 359.8 173 360.5 186.4 351.5 187.2Z"></path><path class="f-lb" d="M367.3 168.2 375.1 167.2 375 191.7 366.7 193.2Z"></path><path class="f-lb" d="M381.7 172.2 389.8 170.6 389.6 187.8 382.3 189.4Z"></path><path class="f-lb" d="M397.2 164.9 405.5 162.7 405.4 195.6 396.7 196.6Z"></path><path class="f-lb" d="M411.6 170.7 420.5 169 420.1 189.8 412.4 190.6Z"></path><path class="f-lb" d="M426.7 166 435.4 164.5 434.9 194.1 427.5 195.4Z"></path><path class="f-lb" d="M441.9 173.7 450.3 171.7 450.5 187 442.1 188.5Z"></path><path class="f-lb" d="M456.9 169 465.2 168 464.6 191.3 457.4 192.3Z"></path><path class="f-lb" d="M472 175.3 479.9 174.1 480.5 185.5 471.8 186Z"></path>
+<path class="f-lb" d="M415.5 222 427.2 222.5 427 244 437.6 243.6 421.4 262 405.4 243.8 415.8 244Z"></path>
+<g class="lay-slip"><g class="slip" transform="rotate(-3 314 324)">
+<path class="f-w" d="M149.5 271.8 252 271.5 351 272.2 463.8 271.9 475.4 284.3 476.9 375.6 398.4 376 318.3 375 225.1 375.2 149.1 375.8Z"></path>
+<path class="f-g" d="M202.2 299.4 214.5 303 222.5 311.1 226.8 324 222.2 336.8 213.9 343.9 201.6 347.9 190.1 345.4 180.9 335.8 178.6 323.4 181.6 311.7 190.3 303.7Z"></path>
+<path class="f-w" d="M188.4 325.4 194.1 319.7 199.4 325.4 210.8 314 216.5 319.7 199.4 336.9Z"></path>
+<text class="tx-n" x="240" y="318" font-size="28" font-weight="800">Visit booked</text>
+<text class="tx-n2" x="240" y="348" font-size="20" font-weight="560">Fri 8:00 AM</text>
+</g></g>
+<path class="f-n" d="M36.3 189.5 144.1 189.5 151.3 198.4 151.7 230.1 35.6 230.3Z"></path>
+<text class="tx-w" x="94" y="216" text-anchor="middle" font-size="17" font-weight="700">Example</text>
+</svg>
+      </figure>
+    </article>
+
+    <div class="duo">
+      <article class="pillar pillar-web" id="websites">
+        <figure class="plate plate-web" aria-hidden="true">
+          <svg class="illo" viewBox="0 0 640 400" focusable="false">
+<clipPath id="pb-g"><path d="M-0.2 -0.2 83.3 -0.6 177.2 -0.7 257.9 0.9 347.4 -0.1 444 -1.6 527.2 -1.1 615.3 -0.4 639.9 25.3 640.3 119.6 640.1 206.4 639.8 310.5 641.2 399.5 547.4 399.5 462.6 400.4 368 400.6 272.7 400.5 184.7 399.3 90.2 400 -0.2 400.9 0.8 303.6 0.6 193.6 -1.3 97.8Z"></path></clipPath><path class="f-b" d="M-0.2 -0.2 83.3 -0.6 177.2 -0.7 257.9 0.9 347.4 -0.1 444 -1.6 527.2 -1.1 615.3 -0.4 639.9 25.3 640.3 119.6 640.1 206.4 639.8 310.5 641.2 399.5 547.4 399.5 462.6 400.4 368 400.6 272.7 400.5 184.7 399.3 90.2 400 -0.2 400.9 0.8 303.6 0.6 193.6 -1.3 97.8Z"></path><g clip-path="url(#pb-g)"><path class="f-bd" d="M217.8 403.5 288.4 360.9 361.9 314.1 425.7 275.4 498 232.3 568.7 189.3 643.5 143.4 643.4 226.7 643.2 321.6 643.7 404.8 554.8 405.5 471.1 404.4 394.9 405.1 301.3 403.8Z"></path><path class="f-bs" d="M460 403.1 552.8 342 644.3 279.6 643.6 403.4 547 404.3Z"></path></g>
+<path class="f-bs" d="M70.7 29.7 159.7 34.4 247.6 36 338.3 40.6 427.7 43.3 528.8 47.6 612.3 51.4 610.2 129.7 607.7 212 603.5 298.5 601.8 383.1 505.5 379.3 414.8 378 335.7 375.3 244.8 373.1 150.6 370.5 60.6 367 62 287.1 65.6 193.9 69 109.9Z"></path>
+<clipPath id="pb-w"><path d="M44.3 39.4 127.6 38.7 217.5 39.3 305.9 39.4 395.7 39.4 492.5 39.6 577.3 39.3 595.7 59 596.5 163.2 595.9 261.2 595.9 358.4 511.3 359 410.2 357.9 325.1 358.1 223.7 358.1 139.5 357.9 44.6 356.8 44.1 280.1 44.1 202.8 43.7 120.3Z"></path></clipPath>
+<path class="f-n" d="M44.3 39.4 127.6 38.7 217.5 39.3 305.9 39.4 395.7 39.4 492.5 39.6 577.3 39.3 595.7 59 596.5 163.2 595.9 261.2 595.9 358.4 511.3 359 410.2 357.9 325.1 358.1 223.7 358.1 139.5 357.9 44.6 356.8 44.1 280.1 44.1 202.8 43.7 120.3Z"></path>
+<g clip-path="url(#pb-w)"><path class="f-n2" d="M39.3 35.3 137.7 34.6 229.4 35 313.6 36.3 418.3 35.5 510.3 34.9 600.2 35.7 599.7 97.5 507.1 97.5 405.9 98.4 314.7 98.6 231.2 97.9 138.4 98.2 40 98.7Z"></path></g>
+<path class="f-lb" d="M67.9 60.4 81.4 60.6 82.4 74.7 67.7 74.5Z"></path>
+<path class="f-b" d="M89.9 61.2 104.3 61.3 103.7 74.7 89.9 74.5Z"></path>
+<path class="f-bd" d="M111.7 60.6 125.8 60.7 125.9 74.8 111.8 74.8Z"></path>
+<path class="f-w" d="M149.8 54.6 255.8 54.5 352.1 53.9 443.2 53.7 549.8 53.5 550 83.5 447.2 83.8 342.9 83.4 249.6 84 149.7 84Z"></path>
+<path class="f-b" d="M176.2 59.6 180.6 60.6 183.4 62.8 184.9 67.9 183.5 72.1 180 75 176 76.4 171.9 75.4 167.7 72.3 166.9 68.8 168.9 64.3 172.1 61Z M176 63.2 178.6 62.6 181.1 65.5 182.1 68.4 181.1 71.2 178.2 71.7 176.6 73.8 174 71.7 171.8 70.8 171.1 67.2 171.7 65 173.7 64.4Z" fill-rule="evenodd"></path>
+<path class="f-b" d="M181.6 72.4 185 69.4 192.4 77.4 189 80.4Z"></path>
+<text class="tx-n" x="202" y="75" font-size="16" font-weight="700">Harbor &amp; Lane Law</text>
+<text class="tx-w" x="84" y="168" font-size="36" font-weight="800">Property, family</text>
+<text class="tx-w" x="84" y="208" font-size="36" font-weight="800">and business law</text>
+<text class="tx-lb" x="84" y="246" font-size="18" font-weight="600">Straight answers from lawyers close to home.</text>
+<path class="f-w" d="M84.6 280.6 162.1 279.9 231.9 279.5 239.5 287.9 240.6 323.9 158.1 323.6 84.7 323.8Z"></path>
+<text class="tx-n" x="162" y="308" text-anchor="middle" font-size="18" font-weight="800">Book online</text>
+<path class="f-b" d="M254.3 280.5 372.4 279.3 379.9 287.8 379.3 324.7 254.5 324.3Z"></path>
+<text class="tx-w" x="317" y="308" text-anchor="middle" font-size="18" font-weight="800">Call now</text>
+<text class="tx-lb" x="560" y="336" text-anchor="end" font-size="16" font-weight="700">Example</text>
+</svg>
+        </figure>
+        <div class="copy">
+          <h3 class="title">Get found and chosen with a new website</h3>
+          <p class="text">
+            A fast website that works on a phone, with call and booking buttons where customers look for
+            them. Designed and built by {BUILDER}.
+          </p>
+          <p class="meta"><a class="meta-link link-draw" href="/free-audit/">Scoped in your free audit</a></p>
+        </div>
+      </article>
+
+      <article class="pillar pillar-auto" id="automation">
+        <div class="copy">
+          <h3 class="title">Stop the busywork with AI automation</h3>
+          <p class="text">
+            We find the work your team still does by hand, like matching purchase orders to invoices,
+            and automate it. A person still checks the exceptions.
+          </p>
+          <p class="meta"><a class="meta-link link-draw" href={SITE.CALENDLY_URL} target="_blank" rel="noopener">Starts with a free 30-minute call</a></p>
+        </div>
+        <figure class="plate plate-auto" aria-hidden="true">
+          <svg class="illo" viewBox="0 0 440 480" focusable="false">
+<clipPath id="pc-g"><path d="M0.6 1.1 82.2 1.2 169.6 -0.2 255.6 -1.7 339.6 -0.2 420.8 -1.4 439.7 19.5 440.1 117 438.4 209.9 438.2 300.7 438.4 395.8 438.6 481.4 349.2 482.5 268.2 481.9 173.2 481.5 91.6 480.2 1 480.5 2.3 382.3 1.8 283.9 0.3 187 0.3 98.8Z"></path></clipPath><path class="f-b" d="M0.6 1.1 82.2 1.2 169.6 -0.2 255.6 -1.7 339.6 -0.2 420.8 -1.4 439.7 19.5 440.1 117 438.4 209.9 438.2 300.7 438.4 395.8 438.6 481.4 349.2 482.5 268.2 481.9 173.2 481.5 91.6 480.2 1 480.5 2.3 382.3 1.8 283.9 0.3 187 0.3 98.8Z"></path><g clip-path="url(#pc-g)"><path class="f-bd" d="M149.4 484.6 203.7 427.4 270.3 358 323.2 299.4 382.3 238.9 443.5 173.5 444.2 277.4 444.4 376.5 444.1 483.9 343.4 483.9 249.6 484.3Z"></path><path class="f-bs" d="M316.9 484.5 378.3 412.7 444.2 335 443.1 413.3 443.9 484.6Z"></path></g>
+<g transform="rotate(-4 133 175)">
+<clipPath id="pc-a"><path d="M29.8 44.6 113.6 44.1 203.5 44.8 236.1 75.9 235.4 149.1 235.6 229.7 234.9 306.1 136.7 306.8 30.6 306.8 30.5 217.2 30.1 133.8Z"></path></clipPath>
+<path class="f-n" d="M29.8 44.6 113.6 44.1 203.5 44.8 236.1 75.9 235.4 149.1 235.6 229.7 234.9 306.1 136.7 306.8 30.6 306.8 30.5 217.2 30.1 133.8Z"></path>
+<g clip-path="url(#pc-a)"><path class="f-n2" d="M26 41 132.1 40.5 80.8 103.8 25.4 175.2Z"></path></g>
+<path class="f-lb" d="M203.6 44 236.2 76.3 205.9 73.8Z"></path>
+<text class="tx-w" x="52" y="94" font-size="24" font-weight="800">PO 1042</text>
+<text class="tx-lb" x="52" y="148" font-size="16" font-weight="600">Copper pipe, 22 mm</text>
+<text class="tx-w" x="52" y="174" font-size="18" font-weight="700">Qty 40</text>
+<text class="tx-lb" x="52" y="218" font-size="16" font-weight="600">Ship to</text>
+<text class="tx-w" x="52" y="244" font-size="18" font-weight="700">412 Oak Street</text>
+</g>
+<g class="lay-sheet"><g transform="rotate(3 311 251)">
+<clipPath id="pc-b"><path d="M209 121 295.5 119.9 381.5 119.3 414.7 152.8 413.8 224.5 413.8 301.1 414.2 383 304.2 381.5 208.6 381.3 209.4 297.3 208.3 200.9Z"></path></clipPath>
+<path class="f-n" d="M209 121 295.5 119.9 381.5 119.3 414.7 152.8 413.8 224.5 413.8 301.1 414.2 383 304.2 381.5 208.6 381.3 209.4 297.3 208.3 200.9Z"></path>
+<g clip-path="url(#pc-b)"><path class="f-n2" d="M204.7 116 311.3 116.1 254.5 188.1 204.7 251Z"></path></g>
+<path class="f-lb" d="M381.7 120.2 414 151.6 384.3 150.1Z"></path>
+<text class="tx-w" x="230" y="170" font-size="24" font-weight="800">Invoice 1042</text>
+<text class="tx-lb" x="230" y="224" font-size="16" font-weight="600">Copper pipe, 22 mm</text>
+<text class="tx-w" x="230" y="250" font-size="18" font-weight="700">Qty 40</text>
+<text class="tx-lb" x="230" y="294" font-size="16" font-weight="600">Ship to</text>
+<text class="tx-w" x="230" y="320" font-size="18" font-weight="700">412 Oak Street</text>
+</g></g>
+<g class="lay-stamp"><g transform="rotate(-5 222 420)">
+<path class="f-g" d="M120.4 394.6 217.1 394.1 313.2 394.5 324.6 403.7 323.9 447.4 219.4 447.6 120.8 447.7Z"></path>
+<path class="f-w" d="M139.6 422.4 144.8 417.2 149.6 422.4 160 412 165.2 417.2 149.6 432.8Z"></path>
+<text class="tx-w" x="176" y="430" font-size="25" font-weight="800">Matched</text>
+</g></g>
+<text class="tx-w" x="30" y="460" font-size="16" font-weight="700">Example</text>
+</svg>
+        </figure>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pillars {
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+  .head {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  }
+  .head .h2 {
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    max-width: 18ch;
+  }
+  @media (min-width: 60rem) {
+    .head {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+      gap: 2rem clamp(2rem, 1rem + 4vw, 5rem);
+    }
+    .head .lead {
+      max-width: 38ch;
+      padding-bottom: 0.4rem;
+    }
+  }
+  .pillar {
+    display: grid;
+    gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+    align-content: start;
+  }
+  .copy {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+  /* the middle tier: between the 70px section heading and 18px body */
+  .title {
+    font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.06;
+    color: var(--navy);
+    max-width: 16ch;
+  }
+  .title-lead {
+    max-width: 15ch;
+  }
+  .text {
+    color: var(--ink-2);
+    max-width: 46ch;
+  }
+  .ticks {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    gap: 0.6rem 1.75rem;
+    font-weight: 650;
+    font-size: var(--step-sm);
+  }
+  .ticks li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .ticks li::before {
+    content: '';
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6L12 5.6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 100% no-repeat,
+      var(--blue);
+  }
+  @media (max-width: 30rem) {
+    .ticks {
+      grid-template-columns: 1fr;
+    }
+  }
+  .price {
+    font-size: var(--step-2);
+    font-weight: 820;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--navy);
+    margin-top: 0.5rem;
+  }
+  .meta {
+    margin-top: 0.25rem;
+    font-size: var(--step-sm);
+    font-weight: 700;
+  }
+  .meta-link {
+    color: var(--blue-deep);
+  }
+  .meta-link:hover {
+    color: var(--navy);
+  }
+
+  .plate {
+    margin: 0;
+    position: relative;
+  }
+  .pillar-desk {
+    margin-bottom: clamp(2rem, 1.25rem + 3vw, 4rem);
+  }
+  .duo {
+    display: grid;
+    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+  }
+  /* on a phone the tall automation plate stays narrower than the wide one */
+  .plate-desk,
+  .plate-web {
+    width: min(100%, 24rem);
+  }
+  .plate-auto {
+    width: min(100%, 15rem);
+  }
+  @media (min-width: 60rem) {
+    .pillar-desk {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: center;
+      gap: clamp(2.5rem, 1rem + 3vw, 4.5rem);
+    }
+    .plate-desk {
+      width: min(100%, 32rem);
+      justify-self: end;
+    }
+    /* unequal on purpose: the website plate is wide and leads; the automation plate is tall,
+       narrower and set lower, with its copy above it */
+    .duo {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(1.5rem, 0.5rem + 2vw, 3rem);
+      align-items: start;
+    }
+    /* the wide website plate leads with its copy beside it */
+    .pillar-web {
+      grid-column: 1 / span 8;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 15.5rem);
+      align-items: center;
+    }
+    .pillar-auto {
+      grid-column: 9 / span 4;
+      margin-top: clamp(1rem, 0.25rem + 1.5vw, 1.75rem);
+    }
+    .plate-web {
+      width: 100%;
+    }
+    .plate-auto {
+      width: 75%;
+    }
+  }
+</style>

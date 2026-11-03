@@ -1,0 +1,12 @@
+dist
+.astro
+legacy
+explore
+design
+.impeccable
+node_modules
+pnpm-lock.yaml
+src/content
+public
+*.md
+site.config.json

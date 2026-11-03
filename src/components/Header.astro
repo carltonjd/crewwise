@@ -1,0 +1,885 @@
+---
+import { SITE } from '../config/site';
+interface Props {
+  current?: 'home' | 'pricing' | 'free-audit' | 'other';
+  /**
+   * 'blue' is the home masthead: an oversized wordmark with a hairline rule over the blue hero that shrinks into
+   * the compact brand-blue bar on scroll. 'light' is the same bar, already compact, on the inner pages.
+   * The compact bar hides while scrolling down and slides back on scroll up.
+   */
+  tone?: 'light' | 'blue';
+}
+const { current = 'other', tone = 'light' } = Astro.props;
+const onHome = current === 'home';
+const links = [
+  { href: onHome ? '#ai-front-desk' : '/#ai-front-desk', label: 'AI front desk' },
+  { href: onHome ? '#websites' : '/#websites', label: 'Websites' },
+  { href: onHome ? '#automation' : '/#automation', label: 'AI automation' },
+  { href: '/pricing/', label: 'Pricing', key: 'pricing' },
+];
+const showCta = current !== 'free-audit';
+---
+
+<header class="mast" id="mast" data-header data-tone={tone}>
+  <div class="mast-bg" aria-hidden="true"><i class="ed"></i><i class="pp"></i></div>
+  <div class="page mast-pad">
+    <div class="mast-in">
+      {tone === 'blue' && <span class="rule" aria-hidden="true"></span>}
+      <a href="/" class="logo" aria-label="Crewwise home">
+        <img class="l-white" src="/brand/crewwise-logo-on-blue.svg" alt="" width="156" height="36" />
+      </a>
+      <div class="side">
+        <nav aria-label="Main" class="mainnav">
+          <span class="tab" aria-hidden="true"></span>
+          <ul class="links">
+            {
+              links.map((l) => (
+                <li>
+                  <a href={l.href} aria-current={l.key && current === l.key ? 'page' : undefined}>
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        {
+          showCta && (
+            <a href="/free-audit/" class="cta">
+              Get my free audit
+            </a>
+          )
+        }
+        {
+          showCta && (
+            <a href="/free-audit/" class="cta cta-m">
+              <span class="t-full">Get my free audit</span>
+              <span class="t-short">Free audit</span>
+            </a>
+          )
+        }
+        <button
+          class="menu"
+          id="mbtn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="sheet"
+          aria-label="Open menu"
+        >
+          <span class="bars" aria-hidden="true"><i></i><i></i></span><span class="lbl">Menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+{tone === 'light' && <div class="mast-spacer" aria-hidden="true"></div>}
+<div class="panel" id="sheet" inert>
+  <span class="p-plane" aria-hidden="true"></span>
+  <nav aria-label="Main mobile">
+    <ul class="p-links">
+      {
+        links.map((l, i) => (
+          <li class="p-item" style={`--i:${i}`}>
+            <a href={l.href} aria-current={l.key && current === l.key ? 'page' : undefined}>
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  {
+    showCta && (
+      <a class="cta p-item" style={`--i:${links.length}`} href="/free-audit/">
+        Get my free audit
+      </a>
+    )
+  }
+  <div class="p-foot p-item" style={`--i:${links.length + 1}`}>
+    <a class="p-mail" href={`mailto:${SITE.CONTACT_EMAIL}`}>{SITE.CONTACT_EMAIL}</a>
+    <a class="p-book" href={SITE.CALENDLY_URL} target="_blank" rel="noopener">Book a free 30-minute call</a>
+  </div>
+</div>
+
+<style is:global>
+  :root {
+    scroll-padding-top: calc(var(--bar) + 1rem);
+    --bar: 72px;
+    /* the home masthead reserves this much above the hero's content: bar, oversized wordmark and its rule */
+    --mast-h: 168px;
+    --mast-k: 2;
+    --mast-ty: 20px;
+    --mast-sy: 38px;
+    --mast-rule: calc(var(--bar) + 66px);
+  }
+  @media (max-width: 62.5rem) {
+    :root {
+      --bar: 64px;
+      --mast-h: 132px;
+      --mast-k: 1.7;
+      --mast-ty: 13px;
+      --mast-sy: 20px;
+      --mast-rule: calc(var(--bar) + 40px);
+    }
+  }
+  @media (max-width: 25rem) {
+    :root {
+      --mast-k: 1.4;
+      --mast-sy: 17px;
+    }
+  }
+  @media (min-width: 62.5625rem) and (max-width: 73.75rem) {
+    :root {
+      --mast-k: 1.8;
+      --mast-sy: 34px;
+    }
+  }
+</style>
+
+<style>
+  /* the compact bar is always brand blue: white wordmark tile, white links, orange action. It slides away on scroll
+     down and back on scroll up (data-hidden, set by the script). */
+  .mast {
+    --ink: var(--white);
+    --ring: var(--white);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--bar);
+    pointer-events: none;
+    transition: transform 280ms var(--ease-out);
+  }
+  .mast[data-hidden] {
+    transform: translateY(calc(-100% - 16px));
+    transition-duration: 220ms;
+  }
+  .mast-spacer {
+    height: var(--bar);
+    background: var(--blue);
+  }
+  .mast[data-tone='light'] {
+    --p: 1;
+    --b: 1;
+  }
+  /* a cut blue-deep paper edge under the blue bar: one deliberate angle change (a single peak at 60%), like the
+     floor edge in the hero, with a constant 6px band of blue-deep showing; the soft shadow follows the cut so the bar
+     still separates from blue and navy grounds */
+  .mast-bg {
+    position: absolute;
+    inset: 0;
+    filter: drop-shadow(0 3px 5px rgb(15 27 51 / 0.28));
+    transform: translateY(calc((-100% - 40px) * (1 - var(--b, 0))));
+  }
+  .mast-bg i {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: block;
+  }
+  .mast-bg .ed {
+    height: calc(var(--bar) + 12px);
+    background: var(--blue-deep);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), 83% calc(100% - 3px), 60% 100%, 27% calc(100% - 10px), 0 calc(100% - 16px));
+  }
+  .mast-bg .pp {
+    height: calc(var(--bar) + 6px);
+    background: var(--blue);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), 83% calc(100% - 3px), 60% 100%, 27% calc(100% - 10px), 0 calc(100% - 16px));
+  }
+  .mast[data-open] .mast-bg {
+    visibility: hidden;
+    animation: none !important;
+  }
+  .mast-pad {
+    height: 100%;
+  }
+  .mast-in {
+    position: relative;
+    height: 100%;
+  }
+  /* the link is 44px tall (36px wordmark with 4px above and below), scaled about the wordmark's own top-left */
+  .logo {
+    position: absolute;
+    left: 0;
+    top: calc((var(--bar) - 36px) / 2 - 4px);
+    display: block;
+    padding-block: 4px;
+    pointer-events: auto;
+    transform-origin: 0 4px;
+    border-radius: 6px;
+    transform: translateY(calc(var(--mast-ty) * (1 - var(--p, 0))))
+      scale(calc(1 + (var(--mast-k) - 1) * (1 - var(--p, 0))));
+  }
+  .logo img {
+    height: 36px;
+    width: auto;
+  }
+  /* a 44px-tall hit area around the wordmark */
+  .logo::before {
+    content: '';
+    position: absolute;
+    inset: 0 -6px;
+  }
+  .l-white {
+    display: block;
+  }
+  .side {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: var(--bar);
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2vw, 28px);
+    pointer-events: auto;
+    transform: translateY(calc(var(--mast-sy) * (1 - var(--p, 0))));
+    color: var(--ink);
+  }
+  .links {
+    display: flex;
+    gap: clamp(4px, 0.8vw, 12px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .links a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 clamp(6px, 0.9vw, 12px);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--ink);
+  }
+  .links a::after {
+    content: '';
+    position: absolute;
+    left: clamp(6px, 0.9vw, 12px);
+    right: clamp(6px, 0.9vw, 12px);
+    bottom: 8px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 360ms var(--ease-out);
+  }
+  .links a:hover::after,
+  .links a:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
+  }
+  .links a[aria-current]::after {
+    display: none;
+  }
+  /* the current section or page: one white cut-paper tab hanging under the links. The script moves it with a
+     transform (x and width as scale) so it slides from link to link instead of jumping. */
+  .mainnav {
+    position: relative;
+  }
+  .tab {
+    --tx: 0px;
+    --tw: 1;
+    position: absolute;
+    left: 0;
+    bottom: -9px;
+    width: 100px;
+    height: 6px;
+    background: var(--white);
+    clip-path: polygon(0 0, 100% 0, 97% 100%, 64% 72%, 32% 100%, 2% 78%);
+    transform-origin: 0 0;
+    transform: translateX(var(--tx)) scaleX(var(--tw));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tab[data-on] {
+    opacity: 1;
+  }
+  .tab[data-ready] {
+    transition:
+      transform 480ms var(--ease-out),
+      opacity 250ms var(--ease-out);
+  }
+  .mast[data-tone='blue']:not([data-solid]) .tab {
+    opacity: 0 !important;
+  }
+  .cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 160ms var(--ease-out);
+  }
+  .cta:hover {
+    background: var(--orange-press);
+    transform: translateY(-1px);
+  }
+  /* pressed: a touch smaller and a deeper fill than hover */
+  .cta:active {
+    transform: scale(0.98);
+    background: var(--orange-deep);
+  }
+  /* the wordmark's hairline: wipes away as the page scrolls */
+  .rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--mast-rule);
+    height: 1px;
+    background: rgb(255 255 255 / 0.4);
+    transform-origin: 0 0;
+    transform: scaleX(max(0, calc(1 - var(--pr, 0) * 2.2)));
+    opacity: var(--rv, 1);
+    pointer-events: none;
+  }
+  .mast[data-open] .rule {
+    opacity: 0 !important;
+    animation: none !important;
+  }
+  .mast a:focus-visible,
+  .mast button:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+  }
+  .cta-m {
+    display: none;
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 0.875rem;
+  }
+  .t-short {
+    display: none;
+  }
+  .menu {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 16px 0 14px;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  .bars {
+    position: relative;
+    width: 18px;
+    height: 10px;
+  }
+  .bars i {
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 450ms var(--ease-out);
+  }
+  .bars i:nth-child(1) {
+    top: 0;
+  }
+  .bars i:nth-child(2) {
+    top: 8px;
+  }
+  .menu[aria-expanded='true'] .bars i:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .menu[aria-expanded='true'] .bars i:nth-child(2) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  /* scroll-linked: the native timeline where supported, --p and --b from the script otherwise */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .mast[data-tone='blue'] .logo {
+        animation-name: mast-shrink;
+        animation-duration: 1ms;
+        animation-timing-function: ease;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 240px;
+        transform: none;
+      }
+      .mast[data-tone='blue'] .side {
+        animation-name: mast-sidein;
+        animation-duration: 1ms;
+        animation-timing-function: ease;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 240px;
+        transform: none;
+      }
+      .mast[data-tone='blue'] .mast-bg {
+        animation-name: mast-barin;
+        animation-duration: 1ms;
+        animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 40px 150px;
+      }
+      .mast[data-tone='blue'] .rule {
+        animation-name: mast-wipe;
+        animation-duration: 1ms;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 110px;
+        transform: none;
+      }
+    }
+  }
+  @keyframes mast-shrink {
+    from {
+      transform: translateY(var(--mast-ty)) scale(var(--mast-k));
+      animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes mast-sidein {
+    from {
+      transform: translateY(var(--mast-sy));
+      animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes mast-barin {
+    from {
+      transform: translateY(calc(-100% - 40px));
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes mast-wipe {
+    from {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    to {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+  }
+
+  /* the full-screen index menu */
+  .panel {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    display: none;
+    overflow: auto;
+    padding: var(--mast-h) var(--gutter) 28px;
+    background: var(--navy);
+    color: var(--white);
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 350ms var(--ease-out),
+      visibility 0s 350ms;
+  }
+  .panel :focus-visible {
+    outline: 3px solid var(--white);
+    outline-offset: -3px;
+  }
+  :global(body:has(.mast[data-open])) .panel {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  .p-plane {
+    position: absolute;
+    left: calc(var(--gutter) * 0.5);
+    right: calc(var(--gutter) * 0.5);
+    top: calc(var(--mast-h) - 14px);
+    height: 336px;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--navy-2);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 78% calc(100% - 3px), 52% 100%, 21% calc(100% - 12px), 0 calc(100% - 18px));
+  }
+  .p-plane::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(255 255 255 / 0.05);
+    clip-path: polygon(0 0, 46% 0, 12% 100%, 0 100%);
+  }
+  .p-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  }
+  .p-links li {
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+  }
+  .p-links a {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 76px;
+    padding: 14px 2px;
+    text-decoration: none;
+    color: var(--white);
+    font-size: clamp(2rem, 9vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .p-links a::after {
+    content: '';
+    margin-left: auto;
+    width: 12px;
+    height: 12px;
+    border-right: 3px solid var(--light-blue);
+    border-top: 3px solid var(--light-blue);
+    transform: rotate(45deg) translateX(-6px);
+    opacity: 0;
+    transition:
+      transform 400ms var(--ease-out),
+      opacity 250ms var(--ease-out);
+  }
+  .p-links a:hover::after,
+  .p-links a:focus-visible::after,
+  .p-links a[aria-current='page']::after {
+    opacity: 1;
+    transform: rotate(45deg);
+  }
+  .p-foot {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 3rem;
+    padding-top: 0;
+  }
+  .p-foot a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--white);
+    font-weight: 700;
+    text-underline-offset: 0.3em;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--rule-navy-strong);
+  }
+  .p-mail {
+    font-size: clamp(1.125rem, 5vw, 1.375rem);
+    letter-spacing: -0.02em;
+  }
+  .p-book {
+    font-size: 1.0625rem;
+    color: var(--on-navy-2) !important;
+  }
+  .p-foot a:hover {
+    text-decoration-color: var(--light-blue);
+  }
+  .panel .cta {
+    display: flex;
+    justify-content: center;
+    min-height: 58px;
+    margin-top: 26px;
+    font-size: 1.0625rem;
+  }
+  .p-item {
+    opacity: 0.6;
+    transform: translateY(18px);
+  }
+  :global(body:has(.mast[data-open])) .p-item {
+    opacity: 1;
+    transform: none;
+    transition:
+      transform 700ms var(--ease-out),
+      opacity 400ms var(--ease-out);
+    transition-delay: calc(var(--i) * 55ms + 80ms);
+  }
+
+  @media (max-width: 62.5rem) {
+    .logo {
+      display: flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+      top: calc((var(--bar) - 2.75rem) / 2);
+    }
+    .logo::before {
+      inset: 0 -6px;
+    }
+    .logo img {
+      height: 30px;
+    }
+    .links,
+    .side .cta:not(.cta-m) {
+      display: none;
+    }
+    .mast[data-solid] .cta-m,
+    .mast[data-tone='light'] .cta-m {
+      display: inline-flex;
+    }
+    .mast[data-open] .cta-m {
+      display: none;
+    }
+    .side {
+      gap: 10px;
+    }
+    .menu {
+      display: inline-flex;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  @media (max-width: 40rem) {
+    .t-full {
+      display: none;
+    }
+    .t-short {
+      display: inline;
+    }
+  }
+  @media (max-width: 25rem) {
+    .menu {
+      padding: 0 12px 0 11px;
+      gap: 8px;
+    }
+  }
+  /* at 360 the compact bar (tile, pill, Menu) has to fit between the gutters without touching */
+  @media (max-width: 23.75rem) {
+    .logo img {
+      height: 27px;
+    }
+    .cta-m {
+      padding: 0 12px;
+      font-size: 0.84375rem;
+    }
+    .menu {
+      padding: 0 10px;
+      gap: 6px;
+      font-size: 0.875rem;
+    }
+    .side {
+      gap: 8px;
+    }
+  }
+  @media (min-width: 62.5625rem) and (max-width: 73.75rem) {
+    .links a {
+      font-size: 0.875rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo,
+    .side,
+    .mast-bg,
+    .rule {
+      animation: none !important;
+    }
+    .mast {
+      transition: none !important;
+      transform: none !important;
+    }
+    .tab {
+      transition: none !important;
+    }
+    .panel,
+    .p-item,
+    .bars i,
+    .links a::after,
+    .cta,
+    .p-links a::after {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  let ctrl: AbortController | undefined;
+
+  function initHeader() {
+    // each page turn swaps in a new header, so the previous page's listeners go with the old one
+    ctrl?.abort();
+    document.documentElement.style.overflow = '';
+    const root = document.querySelector<HTMLElement>('[data-header]');
+    const btn = document.getElementById('mbtn') as HTMLButtonElement | null;
+    const panel = document.getElementById('sheet') as HTMLElement | null;
+    if (!root || !btn || !panel) return;
+    ctrl = new AbortController();
+    const { signal } = ctrl;
+    const reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
+    const bg = root.querySelector<HTMLElement>('.mast-bg');
+    const isBlue = root.dataset.tone === 'blue';
+    const RANGE = 240;
+    const NEAR = 240; // the bar never hides this close to the top (the masthead zone)
+    const STEP = 8; // scroll distance that counts as a direction change, so jitter does not flicker the bar
+    const spyIds = ['ai-front-desk', 'websites', 'automation'];
+    const spyLinks = new Map(
+      spyIds.map((id) => [id, root.querySelector<HTMLAnchorElement>('.links a[href="#' + id + '"]')]),
+    );
+    const nav = root.querySelector<HTMLElement>('.mainnav');
+    const tab = root.querySelector<HTMLElement>('.tab');
+    let tabPlaced = false;
+    // park the tab under the current link (section or page); its transform transition does the sliding
+    const placeTab = () => {
+      if (!nav || !tab) return;
+      const a = nav.querySelector<HTMLElement>('.links a[aria-current]');
+      if (!a || !a.offsetWidth) {
+        tab.removeAttribute('data-on');
+        return;
+      }
+      const pad = parseFloat(getComputedStyle(a).paddingLeft) || 0;
+      tab.style.setProperty('--tx', a.offsetLeft + pad + 'px');
+      tab.style.setProperty('--tw', String((a.offsetWidth - pad * 2) / 100));
+      tab.setAttribute('data-on', '');
+      if (!tabPlaced) {
+        tabPlaced = true;
+        requestAnimationFrame(() => requestAnimationFrame(() => tab.setAttribute('data-ready', '')));
+      }
+    };
+    let open = false;
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const show = () => root.removeAttribute('data-hidden');
+
+    // scroll state, one rAF-throttled passive listener: colour switch, native-timeline fallback, scroll-spy,
+    // and hide on the way down / show on the way up
+    const frame = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const reduce = reduceMq.matches;
+      if (isBlue) {
+        const native = CSS.supports('animation-timeline: scroll()') && !reduce;
+        root.toggleAttribute('data-solid', y > 150);
+        if (!native) {
+          const raw = Math.min(y / RANGE, 1);
+          const snap = y > 110 ? 1 : 0;
+          root.style.setProperty('--p', String(reduce ? snap : 1 - Math.pow(1 - raw, 4)));
+          bg?.style.setProperty('--b', String(reduce ? snap : Math.min(Math.max((y - 40) / 110, 0), 1)));
+          root.style.setProperty('--pr', String(reduce ? snap : Math.min(y / 110, 1)));
+        }
+        let cur: string | null = null;
+        for (const id of spyIds) {
+          const r = document.getElementById(id)?.getBoundingClientRect();
+          if (r && r.top <= 130 && r.bottom > 0) cur = id;
+        }
+        for (const [id, a] of spyLinks) {
+          if (!a) continue;
+          if (id === cur) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        }
+      }
+      placeTab();
+      // reduced motion: the bar simply stays put, the calmer choice
+      const hold = reduce || open || y < NEAR || root.matches(':focus-within:has(:focus-visible)');
+      if (hold) {
+        show();
+        lastY = y;
+        return;
+      }
+      const d = y - lastY;
+      if (Math.abs(d) < STEP) return;
+      if (d > 0) root.setAttribute('data-hidden', '');
+      else show();
+      lastY = y;
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(frame);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+    reduceMq.addEventListener('change', onScroll, { signal });
+    // keyboard focus inside the header always brings it back
+    root.addEventListener('focusin', show, { signal });
+    window.addEventListener('resize', placeTab, { passive: true, signal });
+    document.fonts?.ready.then(() => !signal.aborted && placeTab());
+    frame();
+
+    // the full-screen menu
+    const inertable = () => [
+      ...document.querySelectorAll<HTMLElement>('main, footer, .skip-link'),
+    ];
+    const focusables = () =>
+      [...root.querySelectorAll<HTMLElement>('a[href], button'), ...panel.querySelectorAll<HTMLElement>('a[href], button')].filter(
+        (el) => el.getClientRects().length > 0 && el.tabIndex >= 0,
+      );
+    const set = (v: boolean, returnFocus: boolean) => {
+      if (v === open) return;
+      open = v;
+      btn.setAttribute('aria-expanded', String(v));
+      btn.setAttribute('aria-label', v ? 'Close menu' : 'Open menu');
+      const lbl = btn.querySelector('.lbl');
+      if (lbl) lbl.textContent = v ? 'Close' : 'Menu';
+      root.toggleAttribute('data-open', v);
+      if (v) show();
+      panel.inert = !v;
+      inertable().forEach((el) => (el.inert = v));
+      document.documentElement.style.overflow = v ? 'hidden' : '';
+      if (v) {
+        requestAnimationFrame(() => panel.querySelector<HTMLElement>('a[href]')?.focus({ preventScroll: true }));
+      } else if (returnFocus) {
+        btn.focus({ preventScroll: true });
+      }
+    };
+    btn.addEventListener('click', () => set(!open, true), { signal });
+    panel.addEventListener(
+      'click',
+      (e) => {
+        if ((e.target as HTMLElement).closest('a[href]')) set(false, false);
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (!open) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          set(false, true);
+          return;
+        }
+        if (e.key === 'Tab') {
+          const f = focusables();
+          if (!f.length) return;
+          const first = f[0]!;
+          const last = f[f.length - 1]!;
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      },
+      { signal },
+    );
+    matchMedia('(max-width: 62.5rem)').addEventListener(
+      'change',
+      (e) => {
+        if (!e.matches) set(false, false);
+      },
+      { signal },
+    );
+  }
+  document.addEventListener('astro:page-load', initHeader);
+</script>

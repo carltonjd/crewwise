@@ -1,0 +1,1012 @@
+---
+/**
+ * One working day, scrubbed by scroll. The cut-paper town, sky, sun and moon are the section's
+ * full-bleed ground, pinned behind everything while the section scrolls past. Each moment is
+ * told once, on its own hand-cut slip that lands on the scene in turn: the call comes in, the
+ * lost outcome is struck through, the kept outcome lands with the AI front desk stamp. As the
+ * slips pass, the ground turns blue, blue-deep, then navy; the sun sets, windows light, the moon rises.
+ *
+ * Drivers: CSS scroll-driven animations (named view timelines shared through timeline-scope).
+ * Where those are missing, a rAF scrub feeds the same keyframes through negative delays.
+ * Default HTML (no JS, reduced motion, print) is the finished day: every lost and kept state shown.
+ * No keyframe takes text below 0.6 opacity, so every capture shows all of the content.
+ */
+interface Moment {
+  time: string;
+  who: string; // the inquiry
+  text: string; // the moment, in one sentence
+  lost: string; // what would have happened
+  kept: string; // what the AI front desk did instead
+  booked?: boolean; // green only when it ends in a booking
+}
+interface Props {
+  id?: string;
+  heading: string;
+  lead: string;
+  moments: Moment[];
+  closing: { heading: string; text: string };
+}
+const { id, heading, lead, moments, closing } = Astro.props;
+
+// a hand-cut paper disc: a polygon with a slightly uneven radius (seeded, so it is stable)
+const disc = (seed: number, n = 30) => {
+  let s = seed;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280) * 2 - 1;
+  const pts: string[] = [];
+  for (let k = 0; k < n; k++) {
+    const a = (k / n) * Math.PI * 2;
+    const r = 48 + rnd() * 1.6;
+    pts.push(`${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)}`);
+  }
+  return pts.join(' ');
+};
+const sunPts = disc(7);
+const moonPts = disc(23);
+
+// the town, three cut planes; edges deliberately a little off square
+const far =
+  '0,150 0,62 37,60 39,41 83,43 85,70 119,68 122,27 161,30 163,58 204,56 207,43 248,46 250,74 289,72 292,33 337,36 339,64 379,62 382,49 419,51 422,21 461,24 464,60 507,58 510,45 551,48 553,70 589,68 592,37 635,40 637,62 679,60 682,47 720,50 720,150';
+const mid =
+  '0,150 0,88 46,85 71,65 97,87 139,89 142,72 186,69 188,95 229,96 253,77 277,79 300,97 343,95 346,80 391,82 393,99 435,98 463,73 489,97 531,98 534,84 577,81 580,101 625,100 651,83 677,99 720,98 720,150';
+const near =
+  '0,150 0,106 31,104 62,83 96,105 127,107 130,96 176,94 178,110 213,108 246,87 251,88 251,79 262,80 262,93 281,107 323,109 326,99 371,97 374,113 417,112 452,91 487,111 529,113 532,101 577,99 580,115 619,114 650,95 685,113 720,112 720,150';
+// windows that light at night: towers on the far plane, houses on the near plane
+const winFar = [
+  [130, 40],
+  [146, 40],
+  [130, 54],
+  [430, 34],
+  [446, 34],
+  [446, 48],
+  [300, 46],
+];
+const winNear = [
+  [56, 112],
+  [146, 106],
+  [162, 106],
+  [268, 112],
+  [340, 108],
+  [446, 106],
+  [546, 110],
+  [642, 108],
+];
+---
+
+<section class="story band-blue" id={id} aria-labelledby="slip-title" data-story>
+  <div class="ground" aria-hidden="true">
+    <i class="g-deep" data-anim></i>
+    <i class="g-night" data-anim></i>
+  </div>
+
+  <div class="stage">
+    <!-- the scene: full bleed, pinned behind the content for the length of the section -->
+    <div class="scene" aria-hidden="true">
+      <div class="orb sun-a" data-anim>
+        <div class="sun-b" data-anim>
+          <svg class="body sun" viewBox="0 0 100 100">
+            <polygon points={sunPts}></polygon>
+          </svg>
+        </div>
+      </div>
+      <div class="orb moon-a" data-anim>
+        <div class="moon-b" data-anim>
+          <svg class="body moon" viewBox="0 0 100 100">
+            <polygon points={moonPts}></polygon>
+          </svg>
+        </div>
+      </div>
+      <div class="town">
+        <svg
+          class="plane p-far"
+          data-anim
+          viewBox="0 0 720 150"
+          preserveAspectRatio="xMidYMax slice"
+        >
+          <polygon points={far}></polygon>
+          <g class="lights l-a" data-anim>
+            {winFar.map(([x, y]) => (
+              <rect x={x} y={y} width="8" height="9" rx="1"></rect>
+            ))}
+          </g>
+        </svg>
+        <svg
+          class="plane p-mid"
+          data-anim
+          viewBox="0 0 720 150"
+          preserveAspectRatio="xMidYMax slice"
+        >
+          <polygon points={mid}></polygon>
+        </svg>
+        <svg
+          class="plane p-near"
+          data-anim
+          viewBox="0 0 720 150"
+          preserveAspectRatio="xMidYMax slice"
+        >
+          <polygon points={near}></polygon>
+          <g class="lights l-b" data-anim>
+            {winNear.map(([x, y]) => (
+              <rect x={x} y={y} width="9" height="10" rx="1"></rect>
+            ))}
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="page story-page">
+      <div class="copy">
+        <div class="story-head">
+          <h2 id="slip-title" class="display slip-title">
+            {heading}
+          </h2>
+          <p class="lead">{lead}</p>
+          <p class="ledger-cap">One working day. Example.</p>
+          <p class="clock" aria-hidden="true">
+            <span class="clk-win">
+              <span class="clk-a" data-anim>
+                <span class="clk-b" data-anim>
+                  {moments.map((m) => <span class="clk-t">{m.time}</span>)}
+                </span>
+              </span>
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="ledger">
+        <ol class="slips">
+          {moments.map((m, i) => (
+            <li class="slip-li" data-tl={`m${i + 1}`} data-row={i + 1}>
+              <div class="slip" data-anim>
+                <div class="paper">
+                  <p class="slip-top">
+                    <span class="time slip-time">{m.time}</span>
+                    <span class="who">{m.who}</span>
+                  </p>
+                  <p class="slip-text">{m.text}</p>
+                  <div class="slip-out">
+                    <del class="lost" data-anim>
+                      {m.lost}
+                      <i class="strike" data-anim aria-hidden="true" />
+                    </del>
+                    <ins class:list={['kept', { booked: m.booked }]} data-anim>
+                      <i class="mark" data-anim aria-hidden="true" />
+                      <strong>{m.kept}</strong>
+                    </ins>
+                    <span class="stamp" data-anim>
+                      AI front desk
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page close-wrap">
+    <div class="story-close">
+      <h3 class="close-title">{closing.heading}</h3>
+      <p class="lead">{closing.text}</p>
+      <a href="/free-audit/" class="btn btn-primary close-cta">
+        Get my free audit
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ================================================================
+     Static layout: this is the finished day (no JS, reduced motion)
+     ================================================================ */
+  .story {
+    --quart: cubic-bezier(0.25, 1, 0.5, 1);
+    /* the scene's geometry; the horizon is where the arms pivot, a little below the town's ridge */
+    --town-h: clamp(6.5rem, 4rem + 9vw, 14rem);
+    --horizon: calc(var(--town-h) * 0.55);
+    --sun: clamp(3.5rem, 2.4rem + 3vw, 6rem);
+    --moon: clamp(2.5rem, 1.8rem + 2vw, 4rem);
+    /* sun and moon live in a clear strip of sky at the right edge, never behind running text */
+    --sun-r: -0.9rem;
+    --sun-alt: 30svh;
+    --moon-r: 1.1rem;
+    --moon-alt: calc(var(--town-h) * 0.35 + 3rem);
+    /* how far the sun drops to set fully behind the town */
+    --set: calc(var(--sun-alt) + var(--sun) + var(--horizon) * 0.3);
+    /* room under the content for the town and the low night sky */
+    --base: calc(var(--town-h) + clamp(6rem, 4rem + 4vw, 10rem));
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    background: var(--blue);
+    color: var(--white);
+    timeline-scope: --m1, --m2, --m3;
+    view-timeline-name: --day;
+  }
+  @media (min-width: 60rem) {
+    .story {
+      --sun-r: clamp(1rem, (100vw - var(--page-max)) / 2 + 1.5rem, 12rem);
+      --sun-alt: 38svh;
+      --moon-r: clamp(3rem, (100vw - var(--page-max)) / 2 + 4rem, 16rem);
+      --moon-alt: calc(var(--town-h) * 0.3 + 4rem);
+    }
+  }
+
+  /* the ground: stacked flat layers over the whole section; only their opacity changes */
+  .ground {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--blue);
+  }
+  /* the finished day (no JS, reduced motion) is night; the scrub starts them at 0 */
+  .ground i {
+    position: absolute;
+    inset: 0;
+  }
+  .g-deep {
+    background: var(--blue-deep);
+  }
+  .g-night {
+    background: var(--navy);
+  }
+
+  /* ---------- the scene: sky and town, a viewport tall, pinned behind the content ---------- */
+  .scene {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    grid-area: 1 / 1;
+    align-self: start;
+    height: 100svh;
+    overflow: clip;
+    pointer-events: none;
+  }
+  /* sun and moon: each sits on two nested movers, so a set and a rise are two simple translates */
+  .orb {
+    position: absolute;
+    bottom: var(--horizon);
+  }
+  .sun-a {
+    right: var(--sun-r);
+    bottom: calc(var(--horizon) + var(--sun-alt));
+  }
+  .moon-a {
+    right: var(--moon-r);
+    bottom: calc(var(--horizon) + var(--moon-alt));
+  }
+  /* finished day: the sun has set behind the town, the moon is up low on the right */
+  .sun-b {
+    transform: translateY(var(--set));
+  }
+  .body {
+    display: block;
+    width: var(--sun);
+    height: var(--sun);
+    overflow: visible;
+  }
+  .sun {
+    fill: var(--white);
+  }
+  .moon {
+    width: var(--moon);
+    height: var(--moon);
+    fill: var(--light-blue);
+  }
+  .town {
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--town-h);
+    overflow: clip;
+  }
+  .plane {
+    position: absolute;
+    inset: 0 -4%;
+    width: 108%;
+    height: 100%;
+  }
+  .p-far {
+    fill: var(--blue-deep);
+  }
+  .p-mid {
+    fill: var(--blue-sheet);
+  }
+  .p-near {
+    fill: var(--navy);
+  }
+  .lights {
+    fill: var(--light-blue);
+  }
+
+  /* ---------- the content, laid over the scene ---------- */
+  .story-page {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem) var(--base);
+  }
+  .copy {
+    display: contents;
+  }
+  .story-head {
+    display: grid;
+    gap: 1.25rem;
+    order: 0;
+  }
+  .ledger {
+    order: 1;
+  }
+  /* the stage holds the pinned scene and the slips; it ends where the town comes to rest.
+     The closing copy sits below it, so no text ever scrolls through the town. */
+  .stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .stage > .story-page {
+    grid-area: 1 / 1;
+  }
+  .close-wrap {
+    position: relative;
+    z-index: 1;
+    padding-block: 2rem clamp(4rem, 3rem + 4vw, 7rem);
+  }
+  .story-close {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+  .slip-title {
+    font-size: clamp(2.5rem, 1.3rem + 4.4vw, 4.75rem);
+    max-width: 14ch;
+  }
+  .close-title {
+    font-size: clamp(1.75rem, 1.1rem + 2.2vw, 2.75rem);
+    line-height: 1.05;
+    font-weight: 820;
+    letter-spacing: -0.04em;
+    max-width: 18ch;
+  }
+  .close-cta {
+    margin-top: 0.6rem;
+  }
+  @media (min-width: 60rem) {
+    .story-page {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      column-gap: clamp(2.5rem, 1rem + 4vw, 5rem);
+      align-items: stretch;
+    }
+    .copy {
+      display: block;
+    }
+    /* the lead stays in the left column for the whole scrub; it can only travel as far as the slips do,
+       so it never reaches the town or the close */
+    .story-head {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+  /* a time readout that steps as each slip lands: two nested movers, transform only, text never faded */
+  .clock {
+    display: none;
+  }
+  @media (min-width: 60rem) {
+    .clock {
+      display: block;
+      margin-top: 0.75rem;
+      font-size: clamp(3rem, 1.5rem + 3.4vw, 5rem);
+      font-weight: 830;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      color: var(--white);
+    }
+    .clk-win {
+      display: block;
+      height: 1.05em;
+      overflow: clip;
+    }
+    .clk-a,
+    .clk-b {
+      display: block;
+    }
+    /* finished day: the readout rests on the last time */
+    .clk-a {
+      transform: translateY(-1.05em);
+    }
+    .clk-b {
+      transform: translateY(-1.05em);
+    }
+    .clk-t {
+      display: block;
+      height: 1.05em;
+      white-space: nowrap;
+    }
+    .clk-a {
+      --tl: --m2;
+      --p: var(--p-m2);
+    }
+    .clk-b {
+      --tl: --m3;
+      --p: var(--p-m3);
+    }
+    .story:is(.is-native, .is-scrub) .clk-a {
+      animation-name: clk;
+    }
+    .story:is(.is-native, .is-scrub) .clk-b {
+      animation-name: clk;
+    }
+  }
+  @keyframes clk {
+    0%,
+    30% {
+      transform: none;
+    }
+    52%,
+    100% {
+      transform: translateY(-1.05em);
+    }
+  }
+
+  /* ---------- the ledger: one hand-cut slip per moment ---------- */
+  .ledger-cap {
+    margin-top: -0.25rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--on-blue-2);
+  }
+  .slips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2.5rem;
+  }
+  /* phones: running text and slips stop short of the sky strip on the right */
+  @media (max-width: 59.99rem) {
+    .story .lead,
+    .close-title {
+      max-width: min(46ch, calc(100% - 2.25rem));
+    }
+    .slip-li {
+      margin-right: 1.75rem;
+    }
+    .slip-li:nth-child(2) {
+      margin: 0 0.75rem 0 1rem;
+    }
+  }
+  .slip-li {
+    --r: -0.8deg;
+    --r0: -3.5deg;
+  }
+  .slip-li:nth-child(2) {
+    --r: 0.7deg;
+    --r0: 3deg;
+  }
+  .slip-li:nth-child(3) {
+    --r: -0.4deg;
+    --r0: -2.5deg;
+  }
+  @media (min-width: 60rem) {
+    .slips {
+      /* room for each moment to be read on its own as the day passes */
+      gap: clamp(6rem, 22svh, 13rem);
+    }
+    .slip-li {
+      max-width: 34rem;
+    }
+    .slip-li:nth-child(2) {
+      margin-left: clamp(1.5rem, 4vw, 4rem);
+    }
+  }
+  /* the slip carries the paper drop; its paper is cut by hand with one nicked top-right corner */
+  .slip {
+    filter: var(--drop-paper);
+    rotate: var(--r);
+  }
+  .paper {
+    display: grid;
+    gap: 0.6rem;
+    background: var(--white);
+    color: var(--navy);
+    padding: 1.1rem clamp(1.1rem, 0.7rem + 1.4vw, 1.6rem) 1.2rem;
+    clip-path: polygon(0.4% 1.1%, calc(100% - 1.1rem) 0, 100% 1rem, 99.6% 98.6%, 0.9% 100%, 0 2.4%);
+  }
+  .slip-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+  }
+  .slip .slip-time {
+    color: var(--navy);
+    font-size: var(--step-sm);
+    font-weight: 750;
+  }
+  .who {
+    font-size: var(--step--1);
+    font-weight: 650;
+    line-height: 1.3;
+    color: var(--ink-3);
+  }
+  .slip-text {
+    font-size: var(--step-1);
+    line-height: 1.25;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    max-width: 30ch;
+  }
+  .slip-out {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'lost lost'
+      'kept stamp';
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* a row's outcome: what it would have cost, then what the AI front desk did */
+  .lost {
+    grid-area: lost;
+    justify-self: start;
+    position: relative;
+    font-size: var(--step-sm);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink-2);
+    text-decoration: none;
+    opacity: 0.72;
+  }
+  .strike {
+    position: absolute;
+    left: -0.1rem;
+    right: -0.1rem;
+    top: 54%;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--navy);
+    transform-origin: 0 50%;
+  }
+  .kept {
+    grid-area: kept;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: var(--step-sm);
+    line-height: 1.3;
+    text-decoration: none;
+    color: var(--navy);
+  }
+  .kept strong {
+    font-weight: 750;
+    letter-spacing: -0.01em;
+  }
+  /* a done marker on every kept row: green for a booking, navy for any other follow-through */
+  .mark {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6L12 5.6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 100% no-repeat,
+      var(--navy);
+  }
+  .kept.booked .mark {
+    background-color: var(--green);
+  }
+  /* the AI front desk's stamp: an inked outline, set at a hand-stamped angle */
+  .stamp {
+    grid-area: stamp;
+    justify-self: end;
+    padding: 0.15rem 0.55rem;
+    border: 1.5px solid var(--navy);
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 750;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    color: var(--navy);
+    transform: rotate(-4deg);
+  }
+
+  @media print {
+    .story,
+    .ground {
+      background: #fff !important;
+      color: #000 !important;
+    }
+    .scene,
+    .clock,
+    .ground i {
+      display: none !important;
+    }
+    .story-page {
+      padding-bottom: 2rem;
+    }
+    .story :is(h2, h3, .lead, .ledger-cap) {
+      color: #000 !important;
+    }
+    .story [data-anim] {
+      animation: none !important;
+    }
+    .slip {
+      filter: none;
+    }
+    .paper {
+      border: 1px solid #000;
+    }
+  }
+
+  /* ================================================================
+     Motion: one easing family (quart out), scrubbed by scroll.
+     Each element names its timeline (--tl) and its fallback progress (--p).
+     The slips and the sky share three timelines, one per moment, so the day
+     turns as the visitor reads: dusk on the 6:40 slip, night on the 7:30 one.
+     ================================================================ */
+  .story {
+    --p-m1: 0;
+    --p-m2: 0;
+    --p-m3: 0;
+    --p-day: 0;
+  }
+  .slip-li[data-tl='m1'] {
+    view-timeline-name: --m1;
+  }
+  .slip-li[data-tl='m2'] {
+    view-timeline-name: --m2;
+  }
+  .slip-li[data-tl='m3'] {
+    view-timeline-name: --m3;
+  }
+  .slip-li[data-row='1'] {
+    --tl: --m1;
+    --p: var(--p-m1);
+  }
+  .slip-li[data-row='2'] {
+    --tl: --m2;
+    --p: var(--p-m2);
+  }
+  .slip-li[data-row='3'] {
+    --tl: --m3;
+    --p: var(--p-m3);
+  }
+  .sun-a {
+    --tl: --m1;
+    --p: var(--p-m1);
+  }
+  .g-deep,
+  .sun-b,
+  .l-a {
+    --tl: --m2;
+    --p: var(--p-m2);
+  }
+  .g-night,
+  .moon-a,
+  .moon-b,
+  .l-b {
+    --tl: --m3;
+    --p: var(--p-m3);
+  }
+  .plane {
+    --tl: --day;
+    --p: var(--p-day);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* native: the browser runs the keyframes on scroll timelines */
+    @supports (animation-timeline: view()) and (timeline-scope: --a) {
+      .story.is-native [data-anim] {
+        animation-duration: auto;
+        animation-timing-function: var(--quart);
+        animation-fill-mode: both;
+        animation-timeline: var(--tl);
+      }
+    }
+    /* fallback: the same keyframes, paused, with a rAF-fed negative delay */
+    .story.is-scrub [data-anim] {
+      animation-duration: 1s;
+      animation-timing-function: var(--quart);
+      animation-fill-mode: both;
+      animation-play-state: paused;
+      animation-delay: calc(var(--p) * -1s);
+    }
+    .story:is(.is-native, .is-scrub) .g-deep {
+      animation-name: g-deep;
+    }
+    .story:is(.is-native, .is-scrub) .g-night {
+      animation-name: g-night;
+    }
+    .story:is(.is-native, .is-scrub) .sun-a {
+      animation-name: sun-a;
+    }
+    .story:is(.is-native, .is-scrub) .sun-b {
+      animation-name: sun-b;
+    }
+    .story:is(.is-native, .is-scrub) .moon-a {
+      animation-name: moon-a;
+    }
+    .story:is(.is-native, .is-scrub) .moon-b {
+      animation-name: moon-b;
+    }
+    .story:is(.is-native, .is-scrub) .l-a {
+      animation-name: lights-a;
+    }
+    .story:is(.is-native, .is-scrub) .l-b {
+      animation-name: lights-b;
+    }
+    .story:is(.is-native, .is-scrub) .p-far {
+      animation-name: drift-far;
+    }
+    .story:is(.is-native, .is-scrub) .p-mid {
+      animation-name: drift-mid;
+    }
+    .story:is(.is-native, .is-scrub) .p-near {
+      animation-name: drift-near;
+    }
+    .story:is(.is-native, .is-scrub) .slip {
+      animation-name: slip-land;
+    }
+    .story:is(.is-native, .is-scrub) .lost {
+      animation-name: lost;
+    }
+    .story:is(.is-native, .is-scrub) .strike {
+      animation-name: strike;
+    }
+    .story:is(.is-native, .is-scrub) .kept {
+      animation-name: kept;
+    }
+    .story:is(.is-native, .is-scrub) .mark {
+      animation-name: mark;
+    }
+    .story:is(.is-native, .is-scrub) .stamp {
+      animation-name: stamp;
+    }
+  }
+
+  /* the ground turns with the evening slips: blue-deep at 6:40, navy at 7:30 */
+  @keyframes g-deep {
+    0%,
+    26% {
+      opacity: 0;
+    }
+    60%,
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes g-night {
+    0%,
+    18% {
+      opacity: 0;
+    }
+    50%,
+    100% {
+      opacity: 1;
+    }
+  }
+  /* 2:14 PM: the afternoon sun stands high over the town */
+  @keyframes sun-a {
+    0% {
+      transform: translate(-1.5rem, 4svh);
+    }
+    70%,
+    100% {
+      transform: none;
+    }
+  }
+  /* 6:40 PM: it sinks behind the town */
+  @keyframes sun-b {
+    0%,
+    28% {
+      transform: none;
+    }
+    66%,
+    100% {
+      transform: translateY(var(--set));
+    }
+  }
+  /* 7:30 PM: the moon comes up from behind the town and hangs low on the right */
+  @keyframes moon-a {
+    0%,
+    14% {
+      transform: translateY(calc(var(--moon-alt) + var(--moon) + var(--horizon) * 0.4));
+    }
+    52%,
+    100% {
+      transform: none;
+    }
+  }
+  @keyframes moon-b {
+    0%,
+    30% {
+      transform: translateX(0.75rem);
+    }
+    90%,
+    100% {
+      transform: none;
+    }
+  }
+  @keyframes lights-a {
+    0%,
+    40% {
+      opacity: 0;
+    }
+    62%,
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes lights-b {
+    0%,
+    24% {
+      opacity: 0;
+    }
+    48%,
+    100% {
+      opacity: 1;
+    }
+  }
+  /* the planes slide past each other a little over the whole day: depth without 3D */
+  @keyframes drift-far {
+    from {
+      transform: translateX(1.5%);
+    }
+    to {
+      transform: translateX(-1.5%);
+    }
+  }
+  @keyframes drift-mid {
+    from {
+      transform: translateX(2.6%);
+    }
+    to {
+      transform: translateX(-2.6%);
+    }
+  }
+  @keyframes drift-near {
+    from {
+      transform: translateX(3.6%);
+    }
+    to {
+      transform: translateX(-3.6%);
+    }
+  }
+
+  /* one moment: the slip is laid on the scene, the lost outcome is struck,
+     the kept one inks in, the check and the stamp set. Text never drops below 0.6. */
+  @keyframes slip-land {
+    0% {
+      translate: 0 3rem;
+      rotate: var(--r0);
+    }
+    28%,
+    100% {
+      translate: 0 0;
+      rotate: var(--r);
+    }
+  }
+  @keyframes lost {
+    0%,
+    34% {
+      opacity: 1;
+    }
+    46%,
+    100% {
+      opacity: 0.72;
+    }
+  }
+  @keyframes strike {
+    0%,
+    30% {
+      transform: scaleX(0);
+    }
+    40%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes kept {
+    0%,
+    38% {
+      opacity: 0.6;
+      transform: translateY(0.35rem);
+    }
+    48%,
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes mark {
+    0%,
+    42% {
+      transform: scale(0);
+    }
+    50%,
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes stamp {
+    0%,
+    44% {
+      opacity: 0.6;
+      transform: rotate(-4deg) scale(1.3);
+    }
+    52%,
+    100% {
+      opacity: 1;
+      transform: rotate(-4deg) scale(1);
+    }
+  }
+</style>
+
+<script>
+  const NATIVE =
+    typeof CSS !== 'undefined' &&
+    CSS.supports('animation-timeline: view()') &&
+    CSS.supports('timeline-scope: --a');
+
+  function initStory() {
+    const story = document.querySelector<HTMLElement>('[data-story]');
+    if (!story || story.dataset.init) return;
+    story.dataset.init = '1';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches) return;
+
+    if (NATIVE) {
+      story.classList.add('is-native');
+      return;
+    }
+
+    // fallback: read each timeline's cover progress once per frame, then write the variables
+    story.classList.add('is-scrub');
+    const sources: [string, HTMLElement][] = [
+      ...story.querySelectorAll<HTMLElement>('[data-tl]'),
+    ].map((el) => [el.dataset.tl!, el]);
+    sources.push(['day', story]);
+
+    const cover = (el: Element, vh: number) => {
+      const r = el.getBoundingClientRect();
+      const p = (vh - r.top) / (vh + r.height);
+      return Math.min(0.9999, Math.max(0, p));
+    };
+    const update = () => {
+      const vh = window.innerHeight;
+      const tl = sources.map(([k, el]) => [k, cover(el, vh)] as const);
+      tl.forEach(([k, p]) => story.style.setProperty(`--p-${k}`, p.toFixed(4)));
+    };
+
+    let ticking = false;
+    let near = false;
+    const onScroll = () => {
+      if (!near || ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    };
+    new IntersectionObserver(
+      ([e]) => {
+        near = e.isIntersecting;
+        if (near) update();
+      },
+      { rootMargin: '50% 0px' },
+    ).observe(story);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+  document.addEventListener('astro:page-load', initStory);
+</script>
