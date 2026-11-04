@@ -5,5 +5,7 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
-  }
+  },
+  // Branch previews (wrangler preview, used by the Previews Base build). Settings live at the top level.
+  "previews": {}
 }
