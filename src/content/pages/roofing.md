@@ -8,7 +8,7 @@
     "ogTitle": "Crewwise | AI front desk for roofing companies",
     "ogDescription": "Crewwise answers your roofing leads 24/7, qualifies the homeowner and books the inspection.",
     "ogImage": "/og-roofing.jpg",
-    "ogAlt": "Crewwise logo with the headline: Answers your phone while you’re on the roof.",
+    "ogAlt": "Crewwise logo on a blue field of overlapping paper planes with the headline: Answers your phone while you’re on the roof. AI front desk for roofing companies.",
     "ogHeadline": "Answers your phone while you’re on the roof.",
     "ogSub": "AI front desk for roofing companies"
   },

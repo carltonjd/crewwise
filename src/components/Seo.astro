@@ -19,13 +19,14 @@ const {
   description,
   path = Astro.url.pathname,
   image = '/og.jpg',
-  imageAlt,
+  imageAlt = 'Crewwise logo on a blue field of overlapping paper planes with the headline: Win the first minute with every new client. A booking slip reads Consultation booked, Thu 10:00 AM.',
   ogTitle,
   ogDescription,
   noindex = false,
 } = Astro.props;
 const canonical = new URL(path, SITE.domain).toString();
-const imageUrl = new URL(image, SITE.domain).toString();
+// ?v= makes apps that cached an earlier preview fetch the new image; bump it when the images change.
+const imageUrl = new URL(image, SITE.domain).toString() + (image.startsWith('/') ? '?v=2' : '');
 ---
 
 <title>{title}</title>
@@ -44,9 +45,12 @@ const imageUrl = new URL(image, SITE.domain).toString();
 <meta property="og:description" content={ogDescription ?? description} />
 {!noindex && <meta property="og:url" content={canonical} />}
 <meta property="og:image" content={imageUrl} />
-{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:alt" content={imageAlt} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={ogTitle ?? title} />
 <meta name="twitter:description" content={ogDescription ?? description} />
 <meta name="twitter:image" content={imageUrl} />
-{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+<meta name="twitter:image:alt" content={imageAlt} />
