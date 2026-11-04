@@ -1,0 +1,195 @@
+---
+import { SITE, PARTNER_LINK_TEXT } from '../config/site';
+
+// partnerLine is plain text; split it so "Octalogic" becomes a link without duplicating the sentence.
+const [before, after] = SITE.partnerLine.split(PARTNER_LINK_TEXT);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer band-navy">
+  <div class="page inner">
+    <div class="index">
+      <nav aria-label="Footer" class="nav-main">
+        <ul class="rows">
+          <li><a href="/#ai-front-desk">AI front desk</a></li>
+          <li><a href="/#websites">Websites</a></li>
+          <li><a href="/#automation">AI automation</a></li>
+          <li>
+            <a href="/pricing/">Pricing</a>
+          </li>
+          <li>
+            <a href="/free-audit/">Free audit</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="contact">
+        <a class="mail" href={`mailto:${SITE.CONTACT_EMAIL}`}>{SITE.CONTACT_EMAIL}</a>
+        <a class="book" href={SITE.CALENDLY_URL} target="_blank" rel="noopener">Book a free 30-minute call</a>
+        <ul class="legal-links">
+          <li><a href="/terms/">Terms</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/refunds/">Refunds</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- prettier-ignore -->
+    {SITE.SHOW_OCTALOGIC && <p class="partner">{before}<a href={SITE.OCTALOGIC_URL}>{PARTNER_LINK_TEXT}</a>{after}</p>}
+    <a href="/" class="mark" aria-label="Crewwise home">
+      <img src="/brand/crewwise-logo-on-dark.svg" alt="" width="190" height="44" />
+    </a>
+    <div class="legal">
+      <p>{SITE.legalLine}</p>
+      <p>&copy; {year} {SITE.company}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(3rem, 2rem + 3vw, 5rem) clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  }
+  .inner {
+    display: grid;
+    gap: clamp(2rem, 1.25rem + 2.5vw, 3.5rem);
+  }
+  /* the index: the header menu's ruled rows, carried down here */
+  .index {
+    display: grid;
+    gap: 2rem 3rem;
+    align-items: end;
+  }
+  @media (min-width: 52rem) {
+    .index {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .rows {
+    border-bottom: 1px solid var(--rule-navy-strong);
+  }
+  .rows li {
+    border-top: 1px solid var(--rule-navy-strong);
+  }
+  .rows a {
+    display: flex;
+    align-items: center;
+    min-height: 3.5rem;
+    color: var(--white);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 200ms var(--ease-out);
+  }
+  .rows a:hover {
+    color: var(--light-blue);
+  }
+  .contact {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  @media (min-width: 52rem) {
+    .contact {
+      justify-items: end;
+      text-align: right;
+    }
+  }
+  .mail {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--white);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--rule-navy-strong);
+    transition: text-decoration-color 200ms var(--ease-out);
+  }
+  .mail:hover {
+    text-decoration-color: var(--light-blue);
+  }
+  .book {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--white);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--rule-navy-strong);
+    transition: text-decoration-color 200ms var(--ease-out);
+  }
+  .book:hover {
+    text-decoration-color: var(--light-blue);
+  }
+  .legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+  }
+  .legal-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--on-navy-2);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .legal-links a:hover {
+    color: var(--white);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+  }
+  .rows a:focus-visible {
+    outline-offset: -3px;
+  }
+  .partner {
+    font-size: var(--step-1);
+    font-weight: 560;
+    line-height: 1.4;
+    max-width: 40ch;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+  .partner a {
+    color: var(--light-blue);
+  }
+  .partner a:hover {
+    color: var(--white);
+  }
+  /* the closing masthead: the header's wordmark returns at full scale under its own hairline */
+  .mark {
+    display: block;
+    padding-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-top: 1px solid var(--rule-navy-strong);
+  }
+  .mark:focus-visible {
+    border-radius: 6px;
+  }
+  .mark img {
+    display: block;
+    width: clamp(9rem, 28vw, 16rem);
+    height: auto;
+  }
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule-navy-strong);
+    font-size: 0.875rem;
+    color: var(--on-navy-2);
+  }
+</style>

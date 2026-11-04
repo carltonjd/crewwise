@@ -1,293 +1,278 @@
 ---
 name: Crewwise
-description: AI front desk for roofing and home-service companies. A crisp site plan in logo blue, with one sun-yellow action.
+description: A flat cut-paper studio of overlapping blue, blue-deep, navy and sheet planes, with one orange action per screen.
 colors:
-  logo-blue: "#1E5BD8"
-  logo-blue-raised: "#2C68E4"
-  logo-blue-rule: "#5A8BEE"
-  deep-navy: "#0B1530"
-  navy-raised: "#17244B"
-  navy-rule: "#2B3B68"
-  navy-soft-text: "#C3CDE3"
-  sun-yellow: "#FFC233"
-  sun-yellow-pressed: "#FFB300"
-  pale-sun: "#FFE08A"
-  page-white: "#FFFFFF"
-  surface-white: "#FFFFFF"
-  plan-tint: "#F4F7FE"
-  slate-text: "#3A4766"
-  muted-slate: "#55617D"
-  hairline: "#DDE4F2"
-  rule-steel: "#BFCBE3"
-  on-blue: "#FFFFFF"
-  on-blue-soft: "#DCE6FF"
-  booked-green: "#1F7547"
-  booked-dot: "#2E8B57"
-  booked-mint: "#B9F5CF"
-  error-red: "#B42318"
+  blue: "#1E5BD8"
+  blue-ink: "#1A4FBD"
+  blue-deep: "#1749B0"
+  blue-sheet: "#163B88"
+  navy: "#0F1B33"
+  navy-raised: "#16264A"
+  light-blue: "#8FB3FF"
+  soft: "#F4F7FC"
+  white: "#FFFFFF"
+  orange: "#C94708"
+  orange-press: "#A93B06"
+  green: "#1F7547"
+  slate-label: "#5B6B8C"
 typography:
   display:
-    fontFamily: "Archivo, Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "clamp(4rem, 0.5rem + 6vw, 6rem)"
-    fontWeight: 600
-    lineHeight: 0.96
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(3rem, min(1.2rem + 6.6vw, 0.5rem + 11vh), 6rem)"
+    fontWeight: 830
+    lineHeight: 0.94
     letterSpacing: "-0.04em"
   headline:
-    fontFamily: "Archivo, Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "clamp(2.1rem, 1.3rem + 2.8vw, 3.75rem)"
-    fontWeight: 600
-    lineHeight: 1.02
-    letterSpacing: "-0.03em"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem)"
+    fontWeight: 820
+    lineHeight: 0.98
+    letterSpacing: "-0.04em"
   title:
-    fontFamily: "Archivo, Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "1.375rem"
-    fontWeight: 600
-    lineHeight: 1.2
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)"
+    fontWeight: 750
+    lineHeight: 1.15
     letterSpacing: "-0.02em"
-  lead:
-    fontFamily: "Hanken Grotesk, system-ui, Segoe UI, Roboto, sans-serif"
-    fontSize: "1.1875rem"
-    fontWeight: 400
-    lineHeight: 1.6
   body:
-    fontFamily: "Hanken Grotesk, system-ui, Segoe UI, Roboto, sans-serif"
-    fontSize: "1.0625rem"
-    fontWeight: 400
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem)"
+    fontWeight: 420
     lineHeight: 1.6
-  small:
-    fontFamily: "Hanken Grotesk, system-ui, Segoe UI, Roboto, sans-serif"
-    fontSize: "0.9375rem"
-    fontWeight: 400
-    lineHeight: 1.6
+    letterSpacing: "normal"
   label:
-    fontFamily: "Hanken Grotesk, system-ui, Segoe UI, Roboto, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 600
-    lineHeight: 1.5
-  wordmark:
-    fontFamily: "Hanken Grotesk"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.8125rem"
     fontWeight: 650
-    letterSpacing: "-0.019em"
+    lineHeight: 1.3
+    letterSpacing: "0.01em"
 rounded:
-  tag: "6px"
-  control: "10px"
-  card: "14px"
-  panel: "18px"
-  sheet: "22px"
+  card: "16px"
+  slip: "12px"
+  field: "10px"
   pill: "999px"
 spacing:
-  gutter: "20px"
-  tight: "12px"
-  group: "24px"
-  block: "40px"
-  split: "64px"
-  section: "120px"
+  gutter: "clamp(1rem, 0.4rem + 2.6vw, 2.5rem)"
+  band: "clamp(4.5rem, 3rem + 6vw, 8.5rem)"
+  section-head: "clamp(2.5rem, 1.8rem + 3vw, 5rem)"
 components:
   button-primary:
-    backgroundColor: "{colors.sun-yellow}"
-    textColor: "{colors.deep-navy}"
-    rounded: "{rounded.control}"
-    padding: "12px 22px"
-    height: "48px"
-    typography: "{typography.label}"
-  button-primary-hover:
-    backgroundColor: "{colors.sun-yellow-pressed}"
-    textColor: "{colors.deep-navy}"
-  step-pill:
-    backgroundColor: "{colors.surface-white}"
-    textColor: "{colors.deep-navy}"
+    backgroundColor: "{colors.orange}"
+    textColor: "{colors.white}"
     rounded: "{rounded.pill}"
-    padding: "6px 12px 6px 7px"
-    typography: "{typography.label}"
-  tag:
-    backgroundColor: "{colors.plan-tint}"
-    textColor: "{colors.deep-navy}"
-    rounded: "{rounded.tag}"
-    padding: "3px 8px"
-  input:
-    backgroundColor: "{colors.plan-tint}"
-    textColor: "{colors.deep-navy}"
-    rounded: "{rounded.control}"
-    padding: "12px 14px"
-    height: "50px"
+    padding: "0.85rem 1.6rem"
+    height: "3.25rem"
+  button-primary-hover:
+    backgroundColor: "{colors.orange-press}"
+    textColor: "{colors.white}"
+  button-primary-sm:
+    backgroundColor: "{colors.orange}"
+    textColor: "{colors.white}"
+    rounded: "{rounded.pill}"
+    padding: "0.5rem 1.05rem"
+    height: "2.75rem"
   card:
-    backgroundColor: "{colors.surface-white}"
-    textColor: "{colors.deep-navy}"
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.navy}"
     rounded: "{rounded.card}"
-    padding: "14px 16px"
-  card-dark:
-    backgroundColor: "{colors.deep-navy}"
-    textColor: "{colors.on-blue}"
-    rounded: "{rounded.panel}"
-    padding: "20px"
-  nav-link:
-    textColor: "{colors.slate-text}"
-    rounded: "{rounded.control}"
-    padding: "9px 14px"
-  nav-link-active:
-    backgroundColor: "#E8EFFC"
-    textColor: "{colors.logo-blue}"
+  slip:
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.navy}"
+    rounded: "{rounded.slip}"
+  band-blue:
+    backgroundColor: "{colors.blue}"
+    textColor: "{colors.white}"
+  band-navy:
+    backgroundColor: "{colors.navy}"
+    textColor: "{colors.white}"
+  band-soft:
+    backgroundColor: "{colors.soft}"
+    textColor: "{colors.navy}"
+  field:
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.navy}"
+    rounded: "{rounded.field}"
+    height: "3.25rem"
+    padding: "0.7rem 0.9rem"
+  status-booked:
+    backgroundColor: "{colors.green}"
+    textColor: "{colors.white}"
+    rounded: "{rounded.pill}"
+    padding: "0.5rem 0.75rem"
 ---
 
 # Design System: Crewwise
 
 ## Overview
 
-**Creative North Star: "The Site Plan"**
+**Creative North Star: "The Cut-Paper Studio"**
 
-Crewwise looks like a contractor's plan sheet that works: a crisp white page, a fine logo-blue grid where the sheet begins, and bold marks that show a job moving from first ring to booked. Every visual device is a working part of the plan. The blue line is the route of a call, the dots are checkpoints, the cards are the documents a roofer actually receives (a call transcript, a calendar slot, a text, a monthly report), and the grid is the paper they are drawn on.
+Crewwise is built the way a paper model is built: flat sheets of colour laid over one another on a table, lit from the top left. Depth is never faked with volume. It comes from overlapping planes in four fixed tones (blue, blue-deep, navy and the derived blue-sheet), and from white slips and documents that sit on top and carry a soft paper shadow. Everything is a hand-cut polygon, with one nicked corner at the top right and a pale light facet at the top left shown in tone only.
 
-The mood is bold, sharp and modern. Headlines are big and tight, the logo blue owns whole sections, and one sun-yellow action sits on every screen. The parts you touch are friendly and soft: generously rounded corners, light borders and short lifts, so the boldness reads as confident rather than hard. Density is generous on the page and compact inside the cards, the way a plan has open margins and dense annotations.
+The page is a stack of full-bleed bands, each one flat ground: blue, white, soft or navy. Type is Hanken Grotesk at heavy weights with tight tracking, so headlines read like cut lettering. The tone is calm and credible for a law firm and still friendly to a plumber; nothing is decorative that does not belong to the paper world. One orange pill per screen is the action, and nothing else is orange.
 
-Motion is narrative, never decorative. The page plays the product: the example call plays itself once it's on screen, the busy-day list sorts itself, the line draws to the next step. Everything is complete and readable without motion.
+Motion is the second material. The masthead folds, the working day is scrubbed by scroll, and sheets lay, drop, settle and rise into place. Every movement is a decelerating ease-out to rest, never a bounce.
 
 **Key Characteristics:**
-- Crisp white sheet with a faint logo-blue plan grid fading from the top right of the first screen.
-- Logo blue (#1E5BD8) as the brand's field colour: whole sections, the call line, checkpoints.
-- Sun yellow only on things you click; green only for booked.
-- Archivo headlines set tight; Hanken Grotesk for reading and for the logo.
-- Product artifacts (call, calendar, text, queue, report) instead of illustrations or photos, always labelled as examples.
+- Flat overlapping planes in blue, blue-deep, navy and blue-sheet; no volume, no gradients.
+- Light from the top left, told in tonal steps, never in shadow.
+- Soft shadows only on white slips and documents, plus the hero's stage sheet.
+- Heavy Hanken Grotesk, tracking -0.035em to -0.04em on headings.
+- One orange pill per screen; green only when something is truly done.
+- Fluid type scale and three motion durations, used everywhere.
 
 ## Colors
 
-A two-colour brand on white: logo blue carries identity and structure, sun yellow carries action, deep navy carries the words.
+A blue studio: three blues and a derived darker sheet carry the planes, navy is the ink and the night, white and soft are the paper, orange is the single action.
 
 ### Primary
-- **Logo Blue** (logo-blue): the fixed brand colour. Full-bleed bold sections (leaks, busy days), the call line and progress rail, checkpoint dots, active nav, links, focus rings, the plan grid. Never altered or swapped.
-- **Raised Blue** (logo-blue-raised) and **Blue Rule** (logo-blue-rule): secondary surfaces and dividers inside logo-blue sections only.
+- **Crewwise Blue** (#1E5BD8): the main ground (hero, demo, day story, close), selection, focus ring on light grounds, and the lit facet of illustrations.
+- **Blue Ink** (#1A4FBD): link hover on white and soft grounds only.
+- **Shadow Blue** (#1749B0, `--blue-deep`): the second plane. The hero's hand-cut floor, the masthead's cut edge under the blue bar, the day story's far hills, and pressed or shaded facets in illustrations.
+- **Sheet Blue** (#163B88, `--blue-sheet`, derived as 30% navy mixed into blue-deep in oklab): the third plane. The offset sheet behind the hero phone, the mid hills of the day story, the lowest shaded facet in illustrations. It must read against both blue and blue-deep.
 
 ### Secondary
-- **Sun Yellow** (sun-yellow): every primary action (Book a demo, Call me back, the phone booking bar), with deep navy text. Pressed state is **Pressed Sun** (sun-yellow-pressed).
-- **Pale Sun** (pale-sun): small marks on blue sections (the leak crosses, urgent labels).
+- **Call Orange** (#C94708) with **Orange Press** (#A93B06): the primary action only. White text on it clears 4.5:1. Pressed goes one step deeper still.
 
 ### Tertiary
-- **Booked Green** (booked-green, booked-dot, booked-mint): only for a booked or successful state: the Booked card, calendar bookings, "fixed" ticks, the call-back confirmation.
+- **Booked Green** (#1F7547): real success states only: the booked slip, a booked event, a submitted form. Never decoration, never a category colour.
 
 ### Neutral
-- **Deep Navy** (deep-navy): body and headline text on white; the closing band; dark cards (live call, follow-ups, busy-day list, call forwarding).
-- **Page White** (page-white) and **Surface White** (surface-white): the page and every light card.
-- **Plan Tint** (plan-tint): tinted fills inside white surfaces: inputs, tags, busy calendar slots, incoming text bubbles.
-- **Slate Text** (slate-text) and **Muted Slate** (muted-slate): secondary copy and captions.
-- **Hairline** (hairline) and **Rule Steel** (rule-steel): card borders, list dividers, inactive rail track.
-- **On Blue** (on-blue) and **On Blue Soft** (on-blue-soft): headings and body copy on logo-blue sections.
-- **Error Red** (error-red): form field errors only.
+- **Night Navy** (#0F1B33, `--ink`): text on light grounds, the night ground of the day story, the footer, the mobile menu, the phone body.
+- **Navy Raised** (#16264A): lit facets and lifted plates on navy.
+- **After-Hours Blue** (#8FB3FF): times and quiet accents on navy, the lit windows, the lit facet on blue shapes.
+- **Soft Paper** (#F4F7FC): the quiet band ground and disabled fields.
+- **White** (#FFFFFF): the page ground, slips, cards and documents.
+- **Slate Label** (#5B6B8C): secondary text inside the hero phone screen.
+- Text tints from navy: 74% for secondary, 60% for tertiary; on blue, white at 86%; on navy, white at 78%. Rules are navy at 10% and 22%, light blue at 18% and 36% on navy, white at 28% on blue.
 
 ### Named Rules
-**The Fixed Blue Rule.** The logo blue and the logo (icon plus the Hanken Grotesk 650 wordmark) never change. Everything else may evolve around them.
-
-**The One Yellow Rule.** Sun yellow means "click this". It never decorates, never fills a section, and never appears on something that is not an action.
-
-**The Booked Green Rule.** Green appears only when something is booked or succeeded. A decorative green is a lie about state.
+**The One Orange Rule.** Orange is the primary action and nothing else. One orange pill per screen; a second one means one of them is wrong.
+**The Real Success Rule.** Green means something actually happened (booked, sent). It is never used to say "good" or to decorate.
+**The Four Planes Rule.** Depth is made by stacking blue, blue-deep, navy and blue-sheet. Do not add a fifth tone to fake a new layer.
 
 ## Typography
 
-**Display Font:** Archivo (with Hanken Grotesk, system-ui fallback)
-**Body Font:** Hanken Grotesk (with system-ui, Segoe UI, Roboto fallback)
-**Wordmark:** Hanken Grotesk 650, fixed by the logo spec
+**Display Font:** Hanken Grotesk Variable (with ui-sans-serif, system-ui, sans-serif)
+**Body Font:** Hanken Grotesk Variable (same family; one face carries the whole system)
+**Label/Mono Font:** none. Times and counters use Hanken's tabular numerals.
 
-**Character:** Archivo gives the headlines a sturdy, engineered weight at a calm normal width; Hanken Grotesk keeps reading friendly and matches the logo, so the brand voice stays one family in spirit.
+**Character:** One heavy grotesque, set tight. Headlines are weight 800 to 900 and read like cut lettering; body is a light 420 so the contrast of weight carries hierarchy, not extra faces.
 
 ### Hierarchy
-- **Display** (600, clamp to 6rem on desktop, 0.96): the hero headline only. Two to three lines, tight tracking.
-- **Headline** (600, up to 3.75rem, 1.02): section headings, paired with a lead paragraph in a left/right split on desktop.
-- **Title** (600, 1.375rem, 1.2): every card and step title: feature titles, leak titles, journey steps, report header. One size for one job.
-- **Lead** (400, 1.1875rem, 1.6): section intros and the hero description.
-- **Body** (400, 1.0625rem, 1.6): running text; keep to 65 to 75 characters a line.
-- **Small** (400, 0.9375rem): card text, list details, form help.
-- **Label** (600, 0.875rem): pills, buttons, timestamps, captions, example tags.
+The fluid scale is `--step-*`: micro 0.75rem, label 0.8125rem, ui-small 0.9375rem, ui 1.0625rem, body clamp(1.0625rem to 1.1875rem), title-lead clamp(1.25rem to 1.5rem), subhead clamp(1.625rem to 2.25rem), headline clamp(2.25rem to 4.25rem), statement clamp(2.75rem to 5rem), display clamp(3rem to 6rem, height-aware).
+- **Display** (830; the home hero h1 runs at 900; clamp(3rem, ..., 6rem); line-height 0.94, tracking -0.04em): hero, demo and story headings. Never above 6rem.
+- **Headline** (820, clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem), 0.98, -0.04em): band h2.
+- **Title** (750, clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem), 1.15, -0.02em): card, step and FAQ titles. FAQ row questions are 750 at the same size.
+- **Body** (420, clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem), 1.6): running text, measure 62ch; `.lead` at 46ch.
+- **Label** (650, 0.8125rem, +0.01em, tabular numerals): times, captions and plain tag text. Not uppercase.
 
 ### Named Rules
-**The One Title Rule.** Every card-level title uses the single Title role. If a new card needs a different size, the card is wrong, not the scale.
-
-**The Display Ceiling Rule.** Nothing exceeds the hero's 6rem. Prices and big figures stay at or below it.
+**The Tight Tracking Floor Rule.** Heading tracking runs from -0.02em to -0.04em and never tighter than -0.04em.
+**The Weight Carries It Rule.** Hierarchy comes from weight and size steps in one family. No second face, no uppercase labels above headings.
 
 ## Layout
 
-A centred sheet: content sits in a 1240px container with a 20px gutter on phones, and logo-blue or navy bands run full bleed behind it. Sections open with a split header (headline left, lead paragraph right) on desktop and stack on phones. Sections are separated by generous space (88 to 120px) and joined by a thin vertical connector line with a dot, the plan's route from one area to the next.
+A single column of full-bleed bands inside a 84rem page (`--page-max`) with a fluid gutter of clamp(1rem, 0.4rem + 2.6vw, 2.5rem). Bands take vertical padding clamp(4.5rem, 3rem + 6vw, 8.5rem) and each is one flat ground; adjacent bands change ground (blue, white, soft, navy) to mark the seam. Order on home: hero (blue), demo (blue), pillars (white), the working day (blue to navy), setup route (white), who it is for, FAQ, close (blue), navy footer.
 
-Breakpoints follow the content: 560, 640, 760, 900, 980, 1000 and 1100px. Below 1000px the hero reorders to headline, explanation and buttons, then the call route as a vertical timeline. Phones get a sun-yellow booking bar in thumb reach once the hero buttons scroll away; it hides near the form and the closing band, and the header button steps aside while it shows.
+Rhythm is generous between sections and tight inside groups; section heads sit 2.5rem to 5rem above their content. Deliberate asymmetry is used instead of equal card grids: the pillars set a wide plate first and a tall one lower, the two audiences sit one lower than the other, the FAQ keeps a sticky 4/12 heading column beside 8/12 rows.
 
-The plan grid (56px squares, logo blue at 9% opacity) exists only behind the top of the first screen, fading out from the top right. It never runs behind body content.
+The two layout breakpoints that matter are 62.5rem (masthead collapses to a menu; the hero stacks) and 60rem (two-column section heads). The hero is a stacked stage: a full-width headline, then copy and the action, then one large flat phone right of centre standing on the blue-deep floor, with the sheet behind it and the booking slip overlapping its lower-left edge. At 100svh on desktop; stacked and auto height on phones, where the offset sheet is dropped so only the floor remains.
 
 ## Elevation & Depth
 
-Depth is mostly flat: borders define surfaces and a short, offset lift raises them slightly off the sheet. Coloured bands, not shadows, create the big changes in depth.
+Depth is tonal and planar. Planes overlap: a blue ground, a blue-deep floor cut across it, a blue-sheet offset sheet, a navy phone, a white slip. Nothing is shaded to look round and no 3D is used on the hero phone or on any text.
 
 ### Shadow Vocabulary
-- **Card lift** (`box-shadow: 0 1px 2px rgba(11,21,48,.06), 0 4px 8px -4px rgba(11,21,48,.16)`): every card, panel, form and the report sheet.
-- **Booked halo** (`box-shadow: 0 0 0 3px rgba(46,139,87,.14), 0 4px 8px -4px rgba(11,21,48,.16)`): the Booked card and the call-back confirmation only.
-- **Floating header** (`box-shadow: 0 1px 2px rgba(11,21,48,.05), 0 6px 12px -8px rgba(11,21,48,.22)`): the header bar once the page scrolls.
-- **Checkpoint ring** (`box-shadow: 0 0 0 4–5px` of the dot colour at about 20%): dots on the call line, rail and connectors.
+- **Paper shadow** (`--shadow-paper`: `0 1px 2px rgb(15 27 51 / 0.16), 0 10px 24px -12px rgb(15 27 51 / 0.35)`): white cards, slips and documents on any ground.
+- **Paper drop** (`--drop-paper`: `drop-shadow(0 1px 1.5px rgb(15 27 51 / 0.2)) drop-shadow(0 9px 9px rgb(15 27 51 / 0.2))`): the same shadow for SVG groups: the hero phone body (on its own sibling shape, never on the screen layers), the booking slip, `.illo .slip`.
+- **Stage sheet** (`drop-shadow(0 10px 22px rgb(15 27 51 / 0.38))`): the hero's blue-sheet only.
+- **Bar cut** (`drop-shadow(0 3px 5px rgb(15 27 51 / 0.28))`): follows the masthead's hand-cut edge.
 
 ### Named Rules
-**The Short Lift Rule.** Shadows are offset and short (8px blur or less). A border plus a wide soft blur is not used anywhere.
-
-**The No Glow Rule.** No blurred colour glows. Rings around checkpoints are crisp and mean "this is a point on the route".
+**The Flat Planes Rule.** Depth comes from overlapping flat planes in blue, blue-deep, navy and blue-sheet. Shadows are an accent, not the structure.
+**The Soft Shadow Rule.** Every shadow has an offset and a blur. No zero-blur offset shadows anywhere. Only white slips and documents, plus the hero stage sheet (and the masthead cut that follows its edge), get soft shadows. Coloured or zero-offset halos are not part of the system.
+**The Flat Phone Rule.** The hero phone and all text are 2D: no perspective, preserve-3d, translateZ or rotateX/Y, and no filters on the screen layers. The pointer tilt was removed because it blurred the screen. The phone may rotate in plane (-5deg) only.
+**The Top-Left Light Rule.** Light comes from the top left and is told only in tone: lit facets step up (navy-raised on navy, light blue on blue) and the sheet steps down toward the bottom right (blue, blue-deep, blue-sheet).
 
 ## Shapes
 
-Friendly, soft corners on a sharp grid. Small parts use 6px (tags), controls 10px (buttons, inputs, nav items), cards 14px, dark panels 18px and the report sheet 22px. Pills and checkpoint dots are fully round. Lines are thin and straight (1.5 to 2px), with rounded caps on the call line. Marks such as ticks, crosses and plus signs are drawn in CSS or SVG, never typed characters.
+Everything is hand-cut. Illustration pieces, the hero floor edge, the masthead edge and the nav tab are polygons with slightly uneven edges. Every illustrated piece carries exactly one nicked corner at the top right. The top-left light facet is a clipped triangle in a lighter tone. Illustrations have no strokes.
+
+UI geometry is simple: pills (999px) for buttons, tabs and status chips; 16px for cards, 12px for slips and day pages, 10px for fields, 6px for focus rows. The phone is a 40-unit rounded rectangle. Links and controls take a pale 2px line, and text links use real underlines.
 
 ## Components
 
+Paper in, paper out: crisp white surfaces on flat ground, drawn lines that move with ease-out.
+
 ### Buttons
-Friendly, solid and unmistakable.
-- **Shape:** gently rounded (10px), at least 48px tall.
-- **Primary:** sun yellow with deep navy label at 700 weight (padding 12px 22px).
-- **Hover / Focus:** pressed sun on hover, a slight press scale on click, a 2px logo-blue focus ring (white on blue sections).
-- **Text link (secondary):** underlined navy text beside the primary ("See how it works"). There is no outlined or ghost button.
+- **Shape:** full pill (999px), min-height 3.25rem, weight 720, 1.0625rem, tracking -0.01em.
+- **Primary:** Call Orange fill, white text, padding 0.85rem 1.6rem. Small variant 2.75rem. Hero action is 3.5rem.
+- **Hover / Focus / Press:** hover goes to Orange Press and lifts 1px (translateY(-1px)); press scales to 0.98 and goes one step deeper (`--orange-deep`); transitions use `--dur-2` for transform and `--dur-1` for colour. Disabled and busy: 72% opacity and `cursor: progress`. Focus is a 3px ring offset 3px (blue on light, white on blue and navy).
+- **Quiet link (secondary):** navy text (white on blue and navy) with a faint 2px underline; on hover or focus a 2px line draws across it from the left and retracts to the right (`.link-quiet`, `.link-draw` in running text). Always 44px tall.
 
-### Step Pills
-- **Style:** white pill with a hairline border and a logo-blue dot (green when the step is booked or live). Used for "On the call", "Step 1", and the progress labels.
-
-### Tags
-- **Style:** plan-tint fill, 6px corners, label size. Used for qualified details on call cards ("15-year roof", "Claim filed").
+### Masthead
+- **At the top of home:** an oversized white wordmark over the blue hero with a hairline rule that wipes away as the page scrolls; the wordmark and links ride down and shrink into the compact bar on scroll (native scroll timelines, script fallback).
+- **Compact bar:** brand blue with a hand-cut blue-deep edge beneath it and the bar-cut soft shadow. White links at 0.9375rem, weight 600; a 2px underline draws on hover. Hides while scrolling down and slides back on scroll up; stays put under reduced motion, within 240px of the top, and when keyboard focus is inside.
+- **Current section:** one white cut-paper tab hangs under the links and slides between them as scroll-spy moves (transform only). Inner pages use the same bar, already compact.
+- **Mobile (below 62.5rem):** a "Menu" pill with two drawn bars that turn into a cross; opens a full-screen navy panel of ruled 800-weight links with a drawn chevron, an orange action, and mail and booking links. Items stagger in at 55ms. The panel traps focus and Escape closes it.
 
 ### Cards / Containers
-- **Corner Style:** 14px for cards, 18px for dark panels, 22px for the report sheet and form.
-- **Background:** surface white on the page; deep navy for transcripts, follow-ups and the busy-day list.
-- **Shadow Strategy:** card lift (see Elevation).
-- **Border:** hairline on white cards; none on navy.
-- **Internal Padding:** 14 to 20px; sheet 44 to 48px on desktop.
-- **Labelling:** every card showing example data carries an "Example" label in its header or caption.
+- **Corner Style:** 16px for cards, 12px for slips and day pages.
+- **Background:** white, navy text, on blue, navy or soft grounds. No nested cards.
+- **Shadow Strategy:** paper shadow only (see Elevation).
+- **Border:** none; separation is by plane and shadow.
+- **Internal Padding:** 1rem to 1.5rem, fluid.
 
 ### Inputs / Fields
-- **Style:** plan-tint fill, rule-steel 1px border, 10px corners, 50px tall, 16px text.
-- **Focus:** white fill, logo-blue border and a soft 3px blue ring.
-- **Error:** error-red border and a plain-language message under the field; a summary under the button.
+- **Style:** white, 1.5px navy-32% border, 10px radius, min-height 3.25rem, caret blue.
+- **Focus:** 3px blue-35% outline, border to blue; hover to navy.
+- **Error / Disabled:** invalid becomes a 2px navy edge (inset ring, nothing moves) with a bold navy message; the brand has no red. Disabled goes soft with a faint rule.
 
-### Navigation
-- **Style:** small label-size links in slate text, 10px rounded hit areas; the active section gets a logo-blue tint and blue text.
-- **Header:** flat on the white page at the top, becoming a floating white bar with the floating-header shadow on scroll. Book a demo always sits at the right.
-- **Mobile:** a menu button opens the same links as large rows; the phone booking bar takes over the action while you read.
+### The Working Day (signature)
+A scroll-scrubbed scene on a blue band: a cut-paper town (far blue-deep, mid blue-sheet, near navy hills), a hand-cut sun and moon, windows that light, and a pinned white day page. As each enquiry is read, the lost outcome is struck through and the kept outcome lands with the booking mark. The ground turns blue, then blue-deep, then navy using stacked flat layers whose opacity changes. Driven by named native view timelines, with a requestAnimationFrame fallback, and a static finished version (every lost and kept state shown) with no JS or reduced motion.
 
-### The Call Line (signature)
-The brand's route mark: a logo-blue line with checkpoint dots that carries a call from ring to booked. It appears as the hero's progress rail, the journey through How it works, the connectors between sections, and the phone hero track. Checkpoints fill blue as they are reached and turn green at Booked.
+### The Hero Call (signature)
+The phone screen plays the first minute: the firm's mobile site, a touch dot, Call now pressing and rippling, Calling, Answered by the AI front desk with a timer, then the booking slip landing and its check drawing. The story starts when the artwork scrolls into view (about 1.3s later), with a Replay control. The finished state is the default for no JS, reduced motion and crawlers.
 
-### The Call Route (signature)
-The hero's example call plays itself in four steps (incoming call, answered, qualified, booked) along the call line once it's on screen, in about nine seconds, with no scroll coupling. The step that's playing widens and finished steps fade back; steps still to come show their content faded. It pauses off screen, in a background tab and while the mouse rests on it (with a visible "Paused" note), then rests on Booked with Replay. The row keeps its height throughout, so nothing below moves. Without motion it shows the finished call.
+### Cut-paper Illustrations
+`.illo` SVG plates for the pillars, route markers and audiences. Flat fills only through the `.f-lb .f-b .f-bd .f-bs .f-n2 .f-n .f-w .f-g` classes; text on them through `.tx-*`; white slips take `.slip`.
 
-### The Report Sheet (signature)
-The monthly report drawn as the document itself: a header with the business and month, the storm chart, then a ledger of counts with dotted leaders. Counts only; no money figures.
+### Audit Sheet and FAQ
+The closing band sets the audit deliverable as a white cut-paper sheet, tilted slightly, whose three lines are ticked off with a drawn navy mark. FAQ rows are ruled, native `details`, with the plus turning to a minus and a measured open; no cards.
+
+### Motion
+Tokens: `--dur-1` 160ms (press, hover, focus), `--dur-2` 320ms (tabs, disclosure, underline), `--dur-3` 640ms (authored entrances); `--ease-out-quart` for control state, `--ease-out-expo` for entrances. Scroll-driven entrances use `[data-enter]`: **lay** (plates), **drop** (route markers), **draw** (rules and route lines), **settle** (FAQ rows, call log), **rise** (the demo phone), staggered with `--i`.
+**The Ease-Out Only Rule.** Decelerating curves only. No bounce, no overshoot, no elastic.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep the logo blue (#1E5BD8) and the logo exactly as specified.
-- **Do** use sun yellow (#FFC233) with deep navy text for every primary action, and nothing else.
-- **Do** show the product itself (calls, calendar slots, texts, the queue, the report) and label it as an example.
-- **Do** use the Title role (1.375rem Archivo 600) for every card and step title.
-- **Do** use the card lift shadow and hairline border for raised surfaces.
-- **Do** keep the plan grid faint (9% logo blue) and only behind the top of the first screen.
-- **Do** draw icons and marks in CSS or SVG with one stroke weight.
-- **Do** make every animated element readable with motion off.
+- **Do** build depth from flat overlapping planes: blue, blue-deep, navy and `--blue-sheet`.
+- **Do** give soft shadows only to white slips and documents and the hero stage sheet, with an offset and a blur.
+- **Do** keep the hero phone and all text flat, 2D and sharp.
+- **Do** use orange for the primary action only, one per screen, and green only for real success states.
+- **Do** keep heading tracking between -0.02em and -0.04em, and use the `--step-*` scale.
+- **Do** use `--dur-1/2/3` with `--ease-out-quart` or `--ease-out-expo`, and keep the finished state as the no-JS and reduced-motion default.
+- **Do** call it the "AI front desk"; each client may name their own.
+- **Do** show "from $299" as the only price.
+- **Do** let the hero action go to /free-audit/. This is a recorded exception to "action in working form": the hero button links to the audit page instead of performing the action in place.
+- **Do** cut every illustrated piece by hand with one nicked top-right corner and a top-left light facet in tone.
 
 ### Don't:
-- **Don't** change, recolour or re-letter the logo, or use the logo blue at a different value.
-- **Don't** use yellow for decoration, backgrounds or non-clickable highlights.
-- **Don't** use green for anything that is not booked or successful.
-- **Don't** bring back orange, a warm off-white page, or the pale blue-grey page ground.
-- **Don't** use wide soft shadows, blurred colour glows or gradient text.
-- **Don't** use thick coloured side bars on cards or list items.
-- **Don't** use typed characters (×, +, ✓, emoji) as icons.
-- **Don't** exceed 6rem for any text.
+- **Don't** use zero-blur offset shadows anywhere.
+- **Don't** apply 3D transforms to the hero phone or to text, or bring back the pointer tilt.
+- **Don't** use bounce, overshoot or elastic easing.
+- **Don't** put an eyebrow or kicker above a heading.
+- **Don't** use unicode glyphs or emoji as icons; draw them as SVG or CSS shapes.
+- **Don't** set tracking tighter than -0.04em.
+- **Don't** use orange for anything but the primary action, or green for anything but success.
+- **Don't** give the AI front desk a personal name.
+- **Don't** show any price except "from $299".
+- **Don't** use clinic or medical examples.
+- **Don't** nest cards or build the page from equal icon-heading-text card grids.
+
+### Defects the build carries (not canonized)
+- Content using `[data-enter]` sits at opacity 0 until it scrolls into view, and the closing sheet and demo lines are also hidden by script before they play. This violates "content visible by default" and must not be copied to new surfaces; new entrances start from a visible default.
+- Off-token values in the build: the pressed orange is hard-coded as #8c3105 in the masthead and close instead of `--orange-deep`; the booked check in the demo log uses #2f9a63 instead of Booked Green; the live-call status dot in the hero shows green before anything is booked.
+- The hero doc comments still mention a pointer tilt and an overshoot on the slip; the code has neither.

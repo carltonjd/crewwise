@@ -1,0 +1,238 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Demo from '../components/home/Demo.astro';
+import Pillars from '../components/home/Pillars.astro';
+import TeamStrip from '../components/home/TeamStrip.astro';
+import SlipAway from '../components/home/SlipAway.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import WhoFor from '../components/home/WhoFor.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { SITE, BUILDER } from '../config/site';
+import { faqJsonLd, serviceJsonLd } from '../lib/jsonld';
+
+const faq = [
+  {
+    question: 'Do I have to replace my website?',
+    answer: 'No. The AI front desk works with the website you already have.',
+  },
+  {
+    question: 'Can I keep my phone number?',
+    answer: "Yes. Calls forward to the AI front desk when you don’t pick up, or after hours. You choose.",
+  },
+  {
+    question: 'Will callers know they’re talking to an AI?',
+    answer: 'It answers naturally and always says it’s an AI assistant if a caller asks.',
+  },
+  {
+    question: 'How long does setup take?',
+    answer: 'About a week for the AI front desk, about 10 days for a new website.',
+  },
+];
+
+const jsonLd = [
+  serviceJsonLd({
+    name: 'AI front desk',
+    serviceType: 'AI phone answering and appointment booking',
+    description:
+      'Picks up every call, day or night, books visits or consultations, flags urgent calls and follows up so leads don’t go cold.',
+    path: '/#ai-front-desk',
+    id: 'ai-front-desk',
+  }),
+  serviceJsonLd({
+    name: 'Websites',
+    serviceType: 'Small business website design and build',
+    description:
+      `Fast, phone-friendly websites with clear call and booking buttons, built by ${BUILDER}.`,
+    path: '/#websites',
+    id: 'websites',
+  }),
+  serviceJsonLd({
+    name: 'AI automation',
+    serviceType: 'Business process automation',
+    description:
+      'We find the work your team still does by hand and automate it, starting with a free 30-minute call.',
+    path: '/#automation',
+    id: 'automation',
+  }),
+  faqJsonLd(faq),
+];
+---
+
+<Base
+  title="Crewwise | Websites and an AI front desk for service businesses"
+  description="A website that makes you easy to choose, and an AI front desk that answers every call, so new clients reach you even when you’re busy."
+  imageAlt="Crewwise logo on a blue field of overlapping paper planes with the headline: Win the first minute with every new client. A booking slip reads Consultation booked, Thu 10:00 AM."
+  current="home"
+  jsonLd={jsonLd}
+>
+  <Hero
+    sub="A website clients choose, and an AI front desk that answers every call, day or night."
+    ctaLabel="Get my free audit"
+    ctaHref="/free-audit/"
+    secondaryLabel="Hear it answer a call"
+    secondaryHref="#demo"
+    note="Free, with no obligation. We’ll show you what a new client sees."
+  />
+
+  <Demo
+    id="demo"
+    heading="Meet your AI front desk"
+    lead="It answers in your business name, takes the details, flags anything urgent and books the appointment. Pick a call to watch."
+    scenes={[
+      {
+        id: 'service',
+        tab: 'Home-service call',
+        context: 'Wednesday 2:14 PM. You’re on a job across town.',
+        lines: [
+          { speaker: 'caller', text: 'Hi, our AC stopped working this morning and the house is getting hot.' },
+          {
+            speaker: 'desk',
+            text: 'Sorry about that. Can I get your name and address? I’ll check the soonest time a technician can come out.',
+          },
+          { speaker: 'caller', text: 'Maria Lopez, 412 Oak Street.' },
+          {
+            speaker: 'desk',
+            text: 'Thanks, Maria. I can get a technician to you tomorrow at 9 AM. Does that work?',
+          },
+          { speaker: 'caller', text: 'Yes, that works.' },
+          { speaker: 'desk', text: 'You’re booked for Thursday at 9 AM. I’ll send you a confirmation.' },
+        ],
+        events: [
+          { time: '2:14:02 PM', title: 'Call answered', detail: 'In your business name', kind: 'answer', after: -1 },
+          { time: '2:14:20 PM', title: 'Details captured', detail: 'Maria Lopez, 412 Oak St, AC not cooling', kind: 'info', after: 2 },
+          { time: '2:14:21 PM', title: 'Flagged as urgent', detail: 'No cooling on a hot day', kind: 'urgent', after: 2 },
+          { time: '2:14:38 PM', title: 'Visit booked, Thu 9:00 AM', detail: 'Added to your calendar', kind: 'booked', after: 4 },
+          { time: '2:14:43 PM', title: 'Confirmation sent', detail: 'You get the summary too', kind: 'text', after: 5 },
+        ],
+      },
+      {
+        id: 'firm',
+        tab: 'Law firm call',
+        context: 'Wednesday 11:20 AM. You’re in court.',
+        lines: [
+          {
+            speaker: 'caller',
+            text: 'Hi, I was in a car accident last week and the other driver’s insurer keeps calling me. Do I have a case?',
+          },
+          {
+            speaker: 'desk',
+            text: 'I’m sorry that happened. I can’t give legal advice, but I can book you a consultation with an attorney. Can I take your name and a number?',
+          },
+          { speaker: 'caller', text: 'James Carter, 555 0147.' },
+          { speaker: 'desk', text: 'Thanks, James. Is tomorrow at 11 AM okay?' },
+          { speaker: 'caller', text: 'Yes, tomorrow works.' },
+          {
+            speaker: 'desk',
+            text: 'You’re booked for Thursday at 11 AM. I’ll send you a confirmation.',
+          },
+        ],
+        events: [
+          { time: '11:20:04 AM', title: 'Call answered', detail: 'In your firm’s name', kind: 'answer', after: -1 },
+          { time: '11:20:19 AM', title: 'No legal advice given', detail: 'The AI front desk offers a consultation instead', kind: 'info', after: 1 },
+          { time: '11:20:31 AM', title: 'Inquiry details taken', detail: 'James Carter, car accident, insurer calls', kind: 'info', after: 2 },
+          { time: '11:20:52 AM', title: 'Consultation booked, Thu 11:00 AM', detail: 'Added to your calendar', kind: 'booked', after: 4 },
+          { time: '11:20:58 AM', title: 'Confirmation sent', detail: 'With what to bring', kind: 'text', after: 5 },
+        ],
+      },
+    ]}
+  />
+
+  <Pillars
+    heading="One team for the calls, the website and the busywork"
+    lead="Start with the part that costs you most. We usually start with the AI front desk, and add the website and automation when you need them."
+  />
+
+  {SITE.SHOW_OCTALOGIC && <TeamStrip />}
+
+  <SlipAway
+    id="the-day"
+    heading="Good work still loses jobs before you get a chance"
+    lead="None of these show up as a lost job. The customer just books someone else, long before anyone compares quotes."
+    moments={[
+      {
+        time: '2:14 PM',
+        who: 'Calling about a leak',
+        text: 'You’re on a job. Many callers hang up instead of leaving a voicemail.',
+        lost: 'Hung up, no voicemail',
+        kept: 'It answered and booked the visit',
+        booked: true,
+      },
+      {
+        time: '6:40 PM',
+        who: 'No heat, elderly caller',
+        text: 'You’ve clocked off when an urgent call comes in.',
+        lost: 'Went to voicemail',
+        kept: 'Flagged urgent to you straight away',
+      },
+      {
+        time: '7:30 PM',
+        who: 'Web form, new client',
+        text: 'A web inquiry gets answered that evening, after they’ve booked someone else.',
+        lost: 'Booked someone else',
+        kept: 'It replied and booked a consultation',
+        booked: true,
+      },
+    ]}
+    closing={{
+      heading: 'After you clock off, the AI front desk keeps answering',
+      text: 'Calls forward to the AI front desk after hours. Urgent ones are flagged to you straight away, and the rest are booked or set for a follow-up.',
+    }}
+  />
+
+  <HowItWorks
+    id="setup"
+    heading="From audit to answering calls in about two weeks"
+    steps={[
+      {
+        title: 'Free audit',
+        when: 'Within two business days',
+        text: 'We look at your website and Google profile, call your line like a customer would, and send you what we found.',
+        ctaLabel: 'Get my free audit',
+        ctaHref: '/free-audit/',
+      },
+      {
+        title: 'We set it up',
+        when: 'About 7 to 10 days',
+        text: 'We set up the AI front desk, and build your website if you need one. Two rounds of changes are included.',
+      },
+      {
+        title: 'You go live',
+        when: 'When setup is done',
+        text: 'The AI front desk starts answering your calls and following up, and texting starts once your business number is registered with the phone carriers (usually 1 to 3 weeks). If we built you a new website, it launches too.',
+      },
+      {
+        title: 'Monthly check-in',
+        when: 'Every month',
+        text: 'A short report on what came in and what we followed up.',
+      },
+    ]}
+  />
+
+  <WhoFor
+    id="who-its-for"
+    heading="Built for people who can’t always pick up"
+    audiences={[
+      {
+        title: 'Home-service companies',
+        quote: 'You’re on a roof or under a sink when the next one calls. The AI front desk makes sure it doesn’t go to voicemail.',
+      },
+      {
+        title: 'Law, architecture and accounting firms',
+        quote:
+          'A new client inquiry deserves a reply in minutes, even when you’re with a client. The AI front desk handles the first conversation and books the consultation.',
+        note: 'On law firm calls, the AI front desk never gives legal advice.',
+      },
+    ]}
+  />
+
+  <Faq id="questions" heading="What owners ask first" items={faq} />
+
+  <FinalCta
+    heading="Find out what happens when a customer calls you"
+    text="Send us your website and business number. Within two business days, we’ll show you what a customer sees when they find you online, and what happened when we called."
+    ctaLabel="Get my free audit"
+    ctaHref="/free-audit/"
+  />
+</Base>

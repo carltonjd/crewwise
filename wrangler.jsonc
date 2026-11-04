@@ -1,9 +1,13 @@
 {
-  // Cloudflare Workers config: serve the static site in ./public (no server code).
+  // Cloudflare Workers config: serve the static Astro build in ./dist (no server code).
   "name": "crewwise",
   "compatibility_date": "2026-10-01",
+  // Wrangler builds the site itself before deploy and preview, so a missing dashboard build step cannot ship an empty dist.
+  "build": { "command": "pnpm build" },
   "assets": {
-    "directory": "./public",
+    "directory": "./dist",
     "not_found_handling": "404-page"
-  }
+  },
+  // Branch previews (wrangler preview, used by the Previews Base build). Settings live at the top level.
+  "previews": {}
 }

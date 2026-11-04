@@ -1,0 +1,749 @@
+---
+/**
+ * Demo: meet the AI front desk. A full-bleed continuation of the hero's blue field.
+ * The example call plays on a phone beside a navy cut-paper log and ends booked.
+ * Final state is in the HTML, so no-JS, reduced motion and crawlers get the whole call. Without JS both calls are
+ * shown, stacked (the tabs only exist once the script runs). Nothing here starts hidden or at zero opacity.
+ */
+export interface CallLine {
+  speaker: 'caller' | 'desk';
+  text: string;
+}
+export interface CallEvent {
+  time: string; // '2:14:03 PM'
+  title: string;
+  detail?: string;
+  kind: 'answer' | 'info' | 'urgent' | 'booked' | 'text';
+  after: number; // reveal after this transcript line index (-1 = before the first line)
+}
+export interface Scene {
+  id: string;
+  tab: string;
+  context: string; // 'Wednesday 2:14 PM. You’re on a job.'
+  lines: CallLine[];
+  events: CallEvent[];
+}
+interface Props {
+  id: string;
+  heading: string;
+  lead: string;
+  scenes: Scene[];
+}
+const { id, heading, lead, scenes } = Astro.props;
+---
+
+<section class="demo band band-blue" id={id} aria-labelledby="demo-title">
+  <div class="page">
+    <div class="head">
+      <h2 id="demo-title" class="display demo-title">{heading}</h2>
+      <p class="lead">{lead}</p>
+    </div>
+
+    <div class="stage" id="call" data-stage>
+      <div class="stage-bar">
+        <div class="tabs" role="tablist" aria-label="Example calls" data-tabs hidden style={`--n:${scenes.length}`}>
+          {
+            scenes.map((sc, i) => (
+              <button
+                type="button"
+                role="tab"
+                class="tab"
+                id={`tab-${sc.id}`}
+                aria-controls={`scene-${sc.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                data-tab={i}
+              >
+                {sc.tab}
+              </button>
+            ))
+          }
+          <span class="tab-ink" aria-hidden="true" />
+        </div>
+        <div class="bar-end">
+          <button type="button" class="replay" data-replay-btn hidden>
+            Replay this call
+          </button>
+          <span class="ex-tag">Example call</span>
+        </div>
+      </div>
+
+      {
+        scenes.map((sc, si) => (
+          <div class="scene" id={`scene-${sc.id}`} role="tabpanel" aria-labelledby={`tab-${sc.id}`} data-scene={si}>
+            <div class="phone">
+              <span class="notch" aria-hidden="true" />
+              <div class="screen talk">
+                <div class="talk-head">
+                  <span class="pulse" aria-hidden="true" />
+                  <div>
+                    <p class="talk-title">The AI front desk is on the line</p>
+                    <p class="talk-sub">{sc.context}</p>
+                  </div>
+                </div>
+                <ol class="transcript" tabindex="0" aria-label="Call transcript">
+                  {sc.lines.map((l, li) => (
+                    <li class:list={['line', l.speaker]} data-line={li}>
+                      <span class="who">{l.speaker === 'desk' ? 'AI front desk' : 'Caller'}</span>
+                      <p>{l.text}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+            <div class="log">
+              <p class="log-title">What the AI front desk did</p>
+              <ol class="events">
+                {sc.events.map((e) => (
+                  <li class:list={['event', `k-${e.kind}`]} data-after={e.after}>
+                    <span class="dot" aria-hidden="true" />
+                    <span class="time ev-time">{e.time}</span>
+                    <span class="ev-title">{e.title}</span>
+                    {e.detail && <span class="ev-detail">{e.detail}</span>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .demo {
+    isolation: isolate;
+    overflow: clip;
+    /* the hero's field carries on: less air above than a fresh section */
+    padding-top: clamp(3.5rem, 2rem + 4vw, 6rem);
+    padding-bottom: clamp(4rem, 2.5rem + 5vw, 7.5rem);
+  }
+  .head {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2.25rem, 1.5rem + 3vw, 4rem);
+  }
+  .demo-title {
+    font-size: var(--step-4);
+    max-width: 11ch;
+  }
+  @media (min-width: 60rem) {
+    .head {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+      gap: 2rem clamp(2rem, 1rem + 4vw, 5rem);
+    }
+    .head .lead {
+      max-width: 34ch;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  .stage {
+    position: relative;
+  }
+  .stage-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .bar-end {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+  }
+  /* the one "Example" style on the page: plain, muted, small. No underline, outline or fill, so it never reads as a control */
+  .ex-tag {
+    color: var(--on-blue-2);
+    font-size: var(--step--1);
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+  /* equal tabs on a blue-deep track; one white pill slides under the selected tab */
+  .tabs {
+    --pad: 0.25rem;
+    --gap: 0.25rem;
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--gap);
+    padding: var(--pad);
+    border-radius: 999px;
+    background: var(--blue-deep);
+  }
+  .tabs[hidden] {
+    display: none;
+  }
+  .tab-ink {
+    position: absolute;
+    z-index: -1;
+    top: var(--pad);
+    bottom: var(--pad);
+    left: var(--pad);
+    width: calc((100% - 2 * var(--pad) - (var(--n, 2) - 1) * var(--gap)) / var(--n, 2));
+    border-radius: 999px;
+    background: var(--white);
+    transition: transform var(--dur-2) var(--ease-out-expo);
+  }
+  .tabs:has(.tab:nth-of-type(2)[aria-selected='true']) .tab-ink {
+    transform: translateX(calc(100% + var(--gap)));
+  }
+  .tabs:has(.tab:nth-of-type(3)[aria-selected='true']) .tab-ink {
+    transform: translateX(calc(200% + 2 * var(--gap)));
+  }
+  .tab,
+  .replay {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: var(--step-sm);
+    line-height: 1.1;
+    color: var(--white);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    min-height: 2.75rem;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color var(--dur-1) var(--ease-out-quart),
+      color var(--dur-2) var(--ease-out-quart),
+      scale var(--dur-1) var(--ease-out-quart);
+  }
+  .tab:hover:not([aria-selected='true']) {
+    background: rgb(255 255 255 / 0.14);
+  }
+  .tab:active {
+    scale: 0.98;
+  }
+  .tab[aria-selected='true'] {
+    color: var(--navy);
+  }
+  .tab:focus-visible {
+    outline-offset: 2px;
+  }
+  /* matches the hero's "Replay example call": solid underline, 650 weight, thickens on hover, dims on press */
+  .replay {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+    margin-inline: -0.75rem -0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    text-decoration-line: underline;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+    transition:
+      text-decoration-thickness 160ms var(--ease-out-quart),
+      opacity 160ms var(--ease-out-quart);
+  }
+  .replay:hover {
+    text-decoration-thickness: 3px;
+  }
+  .replay:active {
+    opacity: 0.8;
+  }
+
+  .scene {
+    display: grid;
+    gap: clamp(2rem, 1rem + 2.5vw, 3rem);
+    padding-top: clamp(1.5rem, 0.8rem + 2vw, 2.5rem);
+    padding-right: 12px;
+    padding-bottom: 12px;
+    justify-items: center;
+  }
+  /* a flat blue-deep plane behind phone and log: layered paper, no shadow */
+  .scene {
+    position: relative;
+    isolation: isolate;
+  }
+  .scene::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 14% -3% -4% -3%;
+    background: var(--blue-deep);
+    clip-path: polygon(0 4%, 38% 0, 100% 6%, 99% 100%, 3% 96%);
+  }
+  .scene[hidden] {
+    display: none;
+  }
+  .scene:not([hidden]) ~ .scene:not([hidden]) {
+    margin-top: clamp(3rem, 2rem + 4vw, 5rem);
+  }
+  @media (min-width: 56rem) {
+    .scene {
+      grid-template-columns: minmax(0, 27rem) minmax(0, 28rem);
+      justify-content: center;
+      align-items: stretch;
+      gap: clamp(3rem, 1rem + 5vw, 6.5rem);
+    }
+  }
+
+  /* the phone: navy bezel, white screen, fixed height so the transcript scrolls inside it */
+  .phone {
+    position: relative;
+    width: 100%;
+    max-width: 27rem;
+    padding: 0.7rem;
+    border-radius: 38px;
+    background: var(--navy);
+  }
+  .notch {
+    position: absolute;
+    z-index: 1;
+    top: 1.35rem;
+    left: 50%;
+    width: 4.5rem;
+    height: 1.2rem;
+    translate: -50% 0;
+    border-radius: 999px;
+    background: var(--navy);
+  }
+  .screen {
+    height: 35rem;
+    border-radius: 30px;
+    background: var(--white);
+    color: var(--navy);
+    padding: 3.4rem 1.1rem 0;
+    overflow: hidden;
+  }
+  .talk {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .talk-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 14px;
+    background: var(--soft);
+  }
+  .pulse {
+    flex-shrink: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--green);
+  }
+  .talk-title {
+    font-weight: 780;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    font-size: var(--step-sm);
+  }
+  .talk-sub {
+    font-size: var(--step--1);
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+  .transcript {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0 0.25rem 1.25rem 0;
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+  }
+  .line {
+    display: grid;
+    gap: 0.2rem;
+    max-width: 90%;
+  }
+  .line .who {
+    font-size: var(--step--2);
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+  .line p {
+    font-size: var(--step-sm);
+    line-height: 1.4;
+    padding: 0.6rem 0.85rem;
+    border-radius: 16px 16px 16px 6px;
+    background: var(--soft);
+  }
+  .line.desk {
+    justify-self: end;
+  }
+  .line.desk .who {
+    color: var(--blue);
+    text-align: right;
+  }
+  .line.desk p {
+    border-radius: 16px 16px 6px 16px;
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  /* what it did: a flat navy cut-paper log, as tall as the phone */
+  .log {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-radius: 14px;
+    background: var(--navy);
+    color: var(--white);
+  }
+  .log-title {
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    font-size: var(--step-1);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .events {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.1rem;
+  }
+  .events::before {
+    content: '';
+    position: absolute;
+    left: 0.4rem;
+    top: 0.6rem;
+    bottom: 0.9rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--rule-navy-strong);
+  }
+  .event {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.7rem 1fr;
+    column-gap: 0.4rem;
+  }
+  .dot {
+    grid-row: 1 / span 3;
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: 0.2rem;
+    border-radius: 50%;
+    background: var(--navy);
+    border: 2px solid var(--light-blue);
+    position: relative;
+    z-index: 1;
+  }
+  .ev-time {
+    grid-column: 2;
+    font-size: var(--step--2);
+  }
+  .ev-title {
+    grid-column: 2;
+    font-weight: 740;
+    font-size: var(--step-ui);
+    line-height: 1.3;
+  }
+  .ev-detail {
+    grid-column: 2;
+    font-size: var(--step-sm);
+    color: var(--on-navy-2);
+    line-height: 1.35;
+  }
+  .k-urgent .dot {
+    border-color: var(--white);
+    background: var(--white);
+  }
+  .k-booked .dot {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: -0.12rem;
+    margin-top: 0.1rem;
+    border: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6L12 5.6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 100% no-repeat,
+      var(--green);
+  }
+  .k-booked .ev-title {
+    color: var(--white);
+  }
+
+  /* playback (JS adds .is-playing) */
+  .is-playing .scene:not([hidden]) .line:not(.is-in),
+  .is-playing .scene:not([hidden]) .event:not(.is-in) {
+    opacity: 0;
+  }
+  .is-playing .scene:not([hidden]) .line.is-in {
+    animation: rise var(--dur-3) var(--ease-out-expo) both;
+  }
+  .is-playing .scene:not([hidden]) .event.is-in {
+    animation: tick var(--dur-3) var(--ease-out-expo) both;
+  }
+  .typing {
+    display: inline-flex;
+    gap: 4px;
+    padding: 0.75rem 0.9rem;
+    background: var(--navy);
+    border-radius: 16px 16px 6px 16px;
+    justify-self: end;
+  }
+  .typing i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--white);
+    opacity: 0.6;
+    animation: dot 900ms ease-in-out infinite;
+  }
+  .typing i:nth-child(2) {
+    animation-delay: 150ms;
+  }
+  .typing i:nth-child(3) {
+    animation-delay: 300ms;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scene.is-entering {
+      animation: settle-in var(--dur-3) var(--ease-out-expo) both;
+    }
+    /* the typing dots only run while the stage is on screen */
+    [data-stage][data-offscreen] .typing i {
+      animation-play-state: paused;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .typing i {
+      animation: none;
+    }
+  }
+  @keyframes settle-in {
+    from {
+      transform: translateY(12px);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  @keyframes tick {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+  }
+  @keyframes dot {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+      opacity: 1;
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .events {
+      gap: 1rem;
+    }
+  }
+  /* below the two-column layout the panels grow with the call instead of holding
+     empty space; the phone screen is capped so a long call scrolls inside it */
+  @media (max-width: 55.99rem) {
+    .is-playing .scene:not([hidden]) .line:not(.is-in),
+    .is-playing .scene:not([hidden]) .event:not(.is-in) {
+      display: none;
+    }
+    .events {
+      justify-content: flex-start;
+    }
+    .screen {
+      height: auto;
+    }
+    .transcript {
+      max-height: 19rem;
+    }
+  }
+  @media (max-width: 40rem) {
+    .transcript {
+      max-height: 17rem;
+    }
+    .phone {
+      border-radius: 32px;
+    }
+    .log {
+      padding: 1.35rem 1.25rem 1.5rem;
+    }
+    .log-title {
+      margin-bottom: 1.1rem;
+    }
+    .scene {
+      padding-right: 8px;
+      padding-bottom: 8px;
+    }
+  }
+  /* print: no dark grounds; the phone, bubbles and log become outlined paper */
+  @media print {
+    .tabs,
+    .phone,
+    .line.desk p,
+    .log {
+      background: #fff !important;
+      color: #000 !important;
+      border: 1px solid #000;
+    }
+    .notch {
+      display: none;
+    }
+    .log *,
+    .line.desk p {
+      color: #000 !important;
+    }
+  }
+</style>
+
+<script>
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  let runId = 0;
+
+  async function play(stage: HTMLElement, scene: HTMLElement, force = false) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce && !force) return false;
+    const id = ++runId;
+    const lines = [...scene.querySelectorAll<HTMLElement>('[data-line]')];
+    const events = [...scene.querySelectorAll<HTMLElement>('[data-after]')];
+    const list = scene.querySelector<HTMLElement>('.transcript')!;
+    stage.querySelectorAll('.is-in').forEach((el) => el.classList.remove('is-in'));
+    stage.querySelectorAll('.typing').forEach((el) => el.remove());
+    stage.classList.add('is-playing');
+    list.scrollTop = 0;
+
+    // keep the newest line in view inside the phone screen
+    const follow = (el: HTMLElement) => {
+      const top = el.offsetTop + el.offsetHeight + 12 - list.clientHeight;
+      if (top > list.scrollTop) {
+        list.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    };
+
+    const showEvents = async (after: number) => {
+      for (const e of events.filter((x) => Number(x.dataset.after) === after)) {
+        if (id !== runId) return;
+        e.classList.add('is-in');
+        await wait(420);
+      }
+    };
+    await wait(500);
+    await showEvents(-1);
+    for (let i = 0; i < lines.length; i++) {
+      if (id !== runId) return false;
+      const line = lines[i];
+      if (line.classList.contains('desk')) {
+        const t = document.createElement('li');
+        t.className = 'typing';
+        t.setAttribute('aria-hidden', 'true');
+        t.innerHTML = '<i></i><i></i><i></i>';
+        list.insertBefore(t, line);
+        follow(t);
+        await wait(650);
+        t.remove();
+        if (id !== runId) return false;
+      }
+      line.classList.add('is-in');
+      follow(line);
+      await wait(line.classList.contains('desk') ? 900 : 750);
+      await showEvents(i);
+    }
+    return id === runId;
+  }
+
+  function initStage() {
+    const stage = document.querySelector<HTMLElement>('[data-stage]');
+    if (!stage) return;
+    const scenes = [...stage.querySelectorAll<HTMLElement>('[data-scene]')];
+    const tabs = [...stage.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const tablist = stage.querySelector<HTMLElement>('[data-tabs]');
+    const replay = stage.querySelector<HTMLButtonElement>('[data-replay-btn]');
+    let current = 0;
+    // without JS every scene is shown; with it, only the selected one
+    scenes.forEach((s, j) => (s.hidden = j !== 0));
+    if (tablist && scenes.length > 1) tablist.hidden = false;
+    if (replay) replay.hidden = false;
+
+    const toEnd = (i: number) => {
+      const l = scenes[i]?.querySelector<HTMLElement>('.transcript');
+      if (l) l.scrollTop = l.scrollHeight;
+    };
+    // the finished call is the default: clear any playback state and rest the transcript at its end
+    const finish = (i: number) => {
+      stage.classList.remove('is-playing');
+      stage.querySelectorAll('.is-in').forEach((el) => el.classList.remove('is-in'));
+      stage.querySelectorAll('.typing').forEach((el) => el.remove());
+      toEnd(i);
+    };
+    const show = (i: number, focus = false) => {
+      runId++;
+      scenes.forEach((s, j) => {
+        s.hidden = j !== i;
+        s.classList.remove('is-entering');
+      });
+      if (i !== current) {
+        void scenes[i].offsetWidth;
+        scenes[i].classList.add('is-entering');
+      }
+      tabs.forEach((t, j) => {
+        t.setAttribute('aria-selected', String(j === i));
+        t.tabIndex = j === i ? 0 : -1;
+      });
+      if (focus) tabs[i]?.focus();
+      current = i;
+      finish(i);
+    };
+    const run = async (i: number, force = false) => {
+      // the tabs drive the scenes: a call never switches itself to the next one
+      await play(stage, scenes[i], force);
+    };
+    tabs.forEach((t, i) =>
+      t.addEventListener('click', () => {
+        show(i);
+        run(i);
+      }),
+    );
+    tablist?.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const n = (current + (e.key === 'ArrowRight' ? 1 : -1) + scenes.length) % scenes.length;
+      show(n, true);
+      run(n);
+    });
+    replay?.addEventListener('click', () => {
+      run(current, true);
+    });
+    // the typing dots pause whenever the stage is off screen
+    const vis = new IntersectionObserver((entries) => {
+      for (const e of entries) stage.toggleAttribute('data-offscreen', !e.isIntersecting);
+    });
+    vis.observe(stage);
+    finish(0);
+    document.fonts?.ready.then(() => !stage.classList.contains('is-playing') && toEnd(current));
+    document.querySelectorAll<HTMLAnchorElement>('[data-replay]').forEach((a) =>
+      a.addEventListener('click', () => {
+        show(0);
+        setTimeout(() => run(0), 500);
+      }),
+    );
+  }
+  document.addEventListener('astro:page-load', initStage);
+</script>

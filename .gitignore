@@ -15,3 +15,21 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Astro
+dist/
+.astro/
+
+# Tests
+test-results/
+playwright-report/
+coverage/
+
+# Live design iteration scratch and exploration sandbox
+.impeccable/live/
+explore/
+
+# impeccable working files (screenshots, question state)
+.impeccable/review/
+.impeccable/questions/
+.impeccable/live/

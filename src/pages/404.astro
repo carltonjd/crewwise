@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Page not found | Crewwise"
+  description="This page isn’t here. Go back to the home page or get a free audit."
+  noindex
+>
+  <section class="lost ground-blue" aria-labelledby="lost-title">
+    <!-- the floor, and a torn white slip lying on it: blank ruled lines, no text -->
+    <div class="deco" aria-hidden="true">
+      <svg class="floor" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+        <polygon points="0,74 16,65 35,53 56,38 78,18 100,0 100,101 0,101" />
+        <polyline points="0,74 16,65 35,53 56,38 78,18 100,0" vector-effect="non-scaling-stroke" />
+      </svg>
+      <svg class="torn" viewBox="0 0 240 300" focusable="false">
+        <g class="slipg">
+          <polygon
+            class="paper"
+            points="10,6 128,0 150,14 142,30 160,44 150,62 166,80 156,98 172,116 160,134 176,150 168,170 120,176 96,190 60,184 40,200 10,196"
+          />
+          <g class="lines">
+            <rect x="32" y="34" width="84" height="8" rx="4" />
+            <rect x="32" y="58" width="96" height="8" rx="4" />
+            <rect x="32" y="82" width="64" height="8" rx="4" />
+            <rect x="32" y="106" width="92" height="8" rx="4" />
+            <rect x="32" y="130" width="48" height="8" rx="4" />
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="page inner">
+      <div class="copy">
+        <h1 id="lost-title">Page not found</h1>
+        <p class="lead">
+          The page you wanted isn’t here. The link may have a typo, or the page may have moved.
+        </p>
+        <div class="actions">
+          <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
+          <a href="/" class="link-quiet">Go to the home page</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(4rem, 2rem + 8vw, 8rem);
+    min-height: 68vh;
+    display: grid;
+    align-items: center;
+  }
+  .deco {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .floor {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: clamp(9rem, 7rem + 12vw, 16rem);
+    display: block;
+    overflow: visible;
+  }
+  .floor polygon {
+    fill: var(--blue-deep);
+  }
+  .floor polyline {
+    fill: none;
+    stroke: var(--white);
+    stroke-opacity: 0.26;
+    stroke-width: 2px;
+    stroke-linejoin: round;
+  }
+  /* the torn slip lies on the floor in the right half, tilted, with a soft paper shadow */
+  .torn {
+    position: absolute;
+    right: clamp(1rem, 8vw, 9rem);
+    bottom: clamp(1.5rem, 3vw, 4rem);
+    width: clamp(7.5rem, 5rem + 12vw, 15rem);
+    height: auto;
+    overflow: visible;
+  }
+  .slipg {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: rotate(7deg);
+    filter: var(--drop-paper);
+  }
+  .paper {
+    fill: var(--white);
+  }
+  .lines rect {
+    fill: var(--navy);
+    fill-opacity: 0.12;
+  }
+  @media print {
+    .deco {
+      display: none;
+    }
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 3rem 4rem;
+    align-items: center;
+  }
+  @media (min-width: 56rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  h1 {
+    margin: 0;
+    max-width: 10ch;
+    color: #fff;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 1.2rem + 5.6vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+  .lead {
+    margin-top: 1.5rem;
+    max-width: 40ch;
+  }
+  .actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+</style>

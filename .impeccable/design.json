@@ -1,436 +1,302 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-08T10:02:09.672021+00:00",
+  "generatedAt": "2026-11-03T15:31:06.391Z",
   "title": "Design System: Crewwise",
   "extensions": {
     "colorMeta": {
-      "logo-blue": {
+      "blue": {
         "role": "primary",
-        "displayName": "Logo Blue",
+        "displayName": "Crewwise Blue",
         "canonical": "#1E5BD8",
-        "oklch": "oklch(51.3% 0.202 262.3)",
         "tonalRamp": [
-          "#00003B",
-          "#00186D",
-          "#0338A3",
-          "#1D5AD7",
-          "#4181FF",
-          "#72ABFF",
-          "#9FD0FF",
-          "#C4EFFF"
+          "#0A1F4D",
+          "#0F2E72",
+          "#163E98",
+          "#1A4FBD",
+          "#1E5BD8",
+          "#5A87E4",
+          "#A5BFF0",
+          "#E3ECFB"
         ]
       },
-      "logo-blue-raised": {
+      "blue-ink": {
         "role": "primary",
-        "displayName": "Raised Blue",
-        "canonical": "#2C68E4",
-        "oklch": "oklch(55.2% 0.199 262.5)",
+        "displayName": "Blue Ink",
+        "canonical": "#1A4FBD",
         "tonalRamp": [
-          "#00003A",
-          "#00186C",
-          "#0538A2",
-          "#1F5AD5",
-          "#4381FF",
-          "#73ABFF",
-          "#A0D0FF",
-          "#C5EFFF"
+          "#091B42",
+          "#0E2862",
+          "#133783",
+          "#1A4FBD",
+          "#3F6CCB",
+          "#7A98DB",
+          "#B6C8EC",
+          "#E6EDF9"
         ]
       },
-      "logo-blue-rule": {
+      "blue-deep": {
         "role": "primary",
-        "displayName": "Blue Rule",
-        "canonical": "#5A8BEE",
-        "oklch": "oklch(64.9% 0.157 262.9)",
+        "displayName": "Shadow Blue",
+        "canonical": "#1749B0",
         "tonalRamp": [
-          "#000232",
-          "#031F60",
-          "#173E91",
-          "#3360BF",
-          "#5485E7",
-          "#7FACFF",
-          "#A9D1FF",
-          "#CDEFFF"
+          "#08193F",
+          "#0D275F",
+          "#123780",
+          "#1749B0",
+          "#3E68C2",
+          "#7A97D6",
+          "#B7C8EA",
+          "#E6EDF9"
         ]
       },
-      "deep-navy": {
+      "blue-sheet": {
+        "role": "primary",
+        "displayName": "Sheet Blue",
+        "canonical": "#163B88 (color-mix(in oklab, #1749B0, #0F1B33 30%))",
+        "tonalRamp": [
+          "#050F24",
+          "#0A1D44",
+          "#102C64",
+          "#163B88",
+          "#3A5CA0",
+          "#6C87BB",
+          "#A9B9D9",
+          "#DFE5F1"
+        ]
+      },
+      "navy": {
         "role": "neutral",
-        "displayName": "Deep Navy",
-        "canonical": "#0B1530",
-        "oklch": "oklch(20.4% 0.056 266.3)",
+        "displayName": "Night Navy",
+        "canonical": "#0F1B33",
         "tonalRamp": [
-          "#04091F",
-          "#1A2541",
-          "#374463",
-          "#576687",
-          "#7A89AC",
-          "#9EAED2",
-          "#C1D1F5",
-          "#E0EFFF"
+          "#0F1B33",
+          "#16264A",
+          "#223661",
+          "#36507F",
+          "#566E9A",
+          "#8396B7",
+          "#B8C3D7",
+          "#E8ECF3"
         ]
       },
-      "sun-yellow": {
-        "role": "secondary",
-        "displayName": "Sun Yellow",
-        "canonical": "#FFC233",
-        "oklch": "oklch(84.7% 0.161 83.4)",
-        "tonalRamp": [
-          "#1D0200",
-          "#421B00",
-          "#693800",
-          "#915900",
-          "#B77D00",
-          "#D8A530",
-          "#F6CA74",
-          "#FFE9A2"
-        ]
-      },
-      "sun-yellow-pressed": {
-        "role": "secondary",
-        "displayName": "Pressed Sun",
-        "canonical": "#FFB300",
-        "oklch": "oklch(81.8% 0.171 77.9)",
-        "tonalRamp": [
-          "#200000",
-          "#461600",
-          "#703300",
-          "#995300",
-          "#C07700",
-          "#E0A126",
-          "#FDC770",
-          "#FFE79F"
-        ]
-      },
-      "pale-sun": {
-        "role": "secondary",
-        "displayName": "Pale Sun",
-        "canonical": "#FFE08A",
-        "oklch": "oklch(91.4% 0.111 90.3)",
-        "tonalRamp": [
-          "#170700",
-          "#372200",
-          "#5B4000",
-          "#7E6200",
-          "#A3862D",
-          "#C7AB5E",
-          "#E7CF8F",
-          "#FFEDB7"
-        ]
-      },
-      "page-white": {
+      "navy-raised": {
         "role": "neutral",
-        "displayName": "Page White",
+        "displayName": "Navy Raised",
+        "canonical": "#16264A",
+        "tonalRamp": [
+          "#0B1428",
+          "#16264A",
+          "#21386A",
+          "#33508A",
+          "#516EA6",
+          "#7F96C0",
+          "#B3C2DC",
+          "#E5EBF5"
+        ]
+      },
+      "light-blue": {
+        "role": "neutral",
+        "displayName": "After-Hours Blue",
+        "canonical": "#8FB3FF",
+        "tonalRamp": [
+          "#1A2D57",
+          "#2A4682",
+          "#3E62B0",
+          "#5F86D9",
+          "#8FB3FF",
+          "#B0CAFF",
+          "#D2E1FF",
+          "#EEF4FF"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft Paper",
+        "canonical": "#F4F7FC",
+        "tonalRamp": [
+          "#2B3345",
+          "#4B556B",
+          "#6F7A91",
+          "#939DB2",
+          "#B6BFD0",
+          "#D3D9E6",
+          "#E8ECF4",
+          "#F4F7FC"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
         "canonical": "#FFFFFF",
-        "oklch": "oklch(100.0% 0.000 89.9)",
         "tonalRamp": [
-          "#0B0B0B",
-          "#262626",
-          "#454545",
-          "#666666",
-          "#898989",
-          "#AEAEAE",
-          "#D1D1D1",
-          "#EEEEEE"
+          "#4A4F5C",
+          "#6B7080",
+          "#8E92A0",
+          "#B0B4BF",
+          "#CDD0D8",
+          "#E3E5EA",
+          "#F1F2F5",
+          "#FFFFFF"
         ]
       },
-      "surface-white": {
-        "role": "neutral",
-        "displayName": "Surface White",
-        "canonical": "#FFFFFF",
-        "oklch": "oklch(100.0% 0.000 89.9)",
+      "orange": {
+        "role": "secondary",
+        "displayName": "Call Orange",
+        "canonical": "#C94708",
         "tonalRamp": [
-          "#0B0B0B",
-          "#262626",
-          "#454545",
-          "#666666",
-          "#898989",
-          "#AEAEAE",
-          "#D1D1D1",
-          "#EEEEEE"
+          "#3D1502",
+          "#632204",
+          "#842E05",
+          "#A93B06",
+          "#C94708",
+          "#E07440",
+          "#F0AC8B",
+          "#FBE4D8"
         ]
       },
-      "plan-tint": {
-        "role": "neutral",
-        "displayName": "Plan Tint",
-        "canonical": "#F4F7FE",
-        "oklch": "oklch(97.6% 0.010 267.4)",
+      "orange-press": {
+        "role": "secondary",
+        "displayName": "Orange Press",
+        "canonical": "#A93B06",
         "tonalRamp": [
-          "#090B0F",
-          "#24262B",
-          "#43454A",
-          "#63666C",
-          "#86898F",
-          "#ABAEB4",
-          "#CED1D8",
-          "#EBEEF5"
+          "#3D1502",
+          "#632204",
+          "#842E05",
+          "#A93B06",
+          "#C94708",
+          "#E07440",
+          "#F0AC8B",
+          "#FBE4D8"
         ]
       },
-      "slate-text": {
-        "role": "neutral",
-        "displayName": "Slate Text",
-        "canonical": "#3A4766",
-        "oklch": "oklch(40.1% 0.055 266.5)",
-        "tonalRamp": [
-          "#04091E",
-          "#1A2541",
-          "#374463",
-          "#576686",
-          "#7A89AB",
-          "#9EAED2",
-          "#C1D1F5",
-          "#E0EFFF"
-        ]
-      },
-      "muted-slate": {
-        "role": "neutral",
-        "displayName": "Muted Slate",
-        "canonical": "#55617D",
-        "oklch": "oklch(49.4% 0.047 266.6)",
-        "tonalRamp": [
-          "#040A1D",
-          "#1C253E",
-          "#39445F",
-          "#5A6682",
-          "#7C89A7",
-          "#A0AECD",
-          "#C3D1F1",
-          "#E1EFFF"
-        ]
-      },
-      "hairline": {
-        "role": "neutral",
-        "displayName": "Hairline",
-        "canonical": "#DDE4F2",
-        "oklch": "oklch(91.8% 0.020 264.5)",
-        "tonalRamp": [
-          "#070B14",
-          "#212631",
-          "#404550",
-          "#606672",
-          "#838996",
-          "#A7AEBB",
-          "#CAD1DF",
-          "#E8EFFD"
-        ]
-      },
-      "rule-steel": {
-        "role": "neutral",
-        "displayName": "Rule Steel",
-        "canonical": "#BFCBE3",
-        "oklch": "oklch(84.0% 0.036 264.4)",
-        "tonalRamp": [
-          "#050A1A",
-          "#1E2638",
-          "#3B4559",
-          "#5C667B",
-          "#7E89A0",
-          "#A3AEC6",
-          "#C5D1E9",
-          "#E2EFFF"
-        ]
-      },
-      "on-blue": {
-        "role": "neutral",
-        "displayName": "On Blue",
-        "canonical": "#FFFFFF",
-        "oklch": "oklch(100.0% 0.000 89.9)",
-        "tonalRamp": [
-          "#0B0B0B",
-          "#262626",
-          "#454545",
-          "#666666",
-          "#898989",
-          "#AEAEAE",
-          "#D1D1D1",
-          "#EEEEEE"
-        ]
-      },
-      "on-blue-soft": {
-        "role": "neutral",
-        "displayName": "On Blue Soft",
-        "canonical": "#DCE6FF",
-        "oklch": "oklch(92.5% 0.036 268.3)",
-        "tonalRamp": [
-          "#060A1A",
-          "#1F2638",
-          "#3D4559",
-          "#5D667B",
-          "#80899F",
-          "#A4AEC5",
-          "#C7D1E9",
-          "#E4EEFF"
-        ]
-      },
-      "booked-green": {
+      "green": {
         "role": "tertiary",
         "displayName": "Booked Green",
         "canonical": "#1F7547",
-        "oklch": "oklch(50.0% 0.109 155.2)",
         "tonalRamp": [
-          "#001300",
-          "#003211",
-          "#00552A",
-          "#23784A",
-          "#4C9C6C",
-          "#77C192",
-          "#A4E2B9",
-          "#C9FEDA"
+          "#08261A",
+          "#0F3F28",
+          "#175A38",
+          "#1F7547",
+          "#3F9468",
+          "#7FB899",
+          "#B8D8C6",
+          "#E4F1EA"
         ]
       },
-      "booked-dot": {
-        "role": "tertiary",
-        "displayName": "Booked Dot",
-        "canonical": "#2E8B57",
-        "oklch": "oklch(56.9% 0.119 154.9)",
+      "slate-label": {
+        "role": "neutral",
+        "displayName": "Slate Label",
+        "canonical": "#5B6B8C",
         "tonalRamp": [
-          "#001300",
-          "#00330F",
-          "#005628",
-          "#157947",
-          "#449E69",
-          "#73C290",
-          "#A1E3B7",
-          "#C6FFD8"
-        ]
-      },
-      "booked-mint": {
-        "role": "tertiary",
-        "displayName": "Booked Mint",
-        "canonical": "#B9F5CF",
-        "oklch": "oklch(91.9% 0.080 156.7)",
-        "tonalRamp": [
-          "#001202",
-          "#003017",
-          "#165133",
-          "#3B7453",
-          "#5F9875",
-          "#84BD9A",
-          "#ADDFBF",
-          "#D0FBDF"
-        ]
-      },
-      "error-red": {
-        "role": "error",
-        "displayName": "Error Red",
-        "canonical": "#B42318",
-        "oklch": "oklch(50.0% 0.182 29.5)",
-        "tonalRamp": [
-          "#2A0000",
-          "#570000",
-          "#880000",
-          "#B7271C",
-          "#E25242",
-          "#FF8472",
-          "#FFB09F",
-          "#FFD4C4"
+          "#1E2638",
+          "#2F3B54",
+          "#435272",
+          "#5B6B8C",
+          "#7C8AA6",
+          "#A1ACC2",
+          "#C8CFDC",
+          "#E8EBF1"
         ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Hero headline only."
+        "purpose": "Hero, demo and story headings. Home hero h1 runs at weight 900; never above 6rem."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Section headings."
+        "purpose": "Band headings (h2)."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Every card and step title."
-      },
-      "lead": {
-        "displayName": "Lead",
-        "purpose": "Section intros and the hero description."
+        "purpose": "Card, step and FAQ titles (h3)."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Running text, 65 to 75 characters a line."
-      },
-      "small": {
-        "displayName": "Small",
-        "purpose": "Card text and details."
+        "purpose": "Running text at weight 420, 62ch measure."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Pills, buttons, timestamps, captions, example tags."
-      },
-      "wordmark": {
-        "displayName": "Wordmark",
-        "purpose": "The logo only; fixed by the logo spec."
+        "purpose": "Times in tabular numerals, captions and plain tag text."
       }
     },
     "shadows": [
       {
-        "name": "card-lift",
-        "value": "0 1px 2px rgba(11,21,48,.06), 0 4px 8px -4px rgba(11,21,48,.16)",
-        "purpose": "Every card, panel, form and the report sheet."
+        "name": "shadow-paper",
+        "value": "0 1px 2px rgb(15 27 51 / 0.16), 0 10px 24px -12px rgb(15 27 51 / 0.35)",
+        "purpose": "White cards, slips and documents on any ground."
       },
       {
-        "name": "booked-halo",
-        "value": "0 0 0 3px rgba(46,139,87,.14), 0 4px 8px -4px rgba(11,21,48,.16)",
-        "purpose": "Booked card and call-back confirmation only."
+        "name": "drop-paper",
+        "value": "drop-shadow(0 1px 1.5px rgb(15 27 51 / 0.2)) drop-shadow(0 9px 9px rgb(15 27 51 / 0.2))",
+        "purpose": "shadow-paper for SVG groups: hero phone body (sibling shape only) and booking slip."
       },
       {
-        "name": "floating-header",
-        "value": "0 1px 2px rgba(11,21,48,.05), 0 6px 12px -8px rgba(11,21,48,.22)",
-        "purpose": "Header bar after scrolling."
+        "name": "stage-sheet",
+        "value": "drop-shadow(0 10px 22px rgb(15 27 51 / 0.38))",
+        "purpose": "The hero blue-sheet only."
       },
       {
-        "name": "checkpoint-ring",
-        "value": "0 0 0 5px rgba(30,91,216,.20)",
-        "purpose": "Dots on the call line, rail and connectors."
+        "name": "bar-cut",
+        "value": "drop-shadow(0 3px 5px rgb(15 27 51 / 0.28))",
+        "purpose": "Follows the masthead hand-cut edge."
       }
     ],
     "motion": [
       {
-        "name": "ease",
-        "value": "cubic-bezier(.2,.8,.2,1)",
-        "purpose": "Default easing for reveals and state changes."
+        "name": "dur-1",
+        "value": "160ms",
+        "purpose": "Feedback: press, hover, focus."
       },
       {
-        "name": "spring",
-        "value": "cubic-bezier(.34,1.35,.64,1)",
-        "purpose": "Small, deliberate overshoot for cards and dots arriving."
+        "name": "dur-2",
+        "value": "320ms",
+        "purpose": "State: tabs, disclosure, underline."
       },
       {
-        "name": "reveal",
-        "value": "opacity .45s and translateY(10px) .55s; stagger 0.45ms per delay unit",
-        "purpose": "Scroll reveals start at 30% opacity, never invisible."
+        "name": "dur-3",
+        "value": "640ms",
+        "purpose": "Authored: a timed entrance such as a demo scene change."
       },
       {
-        "name": "call-scene",
-        "value": "pinned 230vh desktop, 200vh phone; beats at 0, .16, .40, .72; autoplay after 3s idle",
-        "purpose": "The hero call played by scroll; static diagram with reduced motion."
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Control state and scroll-scrubbed motion."
+      },
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Entrances and the masthead (alias --ease-out)."
+      },
+      {
+        "name": "ease-ink",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Page-out transition."
+      },
+      {
+        "name": "enter-verbs",
+        "value": "lay, drop, draw, settle, rise",
+        "purpose": "[data-enter] scroll-driven entrances, staggered with --i. See defects: they start at opacity 0."
       }
     ],
     "breakpoints": [
       {
         "name": "xs",
-        "value": "560px"
+        "value": "30rem"
       },
       {
         "name": "sm",
-        "value": "640px"
-      },
-      {
-        "name": "md",
-        "value": "760px"
+        "value": "40rem"
       },
       {
         "name": "lg",
-        "value": "900px"
+        "value": "60rem"
       },
       {
-        "name": "form",
-        "value": "980px"
-      },
-      {
-        "name": "hero",
-        "value": "1000px"
-      },
-      {
-        "name": "xl",
-        "value": "1100px"
+        "name": "nav",
+        "value": "62.5rem"
       }
     ]
   },
@@ -439,141 +305,148 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Every primary action: Book a demo, Call me back, the phone booking bar.",
-      "html": "<a class=\"ds-btn\" href=\"#\">Book a 15-min demo</a>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border-radius:10px;border:1px solid #FFC233;background:#FFC233;color:#0B1530;font:700 15px/1 'Hanken Grotesk',system-ui,sans-serif;text-decoration:none;transition:background-color .15s,transform .2s cubic-bezier(.34,1.35,.64,1)}.ds-btn:hover{background:#FFB300}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid #1E5BD8;outline-offset:3px}"
+      "description": "The one orange action on a screen; pill, lifts on hover, gives on press.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Get my free audit</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:3.25rem;padding:.85rem 1.6rem;border-radius:999px;background:var(--orange,#C94708);color:#fff;font-weight:720;font-size:1.0625rem;letter-spacing:-.01em;text-decoration:none;border:0;cursor:pointer;transition:transform 320ms cubic-bezier(.16,1,.3,1),background-color 160ms cubic-bezier(.25,1,.5,1)}.ds-btn:hover{background:var(--orange-press,#A93B06);transform:translateY(-1px)}.ds-btn:active{background:#8f391e;transform:scale(.98);transition-duration:160ms}.ds-btn:focus-visible{outline:3px solid var(--blue,#1E5BD8);outline-offset:3px}"
     },
     {
-      "name": "Text Link",
-      "kind": "button",
+      "name": "Quiet Link",
+      "kind": "custom",
       "refersTo": "button-primary",
-      "description": "The secondary action beside a primary button.",
-      "html": "<a class=\"ds-link\" href=\"#\">See how it works</a>",
-      "css": ".ds-link{color:#0B1530;font:500 17px 'Hanken Grotesk',system-ui,sans-serif;text-decoration:underline;text-underline-offset:4px}.ds-link:hover{color:#1E5BD8}.ds-link:focus-visible{outline:2px solid #1E5BD8;outline-offset:3px;border-radius:4px}"
+      "description": "Secondary action; a 2px line draws across the faint underline on hover.",
+      "html": "<a class=\"ds-link\" href=\"#\">Book a free 30-minute call</a>",
+      "css": ".ds-link{position:relative;display:inline-flex;align-items:center;min-height:2.75rem;font-weight:650;color:var(--navy,#0F1B33);text-decoration:underline;text-decoration-color:rgb(15 27 51/.22);text-decoration-thickness:2px;text-underline-offset:.3em}.ds-link::after{content:'';position:absolute;left:0;right:0;top:calc(50% + .8em - 1px);height:2px;border-radius:2px;background:var(--blue,#1E5BD8);transform:scaleX(0);transform-origin:right center;transition:transform 320ms cubic-bezier(.25,1,.5,1)}.ds-link:hover::after,.ds-link:focus-visible::after{transform:scaleX(1);transform-origin:left center}.ds-link:focus-visible{outline:3px solid var(--blue,#1E5BD8);outline-offset:3px;border-radius:3px}"
     },
     {
-      "name": "Step Pill",
-      "kind": "chip",
-      "refersTo": "step-pill",
-      "description": "Step and moment labels with a checkpoint dot.",
-      "html": "<span class=\"ds-pill\"><i></i>On the call</span>",
-      "css": ".ds-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:999px;background:#fff;border:1px solid #DDE4F2;font:600 14px 'Hanken Grotesk',system-ui,sans-serif;color:#0B1530}.ds-pill i{width:18px;height:18px;border-radius:50%;background:#1E5BD8;display:grid;place-items:center}.ds-pill i::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff}"
+      "name": "Compact Masthead",
+      "kind": "nav",
+      "description": "Brand-blue bar, white links and a sliding cut-paper tab for the current section (the hand-cut blue-deep edge is a clip-path on the live bar).",
+      "html": "<div class=\"ds-bar\"><strong>crewwise</strong><ul><li><a class=\"ds-nl\" href=\"#\">AI front desk</a></li><li><a class=\"ds-nl\" href=\"#\">Websites</a></li><li><a class=\"ds-nl\" href=\"#\">Pricing</a></li><span class=\"ds-tab\"></span></ul></div>",
+      "css": ".ds-bar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:72px;padding:0 24px;background:var(--blue,#1E5BD8);color:#fff;font-family:var(--font-sans,system-ui,sans-serif)}.ds-bar ul{display:flex;gap:12px;list-style:none;margin:0;padding:0;position:relative}.ds-bar a.ds-nl{position:relative;display:flex;align-items:center;min-height:44px;padding:0 12px;font-weight:600;font-size:.9375rem;color:#fff;text-decoration:none}.ds-bar a.ds-nl::after{content:'';position:absolute;left:12px;right:12px;bottom:8px;height:2px;background:currentColor;transform:scaleX(0);transform-origin:100% 50%;transition:transform 360ms cubic-bezier(.16,1,.3,1)}.ds-bar a.ds-nl:hover::after,.ds-bar a.ds-nl:focus-visible::after{transform:scaleX(1);transform-origin:0 50%}.ds-bar a.ds-nl:focus-visible{outline:3px solid #fff;outline-offset:3px}.ds-tab{position:absolute;left:12px;bottom:-9px;width:74px;height:6px;background:#fff;clip-path:polygon(0 0,100% 0,97% 100%,64% 72%,32% 100%,2% 78%)}"
     },
     {
-      "name": "Detail Tag",
-      "kind": "chip",
-      "refersTo": "tag",
-      "description": "Qualified details on a call card.",
-      "html": "<span class=\"ds-tag\">Claim filed</span>",
-      "css": ".ds-tag{display:inline-block;padding:3px 8px;border-radius:6px;background:#F4F7FE;color:#0B1530;font:400 14px 'Hanken Grotesk',system-ui,sans-serif}"
+      "name": "Booking Slip",
+      "kind": "card",
+      "refersTo": "slip",
+      "description": "White slip with the soft paper shadow; green appears only with a real booking.",
+      "html": "<div class=\"ds-slip\"><span class=\"ds-ck\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\"><polyline points=\"4,9.5 7.5,13 14,5.5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><div><b>Consultation booked</b><span class=\"ds-t\">Thu 10:00 AM</span></div></div>",
+      "css": ".ds-slip{display:flex;gap:14px;align-items:center;max-width:340px;padding:16px 20px;background:#fff;color:var(--navy,#0F1B33);border-radius:12px;box-shadow:0 1px 2px rgb(15 27 51/.16),0 10px 24px -12px rgb(15 27 51/.35);font-family:var(--font-sans,system-ui,sans-serif)}.ds-slip .ds-ck{flex:none;width:36px;height:36px;border-radius:50%;background:var(--green,#1F7547);display:grid;place-items:center}.ds-slip b{display:block;font-weight:800;letter-spacing:-.02em;font-size:1.1rem}.ds-slip span.ds-t{font-size:.9375rem;color:rgb(15 27 51/.74)}"
+    },
+    {
+      "name": "Cut-paper Plate",
+      "kind": "custom",
+      "description": "Flat hand-cut planes, light from top left in tone, one nicked top-right corner, no strokes.",
+      "html": "<svg class=\"ds-plate\" viewBox=\"0 0 240 168\"><path class=\"f-b\" d=\"M1 2 72 0 152 -2 226 -1 239 13 240 85 240 167 156 168 86 168 1 169 1 82Z\"/><path class=\"f-bd\" d=\"M81 171 157 119 244 61 244 172 159 171Z\"/><path class=\"f-bs\" d=\"M172 173 243 118 243 172Z\"/><path class=\"f-n\" d=\"M61 81 174 83 174 158 61 158Z\"/><path class=\"f-lb\" d=\"M46 87 118 30 117 86Z\"/></svg>",
+      "css": ".ds-plate{display:block;width:100%;max-width:240px;height:auto}.ds-plate .f-b{fill:var(--blue,#1E5BD8)}.ds-plate .f-bd{fill:var(--blue-deep,#1749B0)}.ds-plate .f-bs{fill:var(--blue-sheet,#163B88)}.ds-plate .f-lb{fill:var(--light-blue,#8FB3FF)}.ds-plate .f-n{fill:var(--navy,#0F1B33)}.ds-plate .f-w{fill:#fff}"
+    },
+    {
+      "name": "FAQ Row",
+      "kind": "custom",
+      "description": "Ruled native disclosure; plus becomes minus, no cards.",
+      "html": "<div class=\"ds-faq\"><details open><summary>Does it work with my number?</summary><p>Yes. Calls forward to it when unanswered or after hours.</p></details></div>",
+      "css": ".ds-faq{font-family:var(--font-sans,system-ui,sans-serif);color:var(--navy,#0F1B33);border-bottom:1px solid rgb(15 27 51/.22)}.ds-faq details{border-top:1px solid rgb(15 27 51/.22)}.ds-faq summary{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:2.75rem;padding:1.35rem 0;border-radius:6px;cursor:pointer;list-style:none;font-size:1.25rem;font-weight:750;letter-spacing:-.02em}.ds-faq summary::-webkit-details-marker{display:none}.ds-faq summary::after{content:'+';font-weight:500}.ds-faq details[open] summary::after{content:'\\2212'}.ds-faq summary:focus-visible{outline:3px solid var(--blue,#1E5BD8);outline-offset:3px}.ds-faq p{margin:0 0 1.35rem;max-width:62ch;color:rgb(15 27 51/.74)}"
     },
     {
       "name": "Text Field",
       "kind": "input",
-      "refersTo": "input",
-      "description": "Form fields with tinted fill and blue focus.",
-      "html": "<label class=\"ds-field\"><span>Phone</span><input placeholder=\"(512) 555-0134\"></label>",
-      "css": ".ds-field{display:grid;gap:6px;font:600 15px 'Hanken Grotesk',system-ui,sans-serif;color:#0B1530}.ds-field input{min-height:50px;padding:12px 14px;font:400 16px 'Hanken Grotesk',system-ui,sans-serif;color:#0B1530;background:#F4F7FE;border:1px solid #BFCBE3;border-radius:10px;transition:border-color .15s,box-shadow .15s,background-color .15s}.ds-field input:focus{outline:none;background:#fff;border-color:#1E5BD8;box-shadow:0 0 0 3px rgba(30,91,216,.25)}"
-    },
-    {
-      "name": "Call Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "A product artifact card, labelled as an example.",
-      "html": "<div class=\"ds-card\"><div class=\"ds-card-h\"><span>Saturday, 7:42 PM</span><span>Example</span></div><b>Homeowner calling.</b> You're up on a roof.</div>",
-      "css": ".ds-card{max-width:320px;background:#fff;border:1px solid #DDE4F2;border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(11,21,48,.06),0 4px 8px -4px rgba(11,21,48,.16);font:400 15px/1.45 'Hanken Grotesk',system-ui,sans-serif;color:#0B1530}.ds-card-h{display:flex;justify-content:space-between;font-size:14px;color:#55617D;margin-bottom:6px}.ds-card b{font-weight:600}"
-    },
-    {
-      "name": "Booked Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "The booked or success state, the only place green leads.",
-      "html": "<div class=\"ds-booked\"><div class=\"ds-booked-h\"><span>1:48</span><span>Example</span></div><b>Booked Mon 9:00 AM</b><br>Added to your calendar. Text confirmation sent.</div>",
-      "css": ".ds-booked{max-width:320px;background:#fff;border:1px solid #2E8B57;border-radius:14px;padding:14px 16px;box-shadow:0 0 0 3px rgba(46,139,87,.14),0 4px 8px -4px rgba(11,21,48,.16);font:400 15px/1.45 'Hanken Grotesk',system-ui,sans-serif;color:#0B1530}.ds-booked-h{display:flex;justify-content:space-between;font-size:14px;color:#55617D;margin-bottom:6px}.ds-booked b{color:#1F7547;font-weight:600;font-size:18px}"
-    },
-    {
-      "name": "Navy Panel",
-      "kind": "card",
-      "refersTo": "card-dark",
-      "description": "Transcripts, follow-ups, the busy-day list.",
-      "html": "<div class=\"ds-panel\"><div class=\"ds-panel-h\">Live call<span>Recording 0:24</span></div><p><b>Crewwise</b> Oak Ridge Roofing, how can I help?</p></div>",
-      "css": ".ds-panel{max-width:380px;background:#0B1530;color:#fff;border-radius:18px;padding:20px;font:400 15px/1.5 'Hanken Grotesk',system-ui,sans-serif;box-shadow:0 1px 2px rgba(11,21,48,.06),0 4px 8px -4px rgba(11,21,48,.16)}.ds-panel-h{display:flex;justify-content:space-between;font-weight:600;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid #2B3B68}.ds-panel-h span{font-weight:500;font-size:14px;color:#C3CDE3}.ds-panel b{color:#FFE08A;margin-right:10px}"
-    },
-    {
-      "name": "Nav",
-      "kind": "nav",
-      "refersTo": "nav-link",
-      "description": "Header links with a blue active state.",
-      "html": "<nav class=\"ds-nav\"><a href=\"#\">Roofing</a><a class=\"on\" href=\"#\">Busy days</a><a href=\"#\">Pricing</a></nav>",
-      "css": ".ds-nav{display:flex;gap:2px;font:400 15px 'Hanken Grotesk',system-ui,sans-serif}.ds-nav a{padding:9px 14px;border-radius:10px;color:#3A4766;text-decoration:none;transition:color .2s,background-color .2s}.ds-nav a:hover{color:#0B1530;background:rgba(11,21,48,.06)}.ds-nav a.on{color:#1E5BD8;background:rgba(30,91,216,.10);font-weight:600}.ds-nav a:focus-visible{outline:2px solid #1E5BD8;outline-offset:3px}"
+      "refersTo": "field",
+      "description": "White field, 10px radius; invalid is a 2px navy edge, not red.",
+      "html": "<label class=\"ds-field\">Business name<input type=\"text\" placeholder=\"Harbor &amp; Lane Law\"></label>",
+      "css": ".ds-field{display:grid;gap:6px;font-family:var(--font-sans,system-ui,sans-serif);font-weight:650;color:var(--navy,#0F1B33)}.ds-field input{width:100%;min-height:3.25rem;padding:.7rem .9rem;background:#fff;border:1.5px solid rgb(15 27 51/.32);border-radius:10px;color:var(--navy,#0F1B33);font:inherit;font-weight:450;caret-color:var(--blue,#1E5BD8);transition:border-color 160ms cubic-bezier(.16,1,.3,1)}.ds-field input:hover{border-color:var(--navy,#0F1B33)}.ds-field input:focus-visible{outline:3px solid rgb(30 91 216/.35);outline-offset:0;border-color:var(--blue,#1E5BD8)}.ds-field input[aria-invalid=true]{border-color:var(--navy,#0F1B33);box-shadow:inset 0 0 0 .5px var(--navy,#0F1B33)}"
     }
   ],
   "narrative": {
-    "northStar": "The Site Plan",
-    "overview": "Crewwise looks like a contractor's plan sheet that works: a crisp white page, a fine logo-blue grid where the sheet begins, and bold marks that show a job moving from first ring to booked. Every visual device is a working part of the plan. The blue line is the route of a call, the dots are checkpoints, the cards are the documents a roofer actually receives (a call transcript, a calendar slot, a text, a monthly report), and the grid is the paper they are drawn on.\n\nThe mood is bold, sharp and modern. Headlines are big and tight, the logo blue owns whole sections, and one sun-yellow action sits on every screen. The parts you touch are friendly and soft: generously rounded corners, light borders and short lifts, so the boldness reads as confident rather than hard. Density is generous on the page and compact inside the cards, the way a plan has open margins and dense annotations.\n\nMotion is narrative, never decorative. The page plays the product: the call happens as you scroll, the busy-day list sorts itself, the line draws to the next step. Everything is complete and readable without motion.",
+    "northStar": "The Cut-Paper Studio",
+    "overview": "Crewwise is built the way a paper model is built: flat sheets of colour laid over one another on a table, lit from the top left. Depth is never faked with volume. It comes from overlapping planes in four fixed tones (blue, blue-deep, navy and the derived blue-sheet), and from white slips and documents that sit on top and carry a soft paper shadow. Everything is a hand-cut polygon, with one nicked corner at the top right and a pale light facet at the top left shown in tone only.\n\nThe page is a stack of full-bleed bands, each one flat ground: blue, white, soft or navy. Type is Hanken Grotesk at heavy weights with tight tracking, so headlines read like cut lettering. The tone is calm and credible for a law firm and still friendly to a plumber; nothing is decorative that does not belong to the paper world. One orange pill per screen is the action, and nothing else is orange.\n\nMotion is the second material. The masthead folds, the working day is scrubbed by scroll, and sheets lay, drop, settle and rise into place. Every movement is a decelerating ease-out to rest, never a bounce.",
     "keyCharacteristics": [
-      "Crisp white sheet with a faint logo-blue plan grid fading from the top right of the first screen.",
-      "Logo blue (#1E5BD8) as the brand's field colour: whole sections, the call line, checkpoints.",
-      "Sun yellow only on things you click; green only for booked.",
-      "Archivo headlines set tight; Hanken Grotesk for reading and for the logo.",
-      "Product artifacts (call, calendar, text, queue, report) instead of illustrations or photos, always labelled as examples."
+      "Flat overlapping planes in blue, blue-deep, navy and blue-sheet; no volume, no gradients.",
+      "Light from the top left, told in tonal steps, never in shadow.",
+      "Soft shadows only on white slips and documents, plus the hero's stage sheet.",
+      "Heavy Hanken Grotesk, tracking -0.035em to -0.04em on headings.",
+      "One orange pill per screen; green only when something is truly done.",
+      "Fluid type scale and three motion durations, used everywhere."
     ],
     "rules": [
       {
-        "name": "The Fixed Blue Rule",
-        "body": "The logo blue and the logo (icon plus the Hanken Grotesk 650 wordmark) never change. Everything else may evolve around them.",
+        "name": "The One Orange Rule",
+        "body": "Orange is the primary action and nothing else. One orange pill per screen; a second one means one of them is wrong.",
         "section": "colors"
       },
       {
-        "name": "The One Yellow Rule",
-        "body": "Sun yellow means \"click this\". It never decorates, never fills a section, and never appears on something that is not an action.",
+        "name": "The Real Success Rule",
+        "body": "Green means something actually happened (booked, sent). It is never used to say \"good\" or to decorate.",
         "section": "colors"
       },
       {
-        "name": "The Booked Green Rule",
-        "body": "Green appears only when something is booked or succeeded. A decorative green is a lie about state.",
+        "name": "The Four Planes Rule",
+        "body": "Depth is made by stacking blue, blue-deep, navy and blue-sheet. Do not add a fifth tone to fake a new layer.",
         "section": "colors"
       },
       {
-        "name": "The One Title Rule",
-        "body": "Every card-level title uses the single Title role. If a new card needs a different size, the card is wrong, not the scale.",
+        "name": "The Tight Tracking Floor Rule",
+        "body": "Heading tracking runs from -0.02em to -0.04em and never tighter than -0.04em.",
         "section": "typography"
       },
       {
-        "name": "The Display Ceiling Rule",
-        "body": "Nothing exceeds the hero's 6rem. Prices and big figures stay at or below it.",
+        "name": "The Weight Carries It Rule",
+        "body": "Hierarchy comes from weight and size steps in one family. No second face, no uppercase labels above headings.",
         "section": "typography"
       },
       {
-        "name": "The Short Lift Rule",
-        "body": "Shadows are offset and short (8px blur or less). A border plus a wide soft blur is not used anywhere.",
+        "name": "The Flat Planes Rule",
+        "body": "Depth comes from overlapping flat planes in blue, blue-deep, navy and blue-sheet. Shadows are an accent, not the structure.",
         "section": "elevation"
       },
       {
-        "name": "The No Glow Rule",
-        "body": "No blurred colour glows. Rings around checkpoints are crisp and mean \"this is a point on the route\".",
+        "name": "The Soft Shadow Rule",
+        "body": "Every shadow has an offset and a blur. No zero-blur offset shadows anywhere. Only white slips and documents, plus the hero stage sheet (and the masthead cut that follows its edge), get soft shadows. Coloured or zero-offset halos are not part of the system.",
         "section": "elevation"
+      },
+      {
+        "name": "The Flat Phone Rule",
+        "body": "The hero phone and all text are 2D: no perspective, preserve-3d, translateZ or rotateX/Y, and no filters on the screen layers. The pointer tilt was removed because it blurred the screen. The phone may rotate in plane (-5deg) only.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Top-Left Light Rule",
+        "body": "Light comes from the top left and is told only in tone: lit facets step up (navy-raised on navy, light blue on blue) and the sheet steps down toward the bottom right (blue, blue-deep, blue-sheet).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Ease-Out Only Rule",
+        "body": "Decelerating curves only. No bounce, no overshoot, no elastic.",
+        "section": "components"
       }
     ],
     "dos": [
-      "**Do** keep the logo blue (#1E5BD8) and the logo exactly as specified.",
-      "**Do** use sun yellow (#FFC233) with deep navy text for every primary action, and nothing else.",
-      "**Do** show the product itself (calls, calendar slots, texts, the queue, the report) and label it as an example.",
-      "**Do** use the Title role (1.375rem Archivo 600) for every card and step title.",
-      "**Do** use the card lift shadow and hairline border for raised surfaces.",
-      "**Do** keep the plan grid faint (9% logo blue) and only behind the top of the first screen.",
-      "**Do** draw icons and marks in CSS or SVG with one stroke weight.",
-      "**Do** make every animated element readable with motion off."
+      "**Do** build depth from flat overlapping planes: blue, blue-deep, navy and `--blue-sheet`.",
+      "**Do** give soft shadows only to white slips and documents and the hero stage sheet, with an offset and a blur.",
+      "**Do** keep the hero phone and all text flat, 2D and sharp.",
+      "**Do** use orange for the primary action only, one per screen, and green only for real success states.",
+      "**Do** keep heading tracking between -0.02em and -0.04em, and use the `--step-*` scale.",
+      "**Do** use `--dur-1/2/3` with `--ease-out-quart` or `--ease-out-expo`, and keep the finished state as the no-JS and reduced-motion default.",
+      "**Do** call it the \"AI front desk\"; each client may name their own.",
+      "**Do** show \"from $299\" as the only price.",
+      "**Do** let the hero action go to /free-audit/. This is a recorded exception to \"action in working form\": the hero button links to the audit page instead of performing the action in place.",
+      "**Do** cut every illustrated piece by hand with one nicked top-right corner and a top-left light facet in tone."
     ],
     "donts": [
-      "**Don't** change, recolour or re-letter the logo, or use the logo blue at a different value.",
-      "**Don't** use yellow for decoration, backgrounds or non-clickable highlights.",
-      "**Don't** use green for anything that is not booked or successful.",
-      "**Don't** bring back orange, a warm off-white page, or the pale blue-grey page ground.",
-      "**Don't** use wide soft shadows, blurred colour glows or gradient text.",
-      "**Don't** use thick coloured side bars on cards or list items.",
-      "**Don't** use typed characters (×, +, ✓, emoji) as icons.",
-      "**Don't** exceed 6rem for any text."
+      "**Don't** use zero-blur offset shadows anywhere.",
+      "**Don't** apply 3D transforms to the hero phone or to text, or bring back the pointer tilt.",
+      "**Don't** use bounce, overshoot or elastic easing.",
+      "**Don't** put an eyebrow or kicker above a heading.",
+      "**Don't** use unicode glyphs or emoji as icons; draw them as SVG or CSS shapes.",
+      "**Don't** set tracking tighter than -0.04em.",
+      "**Don't** use orange for anything but the primary action, or green for anything but success.",
+      "**Don't** give the AI front desk a personal name.",
+      "**Don't** show any price except \"from $299\".",
+      "**Don't** use clinic or medical examples.",
+      "**Don't** nest cards or build the page from equal icon-heading-text card grids."
+    ],
+    "defectsNotCanonized": [
+      "[data-enter] content sits at opacity 0 until scrolled into view, and the close sheet and demo lines are script-hidden before they play: violates content visible by default.",
+      "Off-token values: #8c3105 pressed orange in masthead and close; #2f9a63 demo booked check; green live-call dot in the hero.",
+      "Hero doc comments still mention pointer tilt and slip overshoot; the code has neither."
     ]
   }
 }

@@ -1,0 +1,714 @@
+---
+/** The free audit form. Works as a normal POST without JavaScript; the script adds inline validation and fetch. */
+import { SITE } from '../config/site';
+import { BUSINESS_TYPES, INTEREST_OPTIONS } from '../lib/form-validation';
+
+const interestHints: Record<string, string> = {
+  'Website and calls': 'Your website and how your calls get answered',
+  'AI automation': 'Work your team does by hand',
+  Both: 'A look at everything',
+};
+---
+
+<div class="audit" data-audit>
+  <form
+    class="form"
+    action={SITE.FORM_ENDPOINT}
+    method="POST"
+    data-audit-form
+    data-email={SITE.CONTACT_EMAIL}
+  >
+    <h2 class="visually-hidden">Your details</h2>
+
+    <div class="summary" data-summary tabindex="-1" role="alert" hidden>
+      <p class="h3" data-summary-title></p>
+      <ul data-summary-list></ul>
+    </div>
+
+    <input type="hidden" name="page" value="free-audit" />
+    <input type="hidden" name="_subject" value="Free audit request" />
+
+    <fieldset class="field choices" id="f-interest" aria-describedby="e-interest" tabindex="-1">
+      <legend>What would you like us to look at? <span class="flag">required</span></legend>
+      <div class="choice-row">
+        {
+          INTEREST_OPTIONS.map((o, i) => (
+            <label class="choice">
+              <input
+                type="radio"
+                name="interest"
+                value={o}
+                id={`interest-${i}`}
+                data-interest={o}
+                required={i === 0}
+              />
+              <span class="box">
+                <strong>{o}</strong>
+                <span class="hint">{interestHints[o]}</span>
+              </span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="err" role="alert" id="e-interest" data-err="interest" hidden></p>
+    </fieldset>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="f-name">Your name <span class="flag">required</span></label>
+        <input
+          id="f-name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          maxlength="80"
+          aria-describedby="e-name"
+        />
+        <p class="err" role="alert" id="e-name" data-err="name" hidden></p>
+      </div>
+      <div class="field">
+        <label for="f-company">Business name <span class="flag">required</span></label>
+        <input
+          id="f-company"
+          name="company"
+          type="text"
+          autocomplete="organization"
+          required
+          maxlength="120"
+          aria-describedby="e-company"
+        />
+        <p class="err" role="alert" id="e-company" data-err="company" hidden></p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-website">Website <span class="flag">optional</span></label>
+      <input
+        id="f-website"
+        name="website"
+        type="url"
+        inputmode="url"
+        autocomplete="url"
+        placeholder="yourbusiness.com"
+        maxlength="200"
+        aria-describedby="e-website"
+      />
+      <label class="tick" for="f-no-website">
+        <input id="f-no-website" name="no_website" type="checkbox" value="I don't have a website" />
+        <span>I don’t have a website</span>
+      </label>
+      <p class="err" role="alert" id="e-website" data-err="website" hidden></p>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="f-phone">Business phone <span class="flag">required</span></label>
+        <input
+          id="f-phone"
+          name="phone"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          required
+          maxlength="24"
+          aria-describedby="e-phone"
+        />
+        <p class="err" role="alert" id="e-phone" data-err="phone" hidden></p>
+      </div>
+      <div class="field">
+        <label for="f-email">Email <span class="flag">required</span></label>
+        <input
+          id="f-email"
+          name="email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          required
+          maxlength="120"
+          aria-describedby="e-email"
+        />
+        <p class="err" role="alert" id="e-email" data-err="email" hidden></p>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="f-type">Type of business <span class="flag">required</span></label>
+        <select id="f-type" name="business_type" required aria-describedby="e-business_type">
+          <option value="">Choose one</option>
+          {BUSINESS_TYPES.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <p class="err" role="alert" id="e-business_type" data-err="business_type" hidden></p>
+      </div>
+      <div class="field">
+        <label for="f-time">Best time to reach you <span class="flag">optional</span></label>
+        <input
+          id="f-time"
+          name="best_time"
+          type="text"
+          autocomplete="off"
+          placeholder="Weekdays after 4 PM"
+          maxlength="120"
+        />
+      </div>
+    </div>
+
+    <div class="hp" aria-hidden="true">
+      <label for="f-gotcha">Leave this field empty</label>
+      <input id="f-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="foot">
+      <button class="btn btn-primary" type="submit" data-submit>Get my free audit</button>
+      <p class="consent">
+        By submitting, you agree that Crewwise may contact you by phone, email or text about your
+        audit. Message and data rates may apply. Reply STOP to opt out. See our <a href="/privacy/"
+          >privacy policy</a
+        >.
+      </p>
+    </div>
+  </form>
+
+  <div class="done" data-done tabindex="-1" role="status" hidden>
+    <svg class="done-check" viewBox="0 0 56 56" width="56" height="56" aria-hidden="true" focusable="false">
+      <circle cx="28" cy="28" r="28" fill="#1F7547"></circle>
+      <path d="M17 29l8 8 14-17" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <div class="done-body">
+      <p class="done-text" data-done-text></p>
+      <p class="after">
+        Questions before then? Email <a href={`mailto:${SITE.CONTACT_EMAIL}`}>{SITE.CONTACT_EMAIL}</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .audit {
+    min-width: 0;
+  }
+  .form {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .grid2 {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 40rem) {
+    .grid2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+    min-width: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  label,
+  legend {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 0.6rem;
+  }
+  .flag {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+    margin-left: 0.25rem;
+  }
+  input[type='text'],
+  input[type='url'],
+  input[type='tel'],
+  input[type='email'],
+  select {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--white);
+    border: 1.5px solid rgb(15 27 51 / 0.32);
+    border-radius: 10px;
+    color: var(--navy);
+    font-weight: 450;
+    transition:
+      border-color 160ms var(--ease-out),
+      box-shadow 160ms var(--ease-out);
+  }
+  input::placeholder {
+    color: var(--ink-3);
+  }
+  input:hover,
+  select:hover {
+    border-color: var(--navy);
+  }
+  input:focus-visible,
+  select:focus-visible {
+    outline: 3px solid rgb(30 91 216 / 0.35);
+    outline-offset: 0;
+    border-color: var(--blue);
+  }
+  input:disabled {
+    background: var(--soft);
+    border-color: var(--rule);
+    color: var(--ink-3);
+  }
+  /* invalid: a 2px navy edge (the 1.5px border plus a 0.5px inset ring, so nothing moves) and a bold
+     navy message led by an outlined warning sign; the brand has no red */
+  input[aria-invalid='true'],
+  select[aria-invalid='true'],
+  .choices[aria-invalid='true'] .box {
+    border-color: var(--navy);
+    box-shadow: inset 0 0 0 0.5px var(--navy);
+  }
+  .err {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--navy);
+  }
+  .err::before {
+    content: '';
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.1rem;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.3 3.9 1.8 18.5A2 2 0 0 0 3.5 21.5h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z'/%3E%3Cpath d='M12 9v4.5'/%3E%3Cpath d='M12 17.5h.01' stroke-width='2.6'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  .tick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: fit-content;
+    min-height: 2.75rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .tick input {
+    width: 1.35rem;
+    height: 1.35rem;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  /* choice: three bookings, pick one */
+  .choice-row {
+    display: grid;
+    gap: 0.9rem;
+  }
+  @media (min-width: 40rem) {
+    .choice-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .choice {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    font-weight: 400;
+  }
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+  .box {
+    display: grid;
+    align-content: start;
+    gap: 0.2rem;
+    height: 100%;
+    padding: 0.95rem 1rem 1rem 2.6rem;
+    position: relative;
+    background: var(--white);
+    border: 1.5px solid rgb(15 27 51 / 0.32);
+    border-radius: 10px;
+    transition:
+      border-color 160ms var(--ease-out),
+      box-shadow 160ms var(--ease-out);
+  }
+  .box::before {
+    content: '';
+    position: absolute;
+    left: 0.95rem;
+    top: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1.5px solid var(--navy);
+    border-radius: 50%;
+    background: var(--white);
+  }
+  .box strong {
+    font-size: 1.0625rem;
+    letter-spacing: -0.015em;
+  }
+  .hint {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+  .choice:hover .box {
+    border-color: var(--navy);
+  }
+  .choice input:checked + .box {
+    border-color: var(--blue);
+    background: var(--soft);
+    box-shadow: inset 0 0 0 1.5px var(--blue);
+  }
+  .choice input:checked + .box::before {
+    border-color: var(--blue);
+  }
+  .box::after {
+    content: '';
+    position: absolute;
+    left: calc(0.95rem + 0.3rem);
+    top: calc(1.1rem + 0.3rem);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0;
+  }
+  .choice input:checked + .box::after {
+    opacity: 1;
+  }
+  .choice input:focus-visible + .box {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .foot {
+    display: grid;
+    justify-items: start;
+    gap: 1.1rem;
+    margin-top: 0.5rem;
+  }
+  .consent {
+    max-width: 58ch;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+
+  /* error summary */
+  .summary {
+    padding: 1.1rem 1.25rem;
+    display: grid;
+    gap: 0.6rem;
+    background: var(--soft);
+    border: 2px solid var(--navy);
+    border-radius: 12px;
+  }
+  .summary p {
+    font-weight: 750;
+    font-size: 1.125rem;
+  }
+  .summary:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 4px;
+  }
+  .summary ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .summary a {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* success: a booking card, like the hero's slip */
+  .done {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0;
+    background: transparent;
+  }
+  .done[hidden] {
+    display: none;
+  }
+  .done:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 8px;
+    border-radius: 8px;
+  }
+  .done-check {
+    flex-shrink: 0;
+  }
+  .done-body {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+  .done-text {
+    font-size: var(--step-1);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    max-width: 30ch;
+  }
+  .after {
+    color: var(--ink-2);
+  }
+  .after a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+</style>
+
+<script>
+  import {
+    FIELD_LABELS,
+    firstName,
+    formatPhone,
+    normalizeWebsite,
+    validateBusinessType,
+    validateCompany,
+    validateEmail,
+    validateInterest,
+    validateName,
+    validatePhone,
+    validateWebsite,
+    type AuditErrors,
+    type FieldName,
+  } from '../lib/form-validation';
+
+  const INTEREST_PARAM: Record<string, string> = { automation: 'AI automation' };
+
+  function initAuditForm() {
+    const root = document.querySelector<HTMLElement>('[data-audit]');
+    const form = root?.querySelector<HTMLFormElement>('[data-audit-form]');
+    if (!root || !form || form.dataset.ready) return;
+    form.dataset.ready = 'true';
+    form.noValidate = true; // our messages replace the browser's
+
+    const summary = form.querySelector<HTMLElement>('[data-summary]')!;
+    const summaryTitle = summary.querySelector<HTMLElement>('[data-summary-title]')!;
+    const summaryList = summary.querySelector<HTMLElement>('[data-summary-list]')!;
+    const done = root.querySelector<HTMLElement>('[data-done]')!;
+    const doneText = root.querySelector<HTMLElement>('[data-done-text]')!;
+    const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const btnLabel = btn.textContent?.trim() || 'Get my free audit';
+    const email = form.dataset.email ?? '';
+    const noWebsite = form.querySelector<HTMLInputElement>('#f-no-website')!;
+    const website = form.querySelector<HTMLInputElement>('#f-website')!;
+    const radios = [...form.querySelectorAll<HTMLInputElement>('input[name="interest"]')];
+    const choices = form.querySelector<HTMLElement>('#f-interest')!;
+
+    const val = (name: string): string =>
+      (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? '';
+    const interest = (): string => radios.find((r) => r.checked)?.value ?? '';
+
+    const validators: Record<FieldName, () => string | null> = {
+      interest: () => validateInterest(interest()),
+      name: () => validateName(val('name')),
+      company: () => validateCompany(val('company')),
+      website: () => validateWebsite(website.value, noWebsite.checked),
+      phone: () => validatePhone(val('phone')),
+      email: () => validateEmail(val('email')),
+      business_type: () => validateBusinessType(val('business_type')),
+    };
+    const fieldEl = (f: FieldName): HTMLElement =>
+      f === 'interest'
+        ? choices
+        : (form.elements.namedItem(f === 'business_type' ? 'business_type' : f) as HTMLElement);
+    const idOf = (f: FieldName): string => (f === 'interest' ? 'f-interest' : fieldEl(f).id);
+
+    const touched = new Set<FieldName>();
+
+    function show(field: FieldName, msg: string | null): boolean {
+      const slot = form!.querySelector<HTMLElement>(`[data-err="${field}"]`);
+      const el = fieldEl(field);
+      el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (slot) {
+        slot.textContent = msg ?? '';
+        slot.hidden = !msg;
+      }
+      return !msg;
+    }
+    const check = (field: FieldName): boolean => show(field, validators[field]());
+
+    function renderSummary(errors: AuditErrors) {
+      const entries = Object.entries(errors) as [FieldName, string][];
+      summaryList.replaceChildren();
+      if (!entries.length) {
+        summary.hidden = true;
+        return;
+      }
+      summaryTitle.textContent =
+        entries.length === 1
+          ? 'Fix 1 detail before we can send this'
+          : `Fix ${entries.length} details before we can send this`;
+      for (const [field, msg] of entries) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${idOf(field)}`;
+        a.textContent = FIELD_LABELS[field];
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = field === 'interest' ? radios[0] : fieldEl(field);
+          target.focus();
+          target.scrollIntoView({ block: 'center' });
+        });
+        li.append(a, `: ${msg}`);
+        summaryList.append(li);
+      }
+      summary.hidden = false;
+    }
+
+    function showNetworkError(detail: string) {
+      summaryTitle.textContent = 'Your audit request didn’t send';
+      summaryList.replaceChildren();
+      const li = document.createElement('li');
+      li.append(`${detail} Everything you typed is still here. You can also email `);
+      const a = document.createElement('a');
+      a.href = `mailto:${email}`;
+      a.textContent = email;
+      li.append(a, ' with your details.');
+      summaryList.append(li);
+      summary.hidden = false;
+      summary.focus();
+    }
+
+    // Pressing the submit button blurs the last field first. Let submit do the validating,
+    // so an error message can not move the button out from under the tap.
+    let pressing = false;
+    btn.addEventListener('pointerdown', () => {
+      pressing = true;
+      setTimeout(() => (pressing = false), 700);
+    });
+
+    (Object.keys(validators) as FieldName[]).forEach((field) => {
+      if (field === 'interest') {
+        radios.forEach((r) =>
+          r.addEventListener('change', () => {
+            touched.add('interest');
+            check('interest');
+            refreshSummary();
+          }),
+        );
+        return;
+      }
+      const el = fieldEl(field) as HTMLInputElement;
+      el.addEventListener('blur', (e) => {
+        if (field === 'phone') el.value = formatPhone(el.value);
+        if ((e as FocusEvent).relatedTarget === btn || pressing) return;
+        if (el.value.trim()) touched.add(field);
+        if (touched.has(field)) check(field);
+      });
+      const live = () => {
+        if (touched.has(field)) check(field);
+        refreshSummary();
+      };
+      el.addEventListener('input', live);
+      el.addEventListener('change', live);
+    });
+
+    function refreshSummary() {
+      if (summary.hidden) return;
+      const bad = form!.querySelectorAll('[aria-invalid="true"]').length;
+      if (!bad) summary.hidden = true;
+    }
+
+    // "I don't have one" clears and disables the website field.
+    noWebsite.addEventListener('change', () => {
+      if (noWebsite.checked) {
+        website.value = '';
+        website.disabled = true;
+        show('website', null);
+      } else {
+        website.disabled = false;
+        website.focus();
+      }
+    });
+
+    // /free-audit/?interest=automation preselects "AI automation".
+    const wanted = INTEREST_PARAM[new URLSearchParams(location.search).get('interest') ?? ''];
+    if (wanted) {
+      const r = radios.find((x) => x.value === wanted);
+      if (r) r.checked = true;
+    }
+
+    let sending = false;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending) return;
+      const errors: AuditErrors = {};
+      (Object.keys(validators) as FieldName[]).forEach((field) => {
+        touched.add(field);
+        if (!check(field)) errors[field] = validators[field]()!;
+      });
+      renderSummary(errors);
+      const keys = Object.keys(errors) as FieldName[];
+      if (keys.length) {
+        summary.focus();
+        summary.scrollIntoView({ block: 'center' });
+        return;
+      }
+      if (val('_gotcha')) return; // a bot filled the honeypot
+
+      sending = true;
+      btn.setAttribute('aria-busy', 'true');
+      btn.textContent = 'Sending your request';
+      const body = new FormData(form);
+      body.set('phone', val('phone').trim());
+      body.set('website', noWebsite.checked ? '' : normalizeWebsite(website.value));
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body,
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error(`status ${res.status}`);
+        const first = firstName(val('name'));
+        doneText.textContent = `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and you’ll get your audit within two business days.`;
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+        done.scrollIntoView({ block: 'center' });
+      } catch (err) {
+        const status = err instanceof Error && err.message.startsWith('status');
+        showNetworkError(
+          status
+            ? `Our form service didn’t accept it. Wait a minute and press “${btnLabel}” again.`
+            : `We couldn’t reach our form service. Check your connection and press “${btnLabel}” again.`,
+        );
+      } finally {
+        sending = false;
+        btn.removeAttribute('aria-busy');
+        btn.textContent = btnLabel;
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAuditForm);
+</script>
