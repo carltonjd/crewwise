@@ -137,7 +137,7 @@ const showCta = current !== 'free-audit';
 </style>
 
 <style>
-  /* the compact bar is always brand blue: white wordmark tile, white links, orange action. It slides away on scroll
+  /* the compact bar is always brand blue: white wordmark tile, white links, white action. It slides away on scroll
      down and back on scroll up (data-hidden, set by the script). */
   .mast {
     --ink: var(--white);
@@ -314,8 +314,8 @@ const showCta = current !== 'free-audit';
     min-height: 44px;
     padding: 0 20px;
     border-radius: 999px;
-    background: var(--orange);
-    color: var(--white);
+    background: var(--white);
+    color: var(--navy);
     font-weight: 700;
     font-size: 0.9375rem;
     text-decoration: none;
@@ -325,13 +325,14 @@ const showCta = current !== 'free-audit';
       background-color 160ms var(--ease-out);
   }
   .cta:hover {
-    background: var(--orange-press);
+    color: var(--navy);
+    background: var(--white-press);
     transform: translateY(-1px);
   }
   /* pressed: a touch smaller and a deeper fill than hover */
   .cta:active {
     transform: scale(0.98);
-    background: var(--orange-deep);
+    background: var(--white-deep);
   }
   /* the wordmark's hairline: wipes away as the page scrolls */
   .rule {

@@ -1,6 +1,6 @@
 ---
 name: Crewwise
-description: A flat cut-paper studio of overlapping blue, blue-deep, navy and sheet planes, with one orange action per screen.
+description: A flat cut-paper studio of overlapping blue, blue-deep, navy and sheet planes, with one primary action per screen: orange on light surfaces, white on blue.
 colors:
   blue: "#1E5BD8"
   blue-ink: "#1A4FBD"
@@ -13,6 +13,7 @@ colors:
   white: "#FFFFFF"
   orange: "#C94708"
   orange-press: "#A93B06"
+  white-press: "#E8EFFC"
   green: "#1F7547"
   slate-label: "#5B6B8C"
 typography:
@@ -65,6 +66,15 @@ components:
   button-primary-hover:
     backgroundColor: "{colors.orange-press}"
     textColor: "{colors.white}"
+  button-primary-on-blue:
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.navy}"
+    rounded: "{rounded.pill}"
+    padding: "0.85rem 1.6rem"
+    height: "3.25rem"
+  button-primary-on-blue-hover:
+    backgroundColor: "{colors.white-press}"
+    textColor: "{colors.navy}"
   button-primary-sm:
     backgroundColor: "{colors.orange}"
     textColor: "{colors.white}"
@@ -118,12 +128,12 @@ Motion is the second material. The masthead folds, the working day is scrubbed b
 - Light from the top left, told in tonal steps, never in shadow.
 - Soft shadows only on white slips and documents, plus the hero's stage sheet.
 - Heavy Hanken Grotesk, tracking -0.035em to -0.04em on headings.
-- One orange pill per screen; green only when something is truly done.
+- One primary pill per view: orange on light surfaces, white on blue and navy surfaces; green only when something is truly done.
 - Fluid type scale and three motion durations, used everywhere.
 
 ## Colors
 
-A blue studio: three blues and a derived darker sheet carry the planes, navy is the ink and the night, white and soft are the paper, orange is the single action.
+A blue studio: three blues and a derived darker sheet carry the planes, navy is the ink and the night, white and soft are the paper, the primary action is orange on light surfaces and white on blue.
 
 ### Primary
 - **Crewwise Blue** (#1E5BD8): the main ground (hero, demo, day story, close), selection, focus ring on light grounds, and the lit facet of illustrations.
@@ -132,7 +142,7 @@ A blue studio: three blues and a derived darker sheet carry the planes, navy is 
 - **Sheet Blue** (#163B88, `--blue-sheet`, derived as 30% navy mixed into blue-deep in oklab): the third plane. The offset sheet behind the hero phone, the mid hills of the day story, the lowest shaded facet in illustrations. It must read against both blue and blue-deep.
 
 ### Secondary
-- **Call Orange** (#C94708) with **Orange Press** (#A93B06): the primary action only. White text on it clears 4.5:1. Pressed goes one step deeper still.
+- **Call Orange** (#C94708) with **Orange Press** (#A93B06): the primary action on light surfaces (white, soft). White text on it clears 4.5:1. Pressed goes one step deeper still. On blue and navy surfaces the action is a white pill with navy text (hover `--white-press` #E8EFFC, pressed `--white-deep` #D5E2FA) because orange on blue is only 1.24:1 and the edge vibrates; the focus ring stays white.
 
 ### Tertiary
 - **Booked Green** (#1F7547): real success states only: the booked slip, a booked event, a submitted form. Never decoration, never a category colour.
@@ -147,7 +157,7 @@ A blue studio: three blues and a derived darker sheet carry the planes, navy is 
 - Text tints from navy: 74% for secondary, 60% for tertiary; on blue, white at 86%; on navy, white at 78%. Rules are navy at 10% and 22%, light blue at 18% and 36% on navy, white at 28% on blue.
 
 ### Named Rules
-**The One Orange Rule.** Orange is the primary action and nothing else. One orange pill per screen; a second one means one of them is wrong.
+**The One Primary Rule.** Orange on light surfaces, white on blue surfaces; that pill is the primary action and nothing else. One primary pill per view; a second one means one of them is wrong.
 **The Real Success Rule.** Green means something actually happened (booked, sent). It is never used to say "good" or to decorate.
 **The Four Planes Rule.** Depth is made by stacking blue, blue-deep, navy and blue-sheet. Do not add a fifth tone to fake a new layer.
 
@@ -207,7 +217,7 @@ Paper in, paper out: crisp white surfaces on flat ground, drawn lines that move 
 
 ### Buttons
 - **Shape:** full pill (999px), min-height 3.25rem, weight 720, 1.0625rem, tracking -0.01em.
-- **Primary:** Call Orange fill, white text, padding 0.85rem 1.6rem. Small variant 2.75rem. Hero action is 3.5rem.
+- **Primary:** Call Orange fill, white text (on blue and navy surfaces: white fill, navy text, via `.btn-on-blue` or automatically inside `.band-blue`, `.ground-blue`, `.band-navy`, `.ground-navy`), padding 0.85rem 1.6rem. Small variant 2.75rem. Hero action is 3.5rem.
 - **Hover / Focus / Press:** hover goes to Orange Press and lifts 1px (translateY(-1px)); press scales to 0.98 and goes one step deeper (`--orange-deep`); transitions use `--dur-2` for transform and `--dur-1` for colour. Disabled and busy: 72% opacity and `cursor: progress`. Focus is a 3px ring offset 3px (blue on light, white on blue and navy).
 - **Quiet link (secondary):** navy text (white on blue and navy) with a faint 2px underline; on hover or focus a 2px line draws across it from the left and retracts to the right (`.link-quiet`, `.link-draw` in running text). Always 44px tall.
 
@@ -215,7 +225,7 @@ Paper in, paper out: crisp white surfaces on flat ground, drawn lines that move 
 - **At the top of home:** an oversized white wordmark over the blue hero with a hairline rule that wipes away as the page scrolls; the wordmark and links ride down and shrink into the compact bar on scroll (native scroll timelines, script fallback).
 - **Compact bar:** brand blue with a hand-cut blue-deep edge beneath it and the bar-cut soft shadow. White links at 0.9375rem, weight 600; a 2px underline draws on hover. Hides while scrolling down and slides back on scroll up; stays put under reduced motion, within 240px of the top, and when keyboard focus is inside.
 - **Current section:** one white cut-paper tab hangs under the links and slides between them as scroll-spy moves (transform only). Inner pages use the same bar, already compact.
-- **Mobile (below 62.5rem):** a "Menu" pill with two drawn bars that turn into a cross; opens a full-screen navy panel of ruled 800-weight links with a drawn chevron, an orange action, and mail and booking links. Items stagger in at 55ms. The panel traps focus and Escape closes it.
+- **Mobile (below 62.5rem):** a "Menu" pill with two drawn bars that turn into a cross; opens a full-screen navy panel of ruled 800-weight links with a drawn chevron, a white action, and mail and booking links. Items stagger in at 55ms. The panel traps focus and Escape closes it.
 
 ### Cards / Containers
 - **Corner Style:** 16px for cards, 12px for slips and day pages.
@@ -251,7 +261,7 @@ Tokens: `--dur-1` 160ms (press, hover, focus), `--dur-2` 320ms (tabs, disclosure
 - **Do** build depth from flat overlapping planes: blue, blue-deep, navy and `--blue-sheet`.
 - **Do** give soft shadows only to white slips and documents and the hero stage sheet, with an offset and a blur.
 - **Do** keep the hero phone and all text flat, 2D and sharp.
-- **Do** use orange for the primary action only, one per screen, and green only for real success states.
+- **Do** use orange (light surfaces) or white (blue surfaces) for the primary action only, one per view, and green only for real success states.
 - **Do** keep heading tracking between -0.02em and -0.04em, and use the `--step-*` scale.
 - **Do** use `--dur-1/2/3` with `--ease-out-quart` or `--ease-out-expo`, and keep the finished state as the no-JS and reduced-motion default.
 - **Do** call it the "AI front desk"; each client may name their own.
@@ -266,7 +276,7 @@ Tokens: `--dur-1` 160ms (press, hover, focus), `--dur-2` 320ms (tabs, disclosure
 - **Don't** put an eyebrow or kicker above a heading.
 - **Don't** use unicode glyphs or emoji as icons; draw them as SVG or CSS shapes.
 - **Don't** set tracking tighter than -0.04em.
-- **Don't** use orange for anything but the primary action, or green for anything but success.
+- **Don't** use orange for anything but the primary action on light surfaces, or put orange on blue, or green for anything but success.
 - **Don't** give the AI front desk a personal name.
 - **Don't** show any price except "from $299".
 - **Don't** use clinic or medical examples.

@@ -1,6 +1,6 @@
 ---
 /**
- * The close: Crewwise blue band, left-aligned. At desktop the copy (heading, lead, orange action, reassurance) sits on
+ * The close: Crewwise blue band, left-aligned. At desktop the copy (heading, lead, white action, reassurance) sits on
  * the left and the audit deliverable itself, a white cut-paper sheet (real words from the audit offer), on the
  * right. Stacked on phones: copy, sheet, action. No phone: the hero owns the device.
  */
@@ -90,8 +90,8 @@ const {
     }
   }
   .close-title {
-    max-width: 18ch;
-    font-size: clamp(2.5rem, 1.2rem + 4.2vw, 4.75rem);
+    max-width: 24ch;
+    font-size: var(--step-section);
     text-wrap: balance;
   }
   .lead {
@@ -182,7 +182,7 @@ const {
     line-height: 1.4;
     max-width: 40ch;
   }
-  /* the action presses in: a touch smaller and a deeper orange under the finger */
+  /* the action presses in: a touch smaller and a deeper fill under the finger */
   .actions .btn {
     transition:
       transform 160ms var(--ease-out),
@@ -190,7 +190,7 @@ const {
   }
   .actions .btn:active {
     transform: scale(0.98);
-    background: var(--orange-deep);
+    background: var(--btn-press);
   }
 
   /* the sheet is static and settled at rest. Only its three ticks draw, in turn, when the section scrolls into view.
