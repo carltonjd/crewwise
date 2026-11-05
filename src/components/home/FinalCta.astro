@@ -1,6 +1,6 @@
 ---
 /**
- * The close: Crewwise blue band, left-aligned. At desktop the copy (heading, lead, orange action, reassurance) sits on
+ * The close: Crewwise blue band, left-aligned. At desktop the copy (heading, lead, white action, reassurance) sits on
  * the left and the audit deliverable itself, a white cut-paper sheet (real words from the audit offer), on the
  * right. Stacked on phones: copy, sheet, action. No phone: the hero owns the device.
  */
@@ -12,6 +12,8 @@ interface Props {
   reassurance?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Smaller heading, for pages whose H1 is smaller than the home hero. */
+  compact?: boolean;
   /** legacy props, ignored */
   slotLabel?: string;
   slotTime?: string;
@@ -25,13 +27,14 @@ const {
   reassurance = 'Free, with no obligation. You keep your number and your website.',
   secondaryLabel,
   secondaryHref,
+  compact = false,
 } = Astro.props;
 ---
 
 <section class="close band band-blue" aria-labelledby="close-title" data-close>
   <div class="page stack">
     <div class="copy">
-      <h2 id="close-title" class="display close-title">{heading}</h2>
+      <h2 id="close-title" class:list={["display close-title", { compact }]}>{heading}</h2>
       <p class="lead">{text}</p>
       <div class="actions">
         <a href={ctaHref} class="btn btn-primary">{ctaLabel}</a>
@@ -89,9 +92,12 @@ const {
       align-self: end;
     }
   }
+  .close-title.compact {
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  }
   .close-title {
-    max-width: 18ch;
-    font-size: clamp(2.5rem, 1.2rem + 4.2vw, 4.75rem);
+    max-width: 24ch;
+    font-size: var(--step-section);
     text-wrap: balance;
   }
   .lead {
@@ -182,7 +188,7 @@ const {
     line-height: 1.4;
     max-width: 40ch;
   }
-  /* the action presses in: a touch smaller and a deeper orange under the finger */
+  /* the action presses in: a touch smaller and a deeper fill under the finger */
   .actions .btn {
     transition:
       transform 160ms var(--ease-out),
@@ -190,7 +196,7 @@ const {
   }
   .actions .btn:active {
     transform: scale(0.98);
-    background: var(--orange-deep);
+    background: var(--btn-press);
   }
 
   /* the sheet is static and settled at rest. Only its three ticks draw, in turn, when the section scrolls into view.

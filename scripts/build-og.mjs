@@ -21,7 +21,7 @@ const pages = [
   {
     file: 'og.jpg',
     headline: 'Win the first minute with every new client.',
-    sub: 'A website clients choose, and an AI front desk that answers every call, day or night.',
+    sub: 'An AI front desk that answers every call, day or night, and a website clients choose.',
     size: 84,
     planes: [
       poly('560,631 640,402 905,318 1186,262 1201,276 1201,631', C.deep),

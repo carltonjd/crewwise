@@ -26,7 +26,7 @@ const {
 } = Astro.props;
 const canonical = new URL(path, SITE.domain).toString();
 // ?v= makes apps that cached an earlier preview fetch the new image; bump it when the images change.
-const imageUrl = new URL(image, SITE.domain).toString() + (image.startsWith('/') ? '?v=2' : '');
+const imageUrl = new URL(image, SITE.domain).toString() + (image.startsWith('/') ? '?v=3' : '');
 ---
 
 <title>{title}</title>
