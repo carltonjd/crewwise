@@ -12,6 +12,8 @@ interface Props {
   reassurance?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Smaller heading, for pages whose H1 is smaller than the home hero. */
+  compact?: boolean;
   /** legacy props, ignored */
   slotLabel?: string;
   slotTime?: string;
@@ -25,13 +27,14 @@ const {
   reassurance = 'Free, with no obligation. You keep your number and your website.',
   secondaryLabel,
   secondaryHref,
+  compact = false,
 } = Astro.props;
 ---
 
 <section class="close band band-blue" aria-labelledby="close-title" data-close>
   <div class="page stack">
     <div class="copy">
-      <h2 id="close-title" class="display close-title">{heading}</h2>
+      <h2 id="close-title" class:list={["display close-title", { compact }]}>{heading}</h2>
       <p class="lead">{text}</p>
       <div class="actions">
         <a href={ctaHref} class="btn btn-primary">{ctaLabel}</a>
@@ -88,6 +91,9 @@ const {
       justify-self: end;
       align-self: end;
     }
+  }
+  .close-title.compact {
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
   }
   .close-title {
     max-width: 24ch;
