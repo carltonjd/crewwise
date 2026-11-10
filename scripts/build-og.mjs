@@ -55,9 +55,9 @@ const pages = [
     slip: { x: 760, y: 120, w: 340, title: 'Your free audit', line: 'In your inbox within two business days', rot: -2 },
   },
   {
-    file: 'og-roofing.jpg',
-    headline: 'Answers your phone while you’re on the roof.',
-    sub: 'AI front desk for roofing companies',
+    file: 'og-home-inspectors.jpg',
+    headline: 'Books your next inspection while you’re in the crawlspace.',
+    sub: 'AI front desk for home inspectors',
     size: 80,
     planes: [
       poly('-2,631 -2,540 230,500 520,420 830,330 1130,170 1186,112 1201,128 1201,631', C.deep),

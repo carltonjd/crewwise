@@ -3,6 +3,7 @@
 
 export const INTEREST_OPTIONS = ['Website and calls', 'AI automation', 'Both'] as const;
 export const BUSINESS_TYPES = [
+  'Home inspection',
   'HVAC',
   'Plumbing',
   'Roofing',

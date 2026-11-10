@@ -14,7 +14,7 @@ export const GET: APIRoute = () => {
 
 ## Who it is for
 
-- Home-service companies: HVAC, plumbing, roofing, electrical and cleaning.
+- Home inspectors and home-service companies: home inspection, HVAC, plumbing, roofing, electrical and cleaning.
 - Small professional firms: law, architecture and accounting firms.
 
 ## Who is behind it

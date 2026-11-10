@@ -1,7 +1,9 @@
-/roofers    /roofing/  301
-/roofers/   /roofing/  301
-/roofer     /roofing/  301
-/roofer/    /roofing/  301
+/roofers    /home-inspectors/  301
+/roofers/   /home-inspectors/  301
+/roofer     /home-inspectors/  301
+/roofer/    /home-inspectors/  301
+/roofing    /home-inspectors/  301
+/roofing/   /home-inspectors/  301
 /photographers /  301
 /photographers/ /  301
 /sitemap.xml /sitemap-index.xml 301

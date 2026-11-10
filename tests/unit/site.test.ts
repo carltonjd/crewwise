@@ -8,8 +8,8 @@ describe('SITE constants', () => {
     );
   });
 
-  it('keeps the demo phone empty and points at Octalogic', () => {
-    expect(SITE.DEMO_PHONE).toBe('');
+  it('sets the inspector demo line and points at Octalogic', () => {
+    expect(SITE.DEMO_PHONE).toBe('(813) 993-1087');
     expect(SITE.OCTALOGIC_URL).toBe('https://octalogic.tech');
   });
 

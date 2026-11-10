@@ -12,6 +12,7 @@ Two audiences, one site (the AI front desk is described without a personal name;
 
 - **Home-service companies:** HVAC, plumbing, roofing, electrical and cleaning businesses, usually owner-operators with small crews. The owner is on a job when the next customer calls; calls go to voicemail, web enquiries get answered that evening, quotes go unchased, and the customer books someone else.
 - **Small professional firms:** law firms, architects and accounting firms. No medical practices or clinic examples anywhere for now (patient calls bring US health privacy rules not yet set up). A new client enquiry deserves a reply in minutes; partners are in meetings or with clients, so enquiries wait and go cold.
+- **Home inspectors** are the worked example (owner, 2026-11-07); the site still serves every audience above.
 
 Both read the site on a phone, between jobs or meetings, short on time and wary of hype. The hero must feel calm and credible to a lawyer and still friendly to a plumber.
 
@@ -46,9 +47,9 @@ Octalogic's extended engineering teams and product builds are not sold here; the
 ## Capabilities and Constraints
 
 - Site: Astro 7, static output, Tailwind 4, MDX content, TypeScript; deployed on Cloudflare Workers static assets from `dist/`. All prices, links, phone numbers and emails live in `src/config/site.ts`.
-- Phase 1 pages: `/`, `/pricing`, `/free-audit`, `/roofing` (existing copy incl. Storm Mode), `/terms`, `/privacy`, `/refunds`. Phase 2: `/ai-front-desk`, `/websites`, `/ai-automation`, `/hvac`, `/plumbing`, `/law-firms`, `/accounting-firms`, `/about`. Never link to a page that doesn't exist yet; no "coming soon".
+- Phase 1 pages: `/`, `/pricing`, `/free-audit`, `/home-inspectors` (the worked example, incl. busy season; `/roofing` 301s to it), `/terms`, `/privacy`, `/refunds`. Phase 2: `/ai-front-desk`, `/websites`, `/ai-automation`, `/hvac`, `/plumbing`, `/law-firms`, `/accounting-firms`, `/about`. Never link to a page that doesn't exist yet; no "coming soon".
 - Company: Crewwise is a brand of Hallmark Data Systems Pvt Ltd, Panaji, Goa, India. Never say or imply US-based. Footer legal line is fixed text.
-- No demo phone number until a non-roofing demo line exists. No recorded sample call yet: the example call on the page is a read-along transcript until a recorded sample exists.
+- Demo line (813) 993-1087 answers as Keystone Home Inspections, a fictional Tampa company; shown on /home-inspectors/ only. No recorded sample call yet: the example call on the page is a read-along transcript until a recorded sample exists.
 - Must be SEO and AI-search ready: unique titles/descriptions, canonical, OG, sitemap, JSON-LD, llms.txt, all crawlers allowed.
 - Accessibility: one H1 per page, AA contrast, visible focus, reduced motion respected. Fast: no heavy libraries for simple effects.
 - Never push to GitHub without the user's explicit approval for that push.

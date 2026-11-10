@@ -7,13 +7,13 @@ import FinalCta from '../components/home/FinalCta.astro';
 import { SITE } from '../config/site';
 import { faqJsonLd, serviceJsonLd } from '../lib/jsonld';
 
-const entry = await getEntry('pages', 'roofing');
-if (!entry) throw new Error('Missing src/content/pages/roofing.md');
+const entry = await getEntry('pages', 'home-inspectors');
+if (!entry) throw new Error('Missing src/content/pages/home-inspectors.md');
 const c = entry.data;
 
 const token = (s: string) => s.replaceAll('{{PRICE_FRONT_DESK}}', SITE.PRICE_FRONT_DESK);
 
-// Owner decision 2026-11-01: the only price is SITE.PRICE_FRONT_DESK. The founding-roofers setup fee offer is dropped.
+// Owner decision 2026-11-01: the only price is SITE.PRICE_FRONT_DESK. The founding-inspectors setup fee offer is dropped.
 const faqItems = c.faq.items.map((i) => ({
   question: i.question,
   answer:
@@ -21,6 +21,9 @@ const faqItems = c.faq.items.map((i) => ({
       ? `${token('{{PRICE_FRONT_DESK}}')}. There’s no contract, and plans are month to month.`
       : token(i.answer),
 }));
+
+const demoDigits = SITE.DEMO_PHONE.replace(/[^0-9]/g, '');
+const demoTel = demoDigits ? `tel:+${demoDigits.length === 10 ? '1' : ''}${demoDigits}` : '';
 
 const ex = c.example;
 const queue = ex.queue;
@@ -51,12 +54,20 @@ const jsonLd = [
       <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
       <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
     </div>
+    {
+      demoTel && (
+        <div class="actions demo-line">
+          <a href={demoTel} class="link-quiet">Call our demo line: {SITE.DEMO_PHONE}</a>
+          <span class="demo-note">Try booking an inspection with Keystone Home Inspections, our sample company.</span>
+        </div>
+      )
+    }
     <div slot="aside" class="slotted-wrap">
       <div class="slotted hero-slip">
-        <span class="detail when">Saturday evening, {ex.business}</span>
+        <span class="detail when">Sunday evening, {ex.business}</span>
         <strong>{ex.calendar.event}</strong>
         <span class="detail">{ex.calendar.where}</span>
-        <span class="stamp-booked">Monday 9:00 AM</span>
+        <span class="stamp-booked">Thursday 9:00 AM</span>
         <span class="tag-example">Example booking</span>
       </div>
     </div>
@@ -70,12 +81,12 @@ const jsonLd = [
       </div>
       <div class="example-grid">
         <div class="call" aria-label={ex.ariaDescription}>
-          <p class="when-line">Saturday evening, {ex.business}</p>
+          <p class="when-line">Sunday evening, {ex.business}</p>
           <ol class="lines">
             {
               ex.call.map((l) => (
                 <li class={l.speaker === 'ai' ? 'ai' : 'caller'}>
-                  <span class="who">{l.speaker === 'ai' ? 'AI front desk' : 'Homeowner'}</span>
+                  <span class="who">{l.speaker === 'ai' ? 'AI front desk' : 'Caller'}</span>
                   <span class="say">{l.text}</span>
                 </li>
               ))
@@ -87,7 +98,7 @@ const jsonLd = [
         </div>
         <div class="result">
           <p class="sms">
-            <strong>Text to the homeowner</strong>
+            <strong>Text to the agent</strong>
             <span>{ex.sms}</span>
           </p>
         </div>
@@ -153,7 +164,7 @@ const jsonLd = [
         <p><span class="tag-example">Example</span> <span class="note">{c.stormMode.note}</span></p>
       </div>
       <div class="storm-grid">
-        <ol class="queue" aria-label="Example storm queue, sorted by urgency">
+        <ol class="queue" aria-label="Example busy-season queue, sorted by deadline">
           {
             queue.map((q) => (
               <li class:list={['q', { urgent: q.priority === 'urgent' }]}>
@@ -175,7 +186,7 @@ const jsonLd = [
         </ol>
         <div class="report-wrap">
         <div class="report">
-          <ul class="log" aria-label="Example call log after the storm">
+          <ul class="log" aria-label="Example call log after a busy week">
             {
               c.stormMode.report.map((r) => (
                 <li>
@@ -234,6 +245,17 @@ const jsonLd = [
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 1.75rem;
+  }
+  .demo-line {
+    margin-top: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+  /* sits on the blue head band: white keeps it AA (5.9:1) */
+  .demo-note {
+    color: #fff;
+    font-size: 0.9375rem;
   }
   .detail {
     color: var(--ink-2);
@@ -462,7 +484,7 @@ const jsonLd = [
     color: var(--ink-2);
   }
 
-  /* storm mode: navy band, ruled queue, the example report as one white slip */
+  /* busy season: navy band, ruled queue, the example report as one white slip */
   .storm-head {
     display: grid;
     gap: 1.25rem;
