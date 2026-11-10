@@ -3,3 +3,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Email logos: public, long-cached, safe to hotlink from email clients.
+/email/*
+  Cache-Control: public, max-age=31536000
+  Access-Control-Allow-Origin: *

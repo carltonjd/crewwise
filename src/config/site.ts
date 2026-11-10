@@ -7,7 +7,7 @@ export interface Site {
   CONTACT_EMAIL: string;
   CALENDLY_URL: string;
   FORM_ENDPOINT: string;
-  /** Leave empty and hidden until a non-roofing demo line exists. */
+  /** The inspector demo line (answers as Keystone Home Inspections). Shown on /home-inspectors/ only; leave empty to hide. */
   DEMO_PHONE: string;
   OCTALOGIC_URL: string;
   company: string;
@@ -36,7 +36,7 @@ export const SITE: Site = {
   CONTACT_EMAIL: 'hello@crewwisehq.com',
   CALENDLY_URL: 'https://calendly.com/roswald-crewwisehq/crewwise-demo',
   FORM_ENDPOINT: 'https://formspree.io/f/xqpepyyw',
-  DEMO_PHONE: '',
+  DEMO_PHONE: '(813) 993-1087',
   OCTALOGIC_URL: 'https://octalogic.tech',
   company,
   companyAddress,
@@ -73,11 +73,11 @@ export const PAGES: PageEntry[] = [
     description: 'Request a free audit of your website and phone line.',
   },
   {
-    path: '/roofing/',
-    title: 'Roofing',
-    description: 'The AI front desk for roofing companies, including Storm Mode.',
+    path: '/home-inspectors/',
+    title: 'Home inspectors',
+    description: 'The AI front desk for home inspectors, including busy season.',
   },
-  { path: '/terms/', title: 'Terms of service', description: 'The terms for using Crewwise.' },
+  { path: '/terms/', title: 'Client terms', description: 'The Crewwise client terms for Riley and websites.' },
   {
     path: '/privacy/',
     title: 'Privacy policy',
