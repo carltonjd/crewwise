@@ -1,9 +1,9 @@
 ---
 title: Client terms
-description: "The Crewwise client terms: your order, Riley the AI front desk, websites, fees and payment, cancelling, your data, ownership and liability."
-updated: 2026-11-10
+description: "The Crewwise client terms: your order, the website plan, Riley the AI front desk, custom websites, fees and payment, cancelling, your data, ownership and liability."
+updated: 2026-11-23
 ---
-Version 1.0 · November 2026
+Version 1.1 · November 2026
 
 ## 1. Who these terms are between, and how you accept them
 
@@ -14,17 +14,18 @@ These terms are between:
 
 **How you accept them.** You accept these terms by ticking the box in our online sign-up form, by signing an order form, or by paying your first invoice. Whoever accepts confirms they're authorised to do so for the business.
 
-**Version.** This is version 1.0, dated November 2026. When you accept, we'll email you a copy of your sign-up details and a link to this version.
+**Version.** This is version 1.1, dated November 2026. When you accept, we'll email you a copy of your sign-up details and a link to this version.
 
-**Which sections apply to you.** Sections 6 and 7 apply only if you buy Riley. Section 8 applies only if you buy a website. Everything else applies to every service.
+**Which sections apply to you.** Sections 6 and 7 apply only if you buy Riley. Section 8 applies only if you have the website plan or a custom website. Everything else applies to every service.
 
 ## 2. Your order
 
 What you're buying, and its price, are set out in your sign-up form or in a written order confirmation from us (email is fine). Together, these are your "order form".
 
 - **Riley** includes up to 1,000 AI-answered minutes and up to 1,000 text messages a month, unless your order form says otherwise. Extra usage is charged at the rates in your order form.
-- **Websites:** your order form shows the package, price, delivery estimate and the annual hosting fee that applies from the second year.
-- **Free trials:** if your order includes a free trial, such as a free first month of Riley with a website, it becomes a paid monthly subscription at the price in your order form unless you cancel before the trial ends. We'll remind you by email at least 7 days before it ends.
+- **The website plan** is a monthly subscription, at the price in your order form, that starts on the day you sign up. There is no free trial. It includes your website, its hosting, small text and photo updates, and setting up and keeping your business profiles up to date on Google, Bing, Apple Maps and ChatGPT, where those services allow it. It doesn't include search engine optimisation.
+- **Custom websites:** your order form shows the package, price, delivery estimate and the annual hosting fee that applies from the second year.
+- **Free trials:** if your order includes a free trial, such as a free first month of Riley, it becomes a paid monthly subscription at the price in your order form unless you cancel before the trial ends. We'll remind you by email at least 7 days before it ends. The website plan has no free trial.
 - **Adding services later:** we'll confirm each addition with a new order form, which you accept the same way.
 - If your order form and these terms disagree, the order form wins.
 
@@ -32,14 +33,16 @@ What you're buying, and its price, are set out in your sign-up form or in a writ
 
 **Riley, the AI front desk.** Riley answers calls forwarded to it from your business number, in your business's name. It collects callers' details, books appointments into your calendar, flags urgent calls to you, and sends follow-up texts and emails that you approve during setup. We set Riley up, adjust it during the first two weeks, and keep it running.
 
-**Websites.** We design, build and launch the website package on your order form, as described in section 8.
+**The website plan.** We build your website from our templates, host it, keep it online and make small updates while your plan is active, as described in section 8. We also set up and keep up to date your business profiles on Google, Bing, Apple Maps and ChatGPT, where those services allow it.
+
+**Custom websites.** We design, build and launch the website package on your order form, as described in section 8.
 
 **What's not included** unless added to the order form in writing: advertising, search engine optimisation, content writing beyond light edits, bulk text or email campaigns, and work on software we didn't build.
 
 ## 4. Fees, included usage and payment
 
-- **Monthly fees are paid in advance,** on the same date each month, by the payment method on your order form.
-- **Website fees** are paid 50% before work starts and 50% when the website is ready, before it goes live. For Signature websites, it's 40% before work starts, 30% when you approve the design, and 30% before launch. A website stays on a private preview link until it's paid in full.
+- **Monthly fees are paid in advance,** on the same date each month, by the payment method on your order form. For the website plan, the first payment is taken when you sign up, before we start building.
+- **Custom website fees** are paid 50% before work starts and 50% when the website is ready, before it goes live. For Signature websites, it's 40% before work starts, 30% when you approve the design, and 30% before launch. A website stays on a private preview link until it's paid in full.
 - **Annual hosting** is invoiced a month before each renewal, from the second year.
 - **Included usage resets each month** and doesn't carry over. If you go over the included minutes or texts, we'll tell you when you reach 80% and again at 100%. Extra usage is charged at the rates in the order form, or we'll agree a higher plan with you.
 - **Late payment:** if a payment is more than 7 days late, we may pause the services until it's paid. We'll warn you before we do.
@@ -57,7 +60,8 @@ What you're buying, and its price, are set out in your sign-up form or in a writ
 
 - We'll stop Riley answering, and help you switch your call forwarding back.
 - On request within 30 days, we'll send you an export of your contacts, call records and bookings. After 30 days we may delete them.
-- If you have a website with us, you keep your domain, and once the website is fully paid we'll send you a copy of its files so you can host it elsewhere.
+- **Website plan:** your website is licensed to you while your plan is active. When the plan ends, we take the website offline, and we don't give you a copy of its files. You keep your domain, your logo, your photos and the text you gave us. If you want to keep the website itself, you can buy it out for the buyout price in your order form, or the price we quote when you ask. Once the buyout is paid, we send you the website's files and you own its content and design.
+- **Custom website:** you keep your domain, and once the website is fully paid we'll send you a copy of its files so you can host it elsewhere.
 
 ## 6. Your responsibilities
 
@@ -79,10 +83,11 @@ What you're buying, and its price, are set out in your sign-up form or in a writ
 
 ## 8. Websites
 
-- **What you get:** the package on your order form, designed and built by our team and our engineering partner, Octalogic.
+- **What you get:** for the website plan, a website built by Crewwise from our templates and the information about your business. For a custom website, the package on your order form, designed and built by our team and our engineering partner, Octalogic.
 - **Your content:** you provide your logo, photos, service details and any text through our onboarding form. Our timelines start once we have them. We may lightly edit wording for clarity.
-- **Timelines** are estimates: about 5 days for Launch, 2–3 weeks for Business and 4–5 weeks for Signature, from receiving your content.
-- **Changes:** two rounds of changes are included before launch. Further changes, new pages or redesigns are quoted separately.
+- **Timelines** are estimates: about 5 business days for the website plan, 2–3 weeks for Business and 4–5 weeks for Signature, from receiving your content.
+- **Changes:** two rounds of changes are included before launch. On the website plan, small text and photo updates are included after launch too. Further changes, new pages or redesigns are quoted separately.
+- **Business profiles:** for the website plan, we set up and update your profiles on Google, Bing, Apple Maps and ChatGPT where those services allow it. Those services decide what they show and whether they recommend your business. We can't control that.
 - **Your rights:** you confirm you have the right to use any content you give us, such as photos and logos.
 - **Hosting:** while hosting is active, we keep your site online, secure and backed up, and make small text or photo changes on request. Bigger changes are quoted separately.
 - **Your domain** is always registered in your name, or transferred to you on request.
@@ -97,13 +102,15 @@ What you're buying, and its price, are set out in your sign-up form or in a writ
 ## 10. Ownership and confidentiality
 
 - **What stays ours:** our software setup, Riley's scripts and workflows, our website templates, tools and know-how remain ours. You can use them as part of the services while these terms are active.
-- **What's yours:** your business name, logo, content and data. Once a website is fully paid, you own its content and design, and you can keep using any of our template code in it for that one site, including after you leave.
+- **What's yours:** your business name, logo, content and data.
+- **Website plan:** the website's design and code stay ours, and you have a licence to use them while your plan is active. If you buy the website out, you own its content and design, and you can keep using any of our template code in it for that one site.
+- **Custom websites:** once a custom website is fully paid, you own its content and design, and you can keep using any of our template code in it for that one site, including after you leave.
 - **Confidentiality:** each of us keeps the other's non-public business information confidential, and uses it only for these terms. This continues after the agreement ends.
 
 ## 11. What we promise, limits on liability, and indemnity
 
 - **What we promise:** we'll provide the services with reasonable skill and care, and fix problems we're responsible for as quickly as we reasonably can.
-- **What we can't promise:** a particular number of calls, leads, bookings, sales, search rankings or any other business result.
+- **What we can't promise:** a particular number of calls, leads, bookings, sales, search rankings, mentions or recommendations by AI assistants such as ChatGPT, or any other business result.
 - **Limit on our liability:** except where the law doesn't allow a limit, our total liability under these terms is capped at the total fees you have paid us under them. Neither of us is liable for indirect losses, such as lost profits or lost business opportunities.
 - **Your indemnity:** you'll cover our reasonable costs and losses if a claim is brought against us because of messages sent at your request without proper consent, content you gave us, or your breach of section 6.
 - **Our indemnity:** we'll cover your reasonable costs and losses if a claim says our own templates or software, as we provided them, infringe someone else's rights.
