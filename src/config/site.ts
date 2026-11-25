@@ -74,7 +74,7 @@ export const SITE: Site = {
   SHOW_AUTOMATION: false,
   SHOW_OCTALOGIC: false,
   HERO_HEADLINE: 'Get AI Ready for $99 a month.',
-  HERO_SUB: 'We build your website and keep your Google, Apple Maps and ChatGPT listings up to date.',
+  HERO_SUB: 'We build your web presence for the AI era, so ChatGPT, Google and Siri have more reasons to mention you.',
   HERO_HEADLINE_BACKUP: 'Win the first minute with every new client.',
   FRONT_DESK_NAME: 'AI front desk',
   ANALYTICS_TOKEN: '',
