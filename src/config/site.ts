@@ -35,6 +35,7 @@ export interface Site {
   SHOW_OCTALOGIC: boolean;
   /** Home hero headline, plus the backup to switch to only if Carlton asks. */
   HERO_HEADLINE: string;
+  HERO_SUB: string;
   HERO_HEADLINE_BACKUP: string;
   /** Product described without a personal name on the site; each client can still name their own front desk. */
   FRONT_DESK_NAME: string;
@@ -72,7 +73,8 @@ export const SITE: Site = {
   SHOW_CUSTOM_WEBSITES: false,
   SHOW_AUTOMATION: false,
   SHOW_OCTALOGIC: false,
-  HERO_HEADLINE: 'Your website, built and kept up for $99 a month.',
+  HERO_HEADLINE: 'Get AI Ready for $99 a month.',
+  HERO_SUB: 'We build your website and keep your Google, Apple Maps and ChatGPT listings up to date.',
   HERO_HEADLINE_BACKUP: 'Win the first minute with every new client.',
   FRONT_DESK_NAME: 'AI front desk',
   ANALYTICS_TOKEN: '',

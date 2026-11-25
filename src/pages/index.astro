@@ -48,8 +48,8 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <Hero
-    sub={`${SITE.PLAN_NAME}: ${SITE.PLAN_LINE.charAt(0).toLowerCase()}${SITE.PLAN_LINE.slice(1)}`}
-    ctaLabel="Ask for the website plan"
+    sub={SITE.HERO_SUB}
+    ctaLabel="Get AI Ready"
     ctaHref="/free-audit/?interest=plan"
     secondaryLabel="What’s included"
     secondaryHref="/pricing/#websites"
@@ -214,14 +214,14 @@ const jsonLd = [
     id="questions"
     heading="What owners ask first"
     items={faq}
-    ctaLabel="Ask for the website plan"
+    ctaLabel="Get AI Ready"
     ctaHref="/free-audit/?interest=plan"
   />
 
   <FinalCta
     heading="Get your business website started"
     text={`Tell us about your business, and we’ll contact you about the ${PLAN_LABEL}.`}
-    ctaLabel="Ask for the website plan"
+    ctaLabel="Get AI Ready"
     ctaHref="/free-audit/?interest=plan"
     reassurance="No setup fee. Month to month, with 30 days’ notice to cancel."
     sheet={{
