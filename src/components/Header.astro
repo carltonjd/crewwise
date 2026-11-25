@@ -11,12 +11,13 @@ interface Props {
 }
 const { current = 'other', tone = 'light' } = Astro.props;
 const onHome = current === 'home';
+// The website plan leads (owner decision 2026-11-25). AI automation is a footer line only.
 const links = [
+  { href: onHome ? '#websites' : '/#websites', label: 'Website plan' },
   { href: onHome ? '#ai-front-desk' : '/#ai-front-desk', label: 'AI front desk' },
-  { href: onHome ? '#websites' : '/#websites', label: 'Websites' },
-  { href: onHome ? '#automation' : '/#automation', label: 'AI automation' },
   { href: '/pricing/', label: 'Pricing', key: 'pricing' },
 ];
+const ctaHref = '/free-audit/?interest=plan';
 const showCta = current !== 'free-audit';
 ---
 
@@ -45,16 +46,16 @@ const showCta = current !== 'free-audit';
         </nav>
         {
           showCta && (
-            <a href="/free-audit/" class="cta">
-              Get my free audit
+            <a href={ctaHref} class="cta">
+              Ask for the website plan
             </a>
           )
         }
         {
           showCta && (
-            <a href="/free-audit/" class="cta cta-m">
-              <span class="t-full">Get my free audit</span>
-              <span class="t-short">Free audit</span>
+            <a href={ctaHref} class="cta cta-m">
+              <span class="t-full">Ask for the website plan</span>
+              <span class="t-short">Get started</span>
             </a>
           )
         }
@@ -90,8 +91,8 @@ const showCta = current !== 'free-audit';
   </nav>
   {
     showCta && (
-      <a class="cta p-item" style={`--i:${links.length}`} href="/free-audit/">
-        Get my free audit
+      <a class="cta p-item" style={`--i:${links.length}`} href={ctaHref}>
+        Ask for the website plan
       </a>
     )
   }
@@ -143,7 +144,8 @@ const showCta = current !== 'free-audit';
     --ink: var(--white);
     --ring: var(--white);
     position: fixed;
-    top: 0;
+    /* pushed down while the Black Friday strip (PromoBanner) is on screen; 0 when it is gone */
+    top: var(--promo-shift, 0px);
     left: 0;
     right: 0;
     z-index: 100;
@@ -491,7 +493,7 @@ const showCta = current !== 'free-audit';
     z-index: 99;
     display: none;
     overflow: auto;
-    padding: var(--mast-h) var(--gutter) 28px;
+    padding: calc(var(--mast-h) + var(--promo-shift, 0px)) var(--gutter) 28px;
     background: var(--navy);
     color: var(--white);
     visibility: hidden;
@@ -731,7 +733,7 @@ const showCta = current !== 'free-audit';
     const RANGE = 240;
     const NEAR = 240; // the bar never hides this close to the top (the masthead zone)
     const STEP = 8; // scroll distance that counts as a direction change, so jitter does not flicker the bar
-    const spyIds = ['ai-front-desk', 'websites', 'automation'];
+    const spyIds = ['websites', 'ai-front-desk'];
     const spyLinks = new Map(
       spyIds.map((id) => [id, root.querySelector<HTMLAnchorElement>('.links a[href="#' + id + '"]')]),
     );

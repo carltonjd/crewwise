@@ -1,21 +1,20 @@
 import type { APIRoute } from 'astro';
-import { SITE, PAGES, absoluteUrl, BUILDER } from '../config/site';
+import { SITE, PAGES, absoluteUrl, PLAN_LABEL } from '../config/site';
 
 export const GET: APIRoute = () => {
   const body = `# ${SITE.brand}
 
-> ${SITE.brand} helps small businesses stop losing customers in the first minute. It sells three services under one name: an AI front desk that answers every call; websites; and AI automation. ${SITE.legalLine}.
+> ${SITE.brand} builds and runs websites for local service businesses in the US. Its main offer is the ${PLAN_LABEL}; an AI front desk that answers calls is a separate service. ${SITE.legalLine}.
 
 ## Services
 
-- AI front desk: answers every call 24/7, books appointments, captures the caller’s details, flags urgent calls to you and follows up. Texting switches on after carrier registration, usually 1 to 3 weeks. ${SITE.PRICE_FRONT_DESK}.
-- Websites: modern, fast websites for small businesses, designed and built by ${BUILDER}.
-- AI automation: a free 30-minute call, a paid automation review credited against any build, then fixed-price automations that take repetitive manual work off a team, for example matching purchase orders to invoices.
+- ${PLAN_LABEL}: ${SITE.PLAN_LINE} The website is built by ${SITE.brand} from its templates, hosted, with small text and photo updates; ready about 5 business days after the content arrives. ${SITE.PRICE_WEBSITE_PLAN}, no setup fee, no free trial, month to month with 30 days' notice to cancel. The website is licensed while the plan is active. Search engine optimization is not included, and no rankings or recommendations are promised. ${SITE.PLAN_DEFINITION}
+- AI front desk: a separate service that answers every call 24/7, books appointments, captures the caller’s details, flags urgent calls to you and follows up. Texting switches on after carrier registration, usually 1 to 3 weeks. ${SITE.PRICE_FRONT_DESK}.
+- AI automation: a free 30-minute call about automating repetitive manual work.
 
 ## Who it is for
 
-- Home inspectors and home-service companies: home inspection, HVAC, plumbing, roofing, electrical and cleaning.
-- Small professional firms: law, architecture and accounting firms.
+- Local service businesses: auto detailing, pressure washing, pool cleaning, garage door and home inspection, and other home-service companies.
 
 ## Who is behind it
 
@@ -28,7 +27,7 @@ ${PAGES.map((p) => `- [${p.title}](${absoluteUrl(p.path)}): ${p.description}`).j
 ## Contact
 
 - Email: ${SITE.CONTACT_EMAIL}
-- Free audit: ${absoluteUrl('/free-audit/')}
+- Get started (website plan or free audit): ${absoluteUrl('/free-audit/')}
 `;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 };

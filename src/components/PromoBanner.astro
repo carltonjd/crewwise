@@ -1,0 +1,176 @@
+---
+/**
+ * Black Friday strip (owner decision 2026-11-25: review options A + C). A white paper slip across the top of every
+ * page, above the bar; it scrolls away with the page and is never sticky. Text and one quiet link, no button, so
+ * the page keeps one primary action.
+ *
+ * Honest by construction: the strip is rendered hidden. The inline script below reveals it only while the time is
+ * before PROMO.endsAt, so a static build can never show a deadline that has passed, and with no JavaScript it never
+ * shows. Elements marked [data-promo-only] (for example the price-lock line on the pricing sheet) follow the same
+ * rule. The fixed header is pushed down by --promo-shift while the strip is on screen.
+ */
+import { SITE, PROMO, PROMO_DEADLINE } from '../config/site';
+
+const [amt, per] = SITE.PRICE_WEBSITE_PLAN.split('/');
+const end = Date.parse(PROMO.endsAt);
+---
+
+<div class="promo" data-promo hidden>
+  <div class="page promo-in">
+    <p class="promo-text">
+      <strong>Black Friday:</strong>{' '}
+      <span class="long">{amt} a {per}, no setup fee. Sign up by {PROMO_DEADLINE} and your price is locked for {PROMO.lockMonths} months.</span>
+      <span class="short">sign up by {PROMO_DEADLINE.replace(/^\w+, /, '')} and lock {amt} a {per} for {PROMO.lockMonths} months.</span>
+      <a class="promo-link" href={PROMO.href}>{PROMO.linkText}</a>
+    </p>
+    <button type="button" class="promo-x" data-promo-close aria-label="Close the Black Friday notice">
+      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
+        <path d="M5 5l10 10M15 5L5 15" />
+      </svg>
+    </button>
+  </div>
+</div>
+<script is:inline define:vars={{ end }}>
+  (() => {
+    const KEY = 'crewwise-promo-closed';
+    const root = document.documentElement;
+    const strip = () => document.querySelector('[data-promo]');
+    let closed = false;
+    try {
+      closed = sessionStorage.getItem(KEY) === '1';
+    } catch {
+      closed = false; // storage blocked: show the strip
+    }
+    const live = Date.now() <= end;
+    const el = strip();
+    if (el) el.hidden = !live || closed;
+    // page content below the strip is parsed after this script, so the promo-only lines are set on page load
+    const applyOnly = () =>
+      document.querySelectorAll('[data-promo-only]').forEach((n) => (n.hidden = Date.now() > end));
+
+    const sync = () => {
+      const s = strip();
+      const h = s && !s.hidden ? s.offsetHeight : 0;
+      root.style.setProperty('--promo-shift', `${Math.max(0, h - window.scrollY)}px`);
+    };
+    sync();
+    el?.querySelector('[data-promo-close]')?.addEventListener('click', () => {
+      el.hidden = true;
+      try {
+        sessionStorage.setItem(KEY, '1');
+      } catch {
+        // storage blocked: the strip comes back on the next page, which is fine
+      }
+      sync();
+      document.querySelector('.logo')?.focus({ preventScroll: true });
+    });
+    // one set of listeners for the whole visit; page turns re-run this script but reuse them
+    if (!window.__promoSync) {
+      window.__promoSync = true;
+      document.addEventListener('astro:page-load', applyOnly);
+      let raf = 0;
+      const onScroll = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          sync();
+        });
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+    }
+  })();
+</script>
+
+<style>
+  .promo {
+    position: relative;
+    z-index: 101;
+    background: var(--blue);
+    color: var(--navy);
+  }
+  .promo[hidden] {
+    display: none;
+  }
+  /* the slip: white paper with a hand-cut lower edge, its soft paper shadow falling on the blue bar */
+  .promo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 71% calc(100% - 2px), 38% 100%, 12% calc(100% - 3px), 0 100%);
+    filter: drop-shadow(0 1px 1.5px rgb(15 27 51 / 0.2));
+  }
+  .promo-in {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding-block: 0.35rem;
+  }
+  .promo-text {
+    flex: 1;
+    margin: 0;
+    font-size: var(--step-sm);
+    font-weight: 560;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+  .promo-text strong {
+    font-weight: 800;
+  }
+  .short {
+    display: none;
+  }
+  .promo-link {
+    display: inline-block;
+    margin-left: 0.35rem;
+    color: var(--navy);
+    font-weight: 750;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
+    text-decoration-color: color-mix(in oklab, var(--blue) 55%, transparent);
+    transition: text-decoration-color var(--dur-1, 160ms) var(--ease-out);
+  }
+  .promo-link:hover {
+    text-decoration-color: var(--blue);
+  }
+  .promo-x {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--navy);
+    cursor: pointer;
+    transition: background-color var(--dur-1, 160ms) var(--ease-out);
+  }
+  .promo-x:hover {
+    background: var(--soft);
+  }
+  .promo-x svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  @media (max-width: 40rem) {
+    .long {
+      display: none;
+    }
+    .short {
+      display: inline;
+    }
+  }
+  @media print {
+    .promo {
+      display: none;
+    }
+  }
+</style>

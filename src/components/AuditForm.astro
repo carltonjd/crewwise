@@ -1,12 +1,13 @@
 ---
 /** The free audit form. Works as a normal POST without JavaScript; the script adds inline validation and fetch. */
-import { SITE } from '../config/site';
+import { SITE, PLAN_LABEL } from '../config/site';
 import { BUSINESS_TYPES, INTEREST_OPTIONS } from '../lib/form-validation';
 
 const interestHints: Record<string, string> = {
-  'Website and calls': 'Your website and how your calls get answered',
+  'Website plan': `${SITE.PLAN_NAME}, ${SITE.PRICE_WEBSITE_PLAN}: your website and your listings`,
+  'Website and calls': 'A free audit of your website and how your calls get answered',
   'AI automation': 'Work your team does by hand',
-  Both: 'A look at everything',
+  Both: 'The free audit, plus AI automation',
 };
 ---
 
@@ -17,6 +18,7 @@ const interestHints: Record<string, string> = {
     method="POST"
     data-audit-form
     data-email={SITE.CONTACT_EMAIL}
+    data-plan-label={PLAN_LABEL}
   >
     <h2 class="visually-hidden">Your details</h2>
 
@@ -26,10 +28,10 @@ const interestHints: Record<string, string> = {
     </div>
 
     <input type="hidden" name="page" value="free-audit" />
-    <input type="hidden" name="_subject" value="Free audit request" />
+    <input type="hidden" name="_subject" value="Get started request" />
 
     <fieldset class="field choices" id="f-interest" aria-describedby="e-interest" tabindex="-1">
-      <legend>What would you like us to look at? <span class="flag">required</span></legend>
+      <legend>What would you like? <span class="flag">required</span></legend>
       <div class="choice-row">
         {
           INTEREST_OPTIONS.map((o, i) => (
@@ -160,10 +162,10 @@ const interestHints: Record<string, string> = {
     </div>
 
     <div class="foot">
-      <button class="btn btn-primary" type="submit" data-submit>Get my free audit</button>
+      <button class="btn btn-primary" type="submit" data-submit>Send my request</button>
       <p class="consent">
         By submitting, you agree that Crewwise may contact you by phone, email or text about your
-        audit. Message and data rates may apply. Reply STOP to opt out. See our <a href="/privacy/"
+        request. Message and data rates may apply. Reply STOP to opt out. See our <a href="/privacy/"
           >privacy policy</a
         >.
       </p>
@@ -313,7 +315,7 @@ const interestHints: Record<string, string> = {
   }
   @media (min-width: 40rem) {
     .choice-row {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   .choice {
@@ -502,7 +504,10 @@ const interestHints: Record<string, string> = {
     type FieldName,
   } from '../lib/form-validation';
 
-  const INTEREST_PARAM: Record<string, string> = { automation: 'AI automation' };
+  const INTEREST_PARAM: Record<string, string> = {
+    plan: 'Website plan',
+    automation: 'AI automation',
+  };
 
   function initAuditForm() {
     const root = document.querySelector<HTMLElement>('[data-audit]');
@@ -517,7 +522,8 @@ const interestHints: Record<string, string> = {
     const done = root.querySelector<HTMLElement>('[data-done]')!;
     const doneText = root.querySelector<HTMLElement>('[data-done-text]')!;
     const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
-    const btnLabel = btn.textContent?.trim() || 'Get my free audit';
+    const btnLabel = btn.textContent?.trim() || 'Send my request';
+    const planLabel = form.dataset.planLabel ?? 'website plan';
     const email = form.dataset.email ?? '';
     const noWebsite = form.querySelector<HTMLInputElement>('#f-no-website')!;
     const website = form.querySelector<HTMLInputElement>('#f-website')!;
@@ -651,7 +657,7 @@ const interestHints: Record<string, string> = {
       }
     });
 
-    // /free-audit/?interest=automation preselects "AI automation".
+    // ?interest=plan preselects the website plan; ?interest=automation preselects "AI automation".
     const wanted = INTEREST_PARAM[new URLSearchParams(location.search).get('interest') ?? ''];
     if (wanted) {
       const r = radios.find((x) => x.value === wanted);
@@ -680,6 +686,7 @@ const interestHints: Record<string, string> = {
       btn.setAttribute('aria-busy', 'true');
       btn.textContent = 'Sending your request';
       const body = new FormData(form);
+      body.set('_subject', interest() === 'Website plan' ? 'Website plan request' : 'Free audit request');
       body.set('phone', val('phone').trim());
       body.set('website', noWebsite.checked ? '' : normalizeWebsite(website.value));
       try {
@@ -690,7 +697,10 @@ const interestHints: Record<string, string> = {
         });
         if (!res.ok) throw new Error(`status ${res.status}`);
         const first = firstName(val('name'));
-        doneText.textContent = `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and you’ll get your audit within two business days.`;
+        doneText.textContent =
+          interest() === 'Website plan'
+            ? `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and we’ll contact you about the ${planLabel}.`
+            : `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and you’ll get your audit within two business days.`;
         form.hidden = true;
         done.hidden = false;
         done.focus();

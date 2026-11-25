@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SITE, PAGES } from '../../src/config/site';
+import { SITE, PAGES, PROMO, PROMO_DEADLINE } from '../../src/config/site';
 
 describe('SITE constants', () => {
   it('has the exact legal line', () => {
@@ -13,11 +13,18 @@ describe('SITE constants', () => {
     expect(SITE.OCTALOGIC_URL).toBe('https://octalogic.tech');
   });
 
-  it('shows from $299 as the only price', () => {
+  it('shows only the website plan price and the AI front desk price', () => {
+    expect(SITE.PRICE_WEBSITE_PLAN).toBe('$99/month');
     expect(SITE.PRICE_FRONT_DESK).toBe('From $299/month');
     const text = JSON.stringify({ ...SITE, PAGES });
     const prices = text.match(/\$\s?\d[\d,]*/g) ?? [];
-    expect(new Set(prices)).toEqual(new Set(['$299']));
+    expect(new Set(prices)).toEqual(new Set(['$99', '$299']));
+  });
+
+  it('hides custom websites and sets the promo deadline', () => {
+    expect(SITE.SHOW_CUSTOM_WEBSITES).toBe(false);
+    expect(PROMO.endsAt).toBe('2026-12-01T23:59:59-05:00');
+    expect(PROMO_DEADLINE).toContain('December 1');
   });
 
   it('names Octalogic in the partner line', () => {

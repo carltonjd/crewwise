@@ -2,28 +2,31 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import AuditForm from '../components/AuditForm.astro';
+import { SITE, PLAN_LABEL } from '../config/site';
 
+// The page keeps its /free-audit/ address, so old links still work. It now takes two requests: the website plan
+// (the main offer, preselected by ?interest=plan) and the free audit.
+const [planAmt, planPer] = SITE.PRICE_WEBSITE_PLAN.split('/');
 const covers = [
-  'First, we review your website and your Google profile.',
-  'Then we call your line like a customer would, and note what happens.',
-  'We write up what we found, in plain words.',
-  'Within two business days, your audit lands in your inbox.',
+  `For the ${PLAN_LABEL}, we contact you to talk it through and set it up. Your website is ready about 5 business days after we have your logo, photos and details.`,
+  'For a free audit, we review your website and Google profile and call your line like a customer would.',
+  'Within two business days, the audit lands in your inbox, in plain words.',
 ];
 ---
 
 <Base
-  title="Get a free audit | Crewwise"
-  description="Tell us about your business. We review your website and Google profile, call your line like a customer would, and send you what we found."
+  title="Get started | Crewwise"
+  description={`Tell us about your business. Ask for the ${PLAN_LABEL} (${SITE.PRICE_WEBSITE_PLAN}, no setup fee), or a free audit of your website and phone line.`}
   current="free-audit"
   image="/og-free-audit.jpg"
-  imageAlt="Crewwise logo on a blue field of overlapping paper planes with the headline: Get a free audit. A slip reads Your free audit, in your inbox within two business days."
+  imageAlt="Crewwise logo on a blue field of overlapping paper planes with the headline: Tell us about your business."
 >
   <PageHead
-    heading="Get a free audit"
-    lead="Tell us a little about your business, and we’ll check it the way a new customer would."
+    heading="Tell us about your business"
+    lead={`Ask for the ${PLAN_LABEL}, or a free audit of your website and calls.`}
   >
     <div class="audit" slot="aside" aria-hidden="true">
-      <p class="a-title">Your free audit</p>
+      <p class="a-title">{SITE.PLAN_NAME}</p>
       <ul class="a-rows">
         <li>
           <svg
@@ -36,7 +39,7 @@ const covers = [
           >
             <path d="M4 10.5l4 4 8-9" />
           </svg>
-          <span>Your website, checked on a phone</span>
+          <span>Your website, built from our templates</span>
         </li>
         <li>
           <svg
@@ -49,7 +52,7 @@ const covers = [
           >
             <path d="M4 10.5l4 4 8-9" />
           </svg>
-          <span>Your phone line, called like a customer would</span>
+          <span>Google, Bing, Apple Maps and ChatGPT profiles set up</span>
         </li>
       </ul>
       <p class="a-foot">
@@ -63,12 +66,12 @@ const covers = [
         >
           <path d="M4 10.5l4 4 8-9" />
         </svg>
-        <span>Within two business days</span>
+        <span>{planAmt} a {planPer}, no setup fee</span>
       </p>
     </div>
   </PageHead>
 
-  <section class="body ground-soft" aria-label="Free audit request">
+  <section class="body ground-soft" aria-label="Your request">
     <div class="page layout">
       <div class="sheet">
         <div class="form-col">
@@ -79,14 +82,14 @@ const covers = [
       <aside class="covers" aria-labelledby="covers-title">
         <div class="covers-in">
           <h2 id="covers-title" class="h3">
-            How your audit works
+            What happens next
           </h2>
           <ol>
             {covers.map((c) => (
               <li class="what">{c}</li>
             ))}
           </ol>
-          <p class="quiet">It costs nothing, and you decide what happens next.</p>
+          <p class="quiet">Sending this form costs nothing, and you decide what happens next.</p>
         </div>
       </aside>
     </div>

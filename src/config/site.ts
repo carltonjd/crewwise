@@ -1,5 +1,6 @@
 // Single source of truth for anything that may change: links, contact details, legal text, prices.
-// Values come from the legacy site.config.json. The ONLY price shown on the site is PRICE_FRONT_DESK.
+// Values come from the legacy site.config.json. Two prices are shown on the site: PRICE_WEBSITE_PLAN (the main
+// offer) and PRICE_FRONT_DESK (the add-on). No buyout price, no custom website price, no former or "% off" price.
 
 export interface Site {
   brand: string;
@@ -16,6 +17,20 @@ export interface Site {
   legalLine: string;
   partnerLine: string;
   PRICE_FRONT_DESK: string;
+  /** The main offer: the monthly website plan (terms v1.1, section 2). No setup fee, no free trial. */
+  PRICE_WEBSITE_PLAN: string;
+  /** Rename the plan here only. Always pair it with PLAN_LINE; never let the name stand alone as a promise. */
+  PLAN_NAME: string;
+  /** What the plan is, in one plain line. Never implies a result (rankings, calls, AI recommendations). */
+  PLAN_LINE: string;
+  /** What "AI Ready" means, for places that need a definition. */
+  PLAN_DEFINITION: string;
+  /** The name on receipts and PayPal. */
+  PLAN_BILLING_NAME: string;
+  /** Custom websites (Business, Signature) are hidden until the owner switches them back on. Code and copy stay. */
+  SHOW_CUSTOM_WEBSITES: boolean;
+  /** AI automation is shown only as a footer line. true brings back its home block and pricing row. */
+  SHOW_AUTOMATION: boolean;
   /** Octalogic mentions (Built by section, footer partner line, copy) stay hidden until the partners agree. */
   SHOW_OCTALOGIC: boolean;
   /** Home hero headline, plus the backup to switch to only if Carlton asks. */
@@ -28,6 +43,8 @@ export interface Site {
 }
 
 const company = 'Hallmark Data Systems Pvt Ltd';
+/** The plan name: change it here and every page follows. */
+const planName = 'AI Ready';
 const companyAddress = '3rd Floor, Sunivas Building, St Inez, Panaji, Goa 403001, India';
 
 export const SITE: Site = {
@@ -45,12 +62,43 @@ export const SITE: Site = {
   partnerLine:
     'Need a bigger build or an engineering team? Our engineering partner Octalogic does that.',
   PRICE_FRONT_DESK: 'From $299/month',
+  PRICE_WEBSITE_PLAN: '$99/month',
+  PLAN_NAME: planName,
+  PLAN_LINE:
+    'Your website, plus your listings on Google, Bing, Apple Maps and ChatGPT set up and kept up to date.',
+  PLAN_DEFINITION:
+    `${planName} means the places AI assistants and maps read about your business are set up and correct.`,
+  PLAN_BILLING_NAME: `Crewwise ${planName}`,
+  SHOW_CUSTOM_WEBSITES: false,
+  SHOW_AUTOMATION: false,
   SHOW_OCTALOGIC: false,
-  HERO_HEADLINE: 'Win the first minute with every new client.',
-  HERO_HEADLINE_BACKUP: 'Make a great first impression, online and on the phone.',
+  HERO_HEADLINE: 'Your website, built and kept up for $99 a month.',
+  HERO_HEADLINE_BACKUP: 'Win the first minute with every new client.',
   FRONT_DESK_NAME: 'AI front desk',
   ANALYTICS_TOKEN: '',
 };
+
+/** "AI Ready website plan": the name with the plain words beside it, for nav, form and titles. */
+export const PLAN_LABEL = `${SITE.PLAN_NAME} website plan`;
+
+/**
+ * Black Friday banner (owner decision 2026-11-25, review options A + C). The banner is rendered hidden and a script
+ * reveals it only before PROMO.endsAt, so a static build never shows a deadline that has passed.
+ * The displayed date is formatted from endsAt, so the weekday cannot disagree with the instant.
+ */
+export const PROMO = {
+  /** End of the offer: 23:59:59 US Eastern (EST, UTC-5) on 2026-12-01. */
+  endsAt: '2026-12-01T23:59:59-05:00',
+  lockMonths: 24,
+  href: '/pricing/#websites',
+  linkText: 'See the plan',
+};
+export const PROMO_DEADLINE = new Date(PROMO.endsAt).toLocaleDateString('en-US', {
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'America/New_York',
+});
 
 export const PARTNER_LINK_TEXT = 'Octalogic';
 
@@ -65,19 +113,27 @@ export interface PageEntry {
 }
 
 export const PAGES: PageEntry[] = [
-  { path: '/', title: 'Home', description: 'What Crewwise is and the three services.' },
-  { path: '/pricing/', title: 'Pricing', description: 'What the AI front desk costs and how pricing works.' },
+  {
+    path: '/',
+    title: 'Home',
+    description: `The ${planName} website plan, and the AI front desk you can add when you miss calls.`,
+  },
+  {
+    path: '/pricing/',
+    title: 'Pricing',
+    description: 'What the website plan includes and costs, and the price of the AI front desk.',
+  },
   {
     path: '/free-audit/',
-    title: 'Free audit',
-    description: 'Request a free audit of your website and phone line.',
+    title: 'Get started',
+    description: 'Ask for the website plan, or a free audit of your website and phone line.',
   },
   {
     path: '/home-inspectors/',
     title: 'Home inspectors',
     description: 'The AI front desk for home inspectors, including busy season.',
   },
-  { path: '/terms/', title: 'Client terms', description: 'The Crewwise client terms for Riley and websites.' },
+  { path: '/terms/', title: 'Client terms', description: 'The Crewwise client terms for the website plan, the AI front desk and websites.' },
   {
     path: '/privacy/',
     title: 'Privacy policy',

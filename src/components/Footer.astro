@@ -11,9 +11,8 @@ const year = new Date().getFullYear();
     <div class="index">
       <nav aria-label="Footer" class="nav-main">
         <ul class="rows">
+          <li><a href="/#websites">Website plan</a></li>
           <li><a href="/#ai-front-desk">AI front desk</a></li>
-          <li><a href="/#websites">Websites</a></li>
-          <li><a href="/#automation">AI automation</a></li>
           <li>
             <a href="/pricing/">Pricing</a>
           </li>
@@ -25,6 +24,11 @@ const year = new Date().getFullYear();
       <div class="contact">
         <a class="mail" href={`mailto:${SITE.CONTACT_EMAIL}`}>{SITE.CONTACT_EMAIL}</a>
         <a class="book" href={SITE.CALENDLY_URL} target="_blank" rel="noopener">Book a free 30-minute call</a>
+        <p class="auto">
+          AI automation for repetitive office work: <a href={SITE.CALENDLY_URL} target="_blank" rel="noopener"
+            >talk it through on a free 30-minute call</a
+          >.
+        </p>
         <ul class="legal-links">
           <li><a href="/terms/">Terms</a></li>
           <li><a href="/privacy/">Privacy</a></li>
@@ -128,6 +132,22 @@ const year = new Date().getFullYear();
     text-underline-offset: 0.3em;
     text-decoration-color: var(--rule-navy-strong);
     transition: text-decoration-color 200ms var(--ease-out);
+  }
+  .auto {
+    max-width: 34ch;
+    color: var(--on-navy-2);
+    font-size: var(--step-sm);
+    line-height: 1.45;
+  }
+  .auto a {
+    color: var(--white);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    text-decoration-color: var(--rule-navy-strong);
+  }
+  .auto a:hover {
+    text-decoration-color: var(--white);
   }
   .book:hover {
     text-decoration-color: var(--light-blue);

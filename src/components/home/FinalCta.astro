@@ -14,6 +14,8 @@ interface Props {
   secondaryHref?: string;
   /** Smaller heading, for pages whose H1 is smaller than the home hero. */
   compact?: boolean;
+  /** The white sheet's words: a title, two ticked rows and a foot line. Defaults to the free audit. */
+  sheet?: { title: string; rows: [string, string] | string[]; foot: string };
   /** legacy props, ignored */
   slotLabel?: string;
   slotTime?: string;
@@ -28,6 +30,11 @@ const {
   secondaryLabel,
   secondaryHref,
   compact = false,
+  sheet = {
+    title: 'Your free audit',
+    rows: ['Your website, checked on a phone', 'Your phone line, called like a customer would'],
+    foot: 'Within two business days',
+  },
 } = Astro.props;
 ---
 
@@ -51,12 +58,13 @@ const {
 
     <div class="sheet-wrap" aria-hidden="true">
       <div class="audit">
-        <p class="a-title">Your free audit</p>
+        <p class="a-title">{sheet.title}</p>
         <ul class="a-rows">
-          <li style="--k:0"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Your website, checked on a phone</span></li>
-          <li style="--k:1"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Your phone line, called like a customer would</span></li>
+          {sheet.rows.map((r, k) => (
+            <li style={`--k:${k}`}><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>{r}</span></li>
+          ))}
         </ul>
-        <p class="a-foot" style="--k:2"><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>Within two business days</span></p>
+        <p class="a-foot" style={`--k:${sheet.rows.length}`}><svg class="tk" viewBox="0 0 20 20" width="20" height="20" focusable="false"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg><span>{sheet.foot}</span></p>
       </div>
     </div>
 

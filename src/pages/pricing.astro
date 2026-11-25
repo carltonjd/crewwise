@@ -3,79 +3,67 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
-import { SITE, BUILDER } from '../config/site';
+import { SITE, BUILDER, PLAN_LABEL, PROMO, PROMO_DEADLINE } from '../config/site';
+import { planFaq, deskFaq } from '../config/faq';
 import { faqJsonLd, serviceJsonLd } from '../lib/jsonld';
 
 const [priceFrom, ...priceRest] = SITE.PRICE_FRONT_DESK.split(' ');
 const priceAmt = priceRest.join(' ');
+const [planAmt, planPer] = SITE.PRICE_WEBSITE_PLAN.split('/');
+
+const planIncludes = [
+  'Your website, built by Crewwise from our templates',
+  'Hosting, kept online, secure and backed up',
+  'Small text and photo updates',
+  'Your business profiles set up and kept up to date on Google, Bing, Apple Maps and ChatGPT, where those services allow it',
+  'Two rounds of changes before launch',
+];
+
+const planFacts = [
+  'Search engine optimization and advertising are not included. New pages and redesigns are quoted separately.',
+  'The website is licensed to you while your plan is active. If the plan ends, we take the website offline. You keep your domain, your logo, your photos and the text you gave us.',
+  'Month to month. Either of us can cancel with 30 days’ written notice.',
+  'Google, Bing, Apple and ChatGPT decide what they show. We can’t promise rankings, calls or recommendations.',
+];
 
 const deskIncludes = [
-  '24/7 answering',
+  '24/7 answering in your business name',
   'Booking into your calendar',
   'Urgent-call alerts',
   'Follow-ups so leads don’t go cold',
   'A monthly report',
+  'Up to 1,000 AI-answered minutes and 1,000 texts a month',
 ];
 
-const websiteIncludes = [
+// Custom websites (Business, Signature) are switched off with SITE.SHOW_CUSTOM_WEBSITES. Kept for when they return.
+const customIncludes = [
   `Design and build by ${BUILDER}`,
   'Phone-friendly pages',
   'Call and booking buttons',
-  'Google Business Profile setup',
-  'Search basics: page titles, speed and correct business details',
+  'About 2 to 3 weeks for Business and 4 to 5 weeks for Signature, from receiving your content',
+  'Once it is fully paid, you own its content and design',
 ];
 
+// AI automation is a footer line only (owner, 2026-11-25). Switched back on with SITE.SHOW_AUTOMATION.
 const automationSteps = [
   { title: 'A free 30-minute call', text: 'We learn what your team still does by hand.' },
   { title: 'A paid automation review', text: 'Credited against any build.' },
   { title: 'Fixed-price projects', text: 'You know the cost before we start.' },
 ];
 
-const faq = [
-  {
-    question: 'What does the free audit cost?',
-    answer:
-      'Nothing. We review your website and Google profile, call your line like a customer would, and send you what we found.',
-  },
-  {
-    question: 'How much does a website cost?',
-    answer:
-      'It depends on what your business needs, so it’s scoped in your free audit. You see the scope before anything starts.',
-  },
-  {
-    question: 'How long does setup take?',
-    answer:
-      'About a week for the AI front desk and about 10 days for a new website. Two rounds of changes are included.',
-  },
-  {
-    question: 'Do I have to replace my website to use the AI front desk?',
-    answer: 'No. The AI front desk works with the website you already have.',
-  },
-  {
-    question: 'Can I keep my phone number?',
-    answer: 'Yes. Calls forward to the AI front desk when you don’t pick up, or after hours. You choose.',
-  },
-];
+const faq = [...planFaq, ...deskFaq];
 
 const jsonLd = [
+  serviceJsonLd({
+    name: PLAN_LABEL,
+    serviceType: 'Small business website, hosting and business profile setup',
+    description: `${SITE.PLAN_LINE} Built by Crewwise from our templates, hosted, with small text and photo updates. ${SITE.PRICE_WEBSITE_PLAN}, no setup fee. Search engine optimization is not included.`,
+    path: '/pricing/',
+  }),
   serviceJsonLd({
     name: 'AI front desk',
     serviceType: 'AI phone answering and appointment booking',
     description: `Answers every call 24/7, books into your calendar, alerts you to urgent calls, follows up and sends a monthly report. ${SITE.PRICE_FRONT_DESK}.`,
-    path: '/pricing/',
-  }),
-  serviceJsonLd({
-    name: 'Websites',
-    serviceType: 'Small business website design and build',
-    description:
-      `Phone-friendly websites with call and booking buttons, designed and built by ${BUILDER}, scoped in your free audit.`,
-    path: '/pricing/',
-  }),
-  serviceJsonLd({
-    name: 'AI automation',
-    serviceType: 'Business process automation',
-    description:
-      'A free 30-minute call, then a paid automation review credited against any build, then fixed-price projects.',
     path: '/pricing/',
   }),
   faqJsonLd(faq),
@@ -84,98 +72,142 @@ const jsonLd = [
 
 <Base
   title="Pricing | Crewwise"
-  description="The AI front desk is from $299/month. Websites are scoped in your free audit. AI automation starts with a free 30-minute call."
+  description={`The ${PLAN_LABEL} is ${SITE.PRICE_WEBSITE_PLAN} with no setup fee: your website, hosting, small updates and your business profiles. Add the AI front desk, ${SITE.PRICE_FRONT_DESK.toLowerCase()}.`}
   current="pricing"
   image="/og-pricing.jpg"
-  imageAlt="Crewwise logo on a blue field of overlapping paper planes with the headline: Simple pricing, set up for you. A slip reads AI front desk, From $299/month."
+  imageAlt={`Crewwise logo on a blue field of overlapping paper planes with the headline: Simple pricing. A slip reads ${SITE.PLAN_NAME}, ${SITE.PRICE_WEBSITE_PLAN}.`}
   jsonLd={jsonLd}
 >
   <PageHead
-    heading="Simple pricing, set up for you"
-    lead="One monthly price for the AI front desk. Websites are scoped in your free audit. AI automation starts with a free 30-minute call."
+    heading="Simple pricing"
+    lead="One monthly price for your website. Add the AI front desk when you miss calls."
   >
     <div slot="aside" class="slip-wrap" aria-hidden="true">
       <div class="slip">
-        <span class="slip-name">AI front desk</span>
-        <span class="slip-note">Month to month</span>
-        <span class="slip-item">{deskIncludes[0]}</span>
+        <span class="slip-name">{SITE.PLAN_NAME}</span>
+        <span class="slip-note">The website plan, month to month</span>
+        <span class="slip-item">{planAmt} a {planPer}. No setup fee.</span>
       </div>
     </div>
   </PageHead>
 
   <section class="plans ground-soft" aria-label="Services and prices">
     <div class="page stack">
-      <article class="desk" id="ai-front-desk" aria-labelledby="desk-title">
+      <article class="desk" id="websites" aria-labelledby="plan-title">
         <div class="desk-main">
-          <h2 id="desk-title" class="h2">AI front desk</h2>
-          <p class="price">{priceFrom} <span class="amt">{priceAmt}</span></p>
-          <p class="note">Month to month.</p>
-          <a href="/free-audit/" class="btn btn-primary">Get my free audit</a>
+          <h2 id="plan-title" class="h2">{SITE.PLAN_NAME}</h2>
+          <p class="kind">The Crewwise website plan</p>
+          <p class="plan-line">{SITE.PLAN_LINE}</p>
+          <p class="price"><span class="amt big">{planAmt}</span> <span class="per">a {planPer}</span></p>
+          <p class="note">No setup fee. No free trial: billing starts the day you sign up.</p>
+          <p class="lock" data-promo-only hidden>
+            Black Friday: sign up by {PROMO_DEADLINE} and your {planAmt} a {planPer} is locked for {PROMO.lockMonths} months.
+            The price lock is written into your order form.
+          </p>
+          <a href="/free-audit/?interest=plan" class="btn btn-primary btn-on-blue">Ask for the website plan</a>
+          <p class="define">{SITE.PLAN_DEFINITION}</p>
         </div>
         <div class="desk-list">
           <h3 class="h3">What’s included</h3>
           <ul class="ticks">
-            {deskIncludes.map((i) => <li>{i}</li>)}
+            {planIncludes.map((i) => <li>{i}</li>)}
           </ul>
+          <p class="timing">Ready about 5 business days after we have your logo, photos and details.</p>
+        </div>
+        <div class="facts">
+          <h3 class="h3">Good to know</h3>
+          <ul class="fact-list">
+            {planFacts.map((i) => <li>{i}</li>)}
+          </ul>
+          <p class="terms-note">
+            In our <a href="/terms/">client terms</a> this is “the website plan”.
+          </p>
         </div>
       </article>
 
       <div class="lighter">
-        <article class="plan" id="websites" aria-labelledby="websites-title">
+        <article class="plan" id="ai-front-desk" aria-labelledby="desk-title">
           <div class="plan-head">
-            <h2 id="websites-title" class="plan-title">Websites</h2>
-            <p class="line">Scoped in your free audit</p>
+            <h2 id="desk-title" class="plan-title">AI front desk</h2>
+            <p class="line">{priceFrom} {priceAmt}</p>
+            <p class="sub">Add it when you miss calls. It works with the website plan or with the website you already have.</p>
           </div>
           <div class="plan-body">
             <h3 class="h3">What’s included</h3>
             <ul class="ticks">
-              {websiteIncludes.map((i) => <li>{i}</li>)}
+              {deskIncludes.map((i) => <li>{i}</li>)}
             </ul>
-            <!-- TODO-confirm: "Hosting and small edits" included or not. Do not show until confirmed. -->
+            <p class="carrier">
+              Texting features switch on once your business number is registered with the phone carriers,
+              usually within 1 to 3 weeks.
+            </p>
           </div>
           <div class="plan-action">
-            <a href="/free-audit/" class="link-quiet">Get my free audit</a>
+            <a href="/#demo" class="link-quiet">Hear it answer a call</a>
           </div>
         </article>
 
-        <article class="plan" id="ai-automation" aria-labelledby="automation-title">
-          <div class="plan-head">
-            <h2 id="automation-title" class="plan-title">AI automation</h2>
-            <p class="line">Starts with a free 30-minute call</p>
-          </div>
-          <div class="plan-body">
-            <h3 class="h3">How it runs</h3>
-            <ol class="steps">
-              {
-                automationSteps.map((s) => (
-                  <li>
-                    <strong>{s.title}</strong>
-                    <span>{s.text}</span>
-                  </li>
-                ))
-              }
-            </ol>
-          </div>
-          <div class="plan-action">
-            <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
-          </div>
-        </article>
+        {
+          SITE.SHOW_CUSTOM_WEBSITES && (
+            <article class="plan" id="custom-websites" aria-labelledby="custom-title">
+              <div class="plan-head">
+                <h2 id="custom-title" class="plan-title">Custom websites</h2>
+                <p class="line">For a business that needs more than a template</p>
+              </div>
+              <div class="plan-body">
+                <h3 class="h3">What’s included</h3>
+                <ul class="ticks">
+                  {customIncludes.map((i) => <li>{i}</li>)}
+                </ul>
+              </div>
+              <div class="plan-action">
+                <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
+              </div>
+            </article>
+          )
+        }
+
+        {
+          SITE.SHOW_AUTOMATION && (
+            <article class="plan" id="ai-automation" aria-labelledby="automation-title">
+              <div class="plan-head">
+                <h2 id="automation-title" class="plan-title">AI automation</h2>
+                <p class="line">Starts with a free 30-minute call</p>
+              </div>
+              <div class="plan-body">
+                <h3 class="h3">How it runs</h3>
+                <ol class="steps">
+                  {automationSteps.map((s) => (
+                    <li>
+                      <strong>{s.title}</strong>
+                      <span>{s.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div class="plan-action">
+                <a href={SITE.CALENDLY_URL} class="link-quiet" target="_blank" rel="noopener">Book a free 30-minute call</a>
+              </div>
+            </article>
+          )
+        }
       </div>
-
-      <p class="carrier">
-        Texting features switch on once your business number is registered with the phone carriers,
-        usually within 1 to 3 weeks.
-      </p>
     </div>
   </section>
 
-  <Faq heading="Pricing questions" items={faq} />
+  <Faq heading="Pricing questions" items={faq} ctaLabel="Ask for the website plan" ctaHref="/free-audit/?interest=plan" />
 
   <FinalCta
-    heading="Get a free audit"
-    text="We review your website and your phone line and send you what we found within two business days."
-    ctaLabel="Get my free audit"
-    ctaHref="/free-audit/"
+    heading="Get your business website started"
+    text={`Tell us about your business, and we’ll contact you about the ${PLAN_LABEL}.`}
+    ctaLabel="Ask for the website plan"
+    ctaHref="/free-audit/?interest=plan"
+    reassurance="No setup fee. Month to month, with 30 days’ notice to cancel."
+    sheet={{
+      title: SITE.PLAN_NAME,
+      rows: ['Your website, built from our templates', 'Google, Bing, Apple Maps and ChatGPT profiles set up'],
+      foot: 'About 5 business days after we have your content',
+    }}
   />
 </Base>
 
@@ -266,6 +298,105 @@ const jsonLd = [
   }
   .amt {
     white-space: nowrap;
+  }
+  .lock {
+    max-width: 40ch;
+    margin-top: -0.25rem;
+    margin-bottom: 0.5rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--white);
+    color: var(--navy);
+    font-size: var(--step-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    clip-path: polygon(0 2%, 60% 0, 100% 1%, 99.5% 100%, 35% 98.5%, 0.5% 100%);
+  }
+  .lock[hidden] {
+    display: none;
+  }
+  .kind {
+    margin-top: -0.4rem;
+    font-weight: 650;
+    color: var(--light-blue);
+  }
+  .plan-line {
+    max-width: 40ch;
+    color: var(--on-navy-2, rgb(255 255 255 / 0.78));
+  }
+  /* the plan price is the one figure the visitor came for: display weight, tabular */
+  .price .big {
+    font-size: clamp(3rem, 2.2rem + 3vw, 4.5rem);
+    font-weight: 830;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+  }
+  .price .per {
+    font-size: var(--step-1);
+    font-weight: 650;
+    color: var(--on-navy-2, rgb(255 255 255 / 0.78));
+  }
+  .define {
+    max-width: 40ch;
+    font-size: var(--step-sm);
+    color: var(--on-navy-2, rgb(255 255 255 / 0.78));
+  }
+  .timing {
+    margin-top: 0.25rem;
+    font-weight: 650;
+    color: var(--white);
+    max-width: 44ch;
+  }
+  /* the plain facts sit on the same navy plate, ruled off, so the licence is read before anyone pays */
+  .facts {
+    display: grid;
+    gap: 1rem;
+    padding-top: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-top: 1px solid var(--rule-navy-strong, rgb(143 179 255 / 0.36));
+  }
+  @media (min-width: 52rem) {
+    .facts {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      column-gap: clamp(2rem, 1rem + 5vw, 6rem);
+    }
+    .facts h3 {
+      grid-column: 1 / -1;
+    }
+  }
+  .facts h3 {
+    margin: 0;
+    color: var(--white);
+  }
+  .fact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.8rem;
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 52rem) {
+    .fact-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem clamp(2rem, 1rem + 5vw, 6rem);
+    }
+  }
+  .fact-list li {
+    max-width: 52ch;
+    color: var(--on-navy-2, rgb(255 255 255 / 0.78));
+  }
+  .terms-note {
+    grid-column: 1 / -1;
+    font-size: var(--step-sm);
+    color: var(--on-navy-2, rgb(255 255 255 / 0.78));
+  }
+  .terms-note a {
+    color: var(--white);
+  }
+  .sub {
+    color: var(--ink-2);
+    max-width: 36ch;
   }
   .note {
     color: var(--on-blue-2);
@@ -381,5 +512,6 @@ const jsonLd = [
   .carrier {
     max-width: 62ch;
     color: var(--ink-2);
+    font-size: var(--step-sm);
   }
 </style>

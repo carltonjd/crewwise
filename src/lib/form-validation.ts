@@ -1,9 +1,13 @@
-// Validation helpers for the free audit form. Pure functions, so they can be unit tested.
+// Validation helpers for the get-started form (website plan or free audit). Pure functions, so they can be unit tested.
 // Every message says what is wrong and how to fix it.
 
-export const INTEREST_OPTIONS = ['Website and calls', 'AI automation', 'Both'] as const;
+export const INTEREST_OPTIONS = ['Website plan', 'Website and calls', 'AI automation', 'Both'] as const;
 export const BUSINESS_TYPES = [
   'Home inspection',
+  'Auto detailing',
+  'Pressure washing',
+  'Pool cleaning',
+  'Garage door',
   'HVAC',
   'Plumbing',
   'Roofing',
@@ -39,7 +43,7 @@ export type AuditErrors = Partial<Record<FieldName, string>>;
 
 /** Label shown in the error summary next to each message. */
 export const FIELD_LABELS: Record<FieldName, string> = {
-  interest: 'What would you like us to look at?',
+  interest: 'What would you like?',
   name: 'Your name',
   company: 'Business name',
   website: 'Website',
@@ -53,7 +57,7 @@ export const digitsOf = (value: string): string => value.replace(/\D/g, '');
 export function validateInterest(value: string): string | null {
   return (INTEREST_OPTIONS as readonly string[]).includes(value)
     ? null
-    : 'Choose what you would like us to look at: website and calls, AI automation, or both.';
+    : 'Choose what you would like: the website plan, a free audit of your website and calls, AI automation, or both.';
 }
 
 export function validateName(value: string): string | null {

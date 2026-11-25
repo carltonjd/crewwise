@@ -552,6 +552,7 @@ const words = SITE.HERO_HEADLINE.split(' ');
   }
   .acts {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 1.5rem;
     margin-top: clamp(1.1rem, 2.6svh, 1.75rem);
@@ -1177,8 +1178,9 @@ const words = SITE.HERO_HEADLINE.split(' ');
     }
   }
   @media (max-width: 30rem) {
+    /* one row when it fits; the quiet link drops under the button rather than running off the screen */
     .acts {
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 0.5rem 1rem;
     }
     .acts .btn {

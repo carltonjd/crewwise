@@ -1,4 +1,4 @@
-import { SITE, absoluteUrl } from '../config/site';
+import { SITE, absoluteUrl, PLAN_LABEL } from '../config/site';
 
 export type JsonLdObject = Record<string, unknown>;
 
@@ -11,7 +11,7 @@ export const organizationJsonLd = (): JsonLdObject => ({
   logo: absoluteUrl('/icon-512.png'),
   email: SITE.CONTACT_EMAIL,
   contactPoint: { '@type': 'ContactPoint', email: SITE.CONTACT_EMAIL, contactType: 'sales' },
-  description: `${SITE.brand} is a brand of ${SITE.company}. It sells an AI front desk, websites and AI automation to small businesses.`,
+  description: `${SITE.brand} is a brand of ${SITE.company}. It sells the ${PLAN_LABEL} and an AI front desk to local service businesses.`,
   parentOrganization: {
     '@type': 'Organization',
     name: SITE.company,
@@ -46,7 +46,7 @@ export interface ServiceInput {
   areaServed?: string;
 }
 
-/** No numeric Offer is emitted: the only price on the site is SITE.PRICE_FRONT_DESK, shown as text. */
+/** No numeric Offer is emitted: prices (SITE.PRICE_WEBSITE_PLAN, SITE.PRICE_FRONT_DESK) are shown as text only. */
 export const serviceJsonLd = (s: ServiceInput): JsonLdObject => ({
   '@context': 'https://schema.org',
   '@type': 'Service',

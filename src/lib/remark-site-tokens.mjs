@@ -1,6 +1,11 @@
 import { SITE } from '../config/site.ts';
 
-const TOKENS = { '{{PRICE_FRONT_DESK}}': SITE.PRICE_FRONT_DESK };
+const TOKENS = {
+  '{{PRICE_FRONT_DESK}}': SITE.PRICE_FRONT_DESK,
+  '{{PRICE_WEBSITE_PLAN}}': SITE.PRICE_WEBSITE_PLAN,
+  '{{PLAN_NAME}}': SITE.PLAN_NAME,
+  '{{PLAN_BILLING_NAME}}': SITE.PLAN_BILLING_NAME,
+};
 
 /** Replaces {{TOKEN}} placeholders in Markdown text, links and HTML nodes with values from SITE. */
 export default function remarkSiteTokens() {

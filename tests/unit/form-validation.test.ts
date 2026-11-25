@@ -82,6 +82,17 @@ describe('audit form validation', () => {
     expect(firstName('  Dana  Reyes')).toBe('Dana');
   });
 
+  it('accepts Website plan and rejects an unknown interest', () => {
+    expect(validateAudit({ ...valid, interest: 'Website plan' })).toEqual({});
+    expect(validateAudit({ ...valid, interest: 'Free lunch' }).interest).toMatch(/website plan/);
+  });
+
+  it('accepts the new business types', () => {
+    for (const t of ['Auto detailing', 'Pressure washing', 'Pool cleaning', 'Garage door']) {
+      expect(validateAudit({ ...valid, business_type: t })).toEqual({});
+    }
+  });
+
   it('never uses an apology or a dash in a message', () => {
     const errors = validateAudit({ ...valid, name: '', phone: '1', email: 'x', website: 'a b' });
     for (const msg of Object.values(errors)) {

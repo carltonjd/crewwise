@@ -119,6 +119,8 @@ components:
 
 Crewwise is built the way a paper model is built: flat sheets of colour laid over one another on a table, lit from the top left. Depth is never faked with volume. It comes from overlapping planes in four fixed tones (blue, blue-deep, navy and the derived blue-sheet), and from white slips and documents that sit on top and carry a soft paper shadow. Everything is a hand-cut polygon, with one nicked corner at the top right and a pale light facet at the top left shown in tone only.
 
+The Black Friday strip is a white paper slip above the bar with a hand-cut lower edge, text plus one quiet link and a 44px close; it scrolls away, and the fixed bar follows it down via `--promo-shift`.
+
 The page is a stack of full-bleed bands, each one flat ground: blue, white, soft or navy. Type is Hanken Grotesk at heavy weights with tight tracking, so headlines read like cut lettering. The tone is calm and credible for a law firm and still friendly to a plumber; nothing is decorative that does not belong to the paper world. One orange pill per screen is the action, and nothing else is orange.
 
 Motion is the second material. The masthead folds, the working day is scrubbed by scroll, and sheets lay, drop, settle and rise into place. Every movement is a decelerating ease-out to rest, never a bounce.
@@ -183,7 +185,7 @@ The fluid scale is `--step-*`: micro 0.75rem, label 0.8125rem, ui-small 0.9375re
 
 ## Layout
 
-A single column of full-bleed bands inside a 84rem page (`--page-max`) with a fluid gutter of clamp(1rem, 0.4rem + 2.6vw, 2.5rem). Bands take vertical padding clamp(4.5rem, 3rem + 6vw, 8.5rem) and each is one flat ground; adjacent bands change ground (blue, white, soft, navy) to mark the seam. Order on home: hero (blue), demo (blue), pillars (white), the working day (blue to navy), setup route (white), who it is for, FAQ, close (blue), navy footer.
+A single column of full-bleed bands inside a 84rem page (`--page-max`) with a fluid gutter of clamp(1rem, 0.4rem + 2.6vw, 2.5rem). Bands take vertical padding clamp(4.5rem, 3rem + 6vw, 8.5rem) and each is one flat ground; adjacent bands change ground (blue, white, soft, navy) to mark the seam. Order on home (2026-11-25): Black Friday strip (only before `PROMO.endsAt`), hero (blue), pillars (white: the website plan first, the AI front desk second), setup route for the website plan (soft), demo (blue, home-service call only), who it is for, FAQ, close (blue), navy footer. The working day and the law firm call are switched off in `index.astro`, not deleted.
 
 Rhythm is generous between sections and tight inside groups; section heads sit 2.5rem to 5rem above their content. Deliberate asymmetry is used instead of equal card grids: the pillars set a wide plate first and a tall one lower, the two audiences sit one lower than the other, the FAQ keeps a sticky 4/12 heading column beside 8/12 rows.
 
@@ -265,8 +267,10 @@ Tokens: `--dur-1` 160ms (press, hover, focus), `--dur-2` 320ms (tabs, disclosure
 - **Do** keep heading tracking between -0.02em and -0.04em, and use the `--step-*` scale.
 - **Do** use `--dur-1/2/3` with `--ease-out-quart` or `--ease-out-expo`, and keep the finished state as the no-JS and reduced-motion default.
 - **Do** call it the "AI front desk"; each client may name their own.
-- **Do** show "from $299" as the only price.
-- **Do** let the hero action go to /free-audit/. This is a recorded exception to "action in working form": the hero button links to the audit page instead of performing the action in place.
+- **Do** show the website plan price ($99/month) first and the AI front desk ("from $299") second; take both from `src/config/site.ts`.
+- **Do** keep the plan name in `SITE.PLAN_NAME` and always pair it with its plain line.
+- **Do** render any dated offer hidden and reveal it only before its end date in code (see `PromoBanner.astro`).
+- **Do** let the hero action go to /free-audit/?interest=plan. This is a recorded exception to "action in working form": the hero button links to the audit page instead of performing the action in place.
 - **Do** cut every illustrated piece by hand with one nicked top-right corner and a top-left light facet in tone.
 
 ### Don't:
@@ -278,7 +282,7 @@ Tokens: `--dur-1` 160ms (press, hover, focus), `--dur-2` 320ms (tabs, disclosure
 - **Don't** set tracking tighter than -0.04em.
 - **Don't** use orange for anything but the primary action on light surfaces, or put orange on blue, or green for anything but success.
 - **Don't** give the AI front desk a personal name.
-- **Don't** show any price except "from $299".
+- **Don't** show any price except the website plan and "from $299": no buyout price, no former price, no "% off".
 - **Don't** use clinic or medical examples.
 - **Don't** nest cards or build the page from equal icon-heading-text card grids.
 
