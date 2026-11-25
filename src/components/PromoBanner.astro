@@ -18,9 +18,9 @@ const end = Date.parse(PROMO.endsAt);
 <div class="promo" data-promo hidden>
   <div class="page promo-in">
     <p class="promo-text">
-      <strong>Black Friday:</strong>{' '}
-      <span class="long">{amt} a {per}, no setup fee. Sign up by {PROMO_DEADLINE} and your price is locked for {PROMO.lockMonths} months.</span>
-      <span class="short">sign up by {PROMO_DEADLINE.replace(/^\w+, /, '')} and lock {amt} a {per} for {PROMO.lockMonths} months.</span>
+      <strong>No setup fee.</strong>{' '}
+      <span class="long">Black Friday special: sign up by {PROMO_DEADLINE} and lock {amt} a {per} for {PROMO.lockMonths} months.</span>
+      <span class="short">Black Friday: lock {amt} a {per} for {PROMO.lockMonths} months, until {PROMO_DEADLINE.replace(/^\w+, /, '')}.</span>
       <a class="promo-link" href={PROMO.href}>{PROMO.linkText}</a>
     </p>
     <button type="button" class="promo-x" data-promo-close aria-label="Close the Black Friday notice">
