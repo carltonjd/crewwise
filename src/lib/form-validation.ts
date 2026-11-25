@@ -1,7 +1,7 @@
 // Validation helpers for the get-started form (website plan or free audit). Pure functions, so they can be unit tested.
 // Every message says what is wrong and how to fix it.
 
-export const INTEREST_OPTIONS = ['Website plan', 'Website and calls', 'AI automation', 'Both'] as const;
+export const INTEREST_OPTIONS = ['AI Ready plan', 'Website and calls', 'AI automation', 'Both'] as const;
 export const BUSINESS_TYPES = [
   'Home inspection',
   'Auto detailing',
@@ -57,7 +57,7 @@ export const digitsOf = (value: string): string => value.replace(/\D/g, '');
 export function validateInterest(value: string): string | null {
   return (INTEREST_OPTIONS as readonly string[]).includes(value)
     ? null
-    : 'Choose what you would like: the website plan, a free audit of your website and calls, AI automation, or both.';
+    : 'Choose what you would like: the AI Ready plan, a free audit of your website and calls, AI automation, or both.';
 }
 
 export function validateName(value: string): string | null {

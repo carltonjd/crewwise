@@ -81,7 +81,7 @@ export const SITE: Site = {
 };
 
 /** "AI Ready website plan": the name with the plain words beside it, for nav, form and titles. */
-export const PLAN_LABEL = `${SITE.PLAN_NAME} website plan`;
+export const PLAN_LABEL = `${SITE.PLAN_NAME} plan`;
 
 /**
  * Black Friday banner (owner decision 2026-11-25, review options A + C). The banner is rendered hidden and a script
@@ -118,17 +118,17 @@ export const PAGES: PageEntry[] = [
   {
     path: '/',
     title: 'Home',
-    description: `The ${planName} website plan, and the AI front desk you can add when you miss calls.`,
+    description: `The ${planName} plan: your website and your listings, and the AI front desk you can add when you miss calls.`,
   },
   {
     path: '/pricing/',
     title: 'Pricing',
-    description: 'What the website plan includes and costs, and the price of the AI front desk.',
+    description: `What the ${planName} plan includes and costs, and the price of the AI front desk.`,
   },
   {
     path: '/free-audit/',
     title: 'Get started',
-    description: 'Ask for the website plan, or a free audit of your website and phone line.',
+    description: `Ask for the ${planName} plan, or a free audit of your website and phone line.`,
   },
   {
     path: '/home-inspectors/',

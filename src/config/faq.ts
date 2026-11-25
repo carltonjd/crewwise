@@ -16,7 +16,7 @@ export const planFaq: FaqItem[] = [
   },
   {
     question: `What does “${SITE.PLAN_NAME}” mean?`,
-    answer: `${SITE.PLAN_DEFINITION} It is the name of our website plan. Those services decide what they show, so we can’t promise rankings, calls or recommendations.`,
+    answer: `${SITE.PLAN_DEFINITION} It is the name of our plan. Those services decide what they show, so we can’t promise rankings, calls or recommendations.`,
   },
   {
     question: 'Do I own the website?',
@@ -45,7 +45,7 @@ export const planFaq: FaqItem[] = [
 
 export const deskFaq: FaqItem[] = [
   {
-    question: 'Is the AI front desk part of the website plan?',
+    question: `Is the AI front desk part of the ${SITE.PLAN_NAME} plan?`,
     answer: `No. The AI front desk is a separate service, ${SITE.PRICE_FRONT_DESK.toLowerCase()}. Add it when you miss calls. It works with the ${PLAN_LABEL} or with the website you already have.`,
   },
   {

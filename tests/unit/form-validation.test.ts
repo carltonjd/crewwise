@@ -82,9 +82,9 @@ describe('audit form validation', () => {
     expect(firstName('  Dana  Reyes')).toBe('Dana');
   });
 
-  it('accepts Website plan and rejects an unknown interest', () => {
-    expect(validateAudit({ ...valid, interest: 'Website plan' })).toEqual({});
-    expect(validateAudit({ ...valid, interest: 'Free lunch' }).interest).toMatch(/website plan/);
+  it('accepts AI Ready plan and rejects an unknown interest', () => {
+    expect(validateAudit({ ...valid, interest: 'AI Ready plan' })).toEqual({});
+    expect(validateAudit({ ...valid, interest: 'Free lunch' }).interest).toMatch(/AI Ready plan/);
   });
 
   it('accepts the new business types', () => {

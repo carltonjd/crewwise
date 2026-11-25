@@ -4,7 +4,7 @@ import { SITE, PLAN_LABEL } from '../config/site';
 import { BUSINESS_TYPES, INTEREST_OPTIONS } from '../lib/form-validation';
 
 const interestHints: Record<string, string> = {
-  'Website plan': `${SITE.PLAN_NAME}, ${SITE.PRICE_WEBSITE_PLAN}: your website and your listings`,
+  'AI Ready plan': `${SITE.PLAN_NAME}, ${SITE.PRICE_WEBSITE_PLAN}: your website and your listings`,
   'Website and calls': 'A free audit of your website and how your calls get answered',
   'AI automation': 'Work your team does by hand',
   Both: 'The free audit, plus AI automation',
@@ -505,7 +505,7 @@ const interestHints: Record<string, string> = {
   } from '../lib/form-validation';
 
   const INTEREST_PARAM: Record<string, string> = {
-    plan: 'Website plan',
+    plan: 'AI Ready plan',
     automation: 'AI automation',
   };
 
@@ -523,7 +523,7 @@ const interestHints: Record<string, string> = {
     const doneText = root.querySelector<HTMLElement>('[data-done-text]')!;
     const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
     const btnLabel = btn.textContent?.trim() || 'Send my request';
-    const planLabel = form.dataset.planLabel ?? 'website plan';
+    const planLabel = form.dataset.planLabel ?? 'AI Ready plan';
     const email = form.dataset.email ?? '';
     const noWebsite = form.querySelector<HTMLInputElement>('#f-no-website')!;
     const website = form.querySelector<HTMLInputElement>('#f-website')!;
@@ -686,7 +686,7 @@ const interestHints: Record<string, string> = {
       btn.setAttribute('aria-busy', 'true');
       btn.textContent = 'Sending your request';
       const body = new FormData(form);
-      body.set('_subject', interest() === 'Website plan' ? 'Website plan request' : 'Free audit request');
+      body.set('_subject', interest() === 'AI Ready plan' ? 'AI Ready plan request' : 'Free audit request');
       body.set('phone', val('phone').trim());
       body.set('website', noWebsite.checked ? '' : normalizeWebsite(website.value));
       try {
@@ -698,7 +698,7 @@ const interestHints: Record<string, string> = {
         if (!res.ok) throw new Error(`status ${res.status}`);
         const first = firstName(val('name'));
         doneText.textContent =
-          interest() === 'Website plan'
+          interest() === 'AI Ready plan'
             ? `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and we’ll contact you about the ${planLabel}.`
             : `Thanks${first ? `, ${first}` : ''}. We’ve got your details, and you’ll get your audit within two business days.`;
         form.hidden = true;
